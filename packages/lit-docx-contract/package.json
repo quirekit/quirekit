@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/lit-docx-contract",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/lit-docx-contract"},
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/lit-docx-contract#readme",

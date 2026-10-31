@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/extension-mind-map",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/extensions/mind-map"},
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/extensions/mind-map#readme",

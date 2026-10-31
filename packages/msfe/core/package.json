@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-core",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Source-first Markdown editor framework on CodeMirror: editor state, blocks, history and live presentation.",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/msfe/core"},

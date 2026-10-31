@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/md-editor-comments",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Comment workspace for md-editor: stand-off threads, side rail, list, document comments and CriticMarkup file actions.",
   "type": "module",
   "license": "MIT",

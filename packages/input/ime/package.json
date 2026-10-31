@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/ime",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/input/ime"},
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/input/ime#readme",

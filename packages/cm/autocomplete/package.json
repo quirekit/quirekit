@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/cm-autocomplete",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Autocompletion for the CodeMirror code editor",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/cm/autocomplete"},

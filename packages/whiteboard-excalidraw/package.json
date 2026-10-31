@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/whiteboard-excalidraw",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Excalidraw adapter for QuireKit whiteboard documents: editing, snapshots and scene rendering.",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/whiteboard-excalidraw"},

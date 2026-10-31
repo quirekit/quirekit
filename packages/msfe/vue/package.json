@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-vue",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Vue 3 bindings for the MSFE Markdown source editor: composables, editor content and Vue node views.",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/msfe/vue"},

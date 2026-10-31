@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/cm-language",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Language support infrastructure for the CodeMirror code editor",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/cm/language"},

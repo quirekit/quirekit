@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-markdown-extras",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Optional Markdown syntax for MSFE: frontmatter, footnotes, math, callouts, containers, definition lists, Mermaid, text diagrams, emoji and typographic marks.",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/msfe/markdown-extras"},

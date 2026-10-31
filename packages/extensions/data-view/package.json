@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/extension-data-view",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Portable multidimensional table document adapter.",
   "license": "MIT",
   "type": "module",

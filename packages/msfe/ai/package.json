@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-ai",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Connects MSFE to the QuireKit AI core: source document port, AI change highlighting and document SDK.",
   "license": "MIT",
   "repository": {

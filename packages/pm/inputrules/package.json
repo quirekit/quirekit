@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/pm-inputrules",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "QuireKit vendored ProseMirror input rules boundary.",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/pm/inputrules"},

@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-html-sandbox",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Sandboxed HTML blocks stored as Markdown fences in the MSFE source editor.",
   "license": "MIT",
   "repository": {

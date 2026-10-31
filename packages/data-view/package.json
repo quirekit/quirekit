@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/data-view",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Portable typed datasets, table and board queries, and source-backed editing contracts.",
   "license": "MIT",
   "type": "module",

@@ -1,5 +1,5 @@
 {
-  "name": "@quirekit/flowchart-pdf", "version": "0.0.1-alpha.1", "license": "MIT", "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/flowchart-pdf"}, "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/flowchart-pdf#readme", "bugs": "https://github.com/quirekit/quirekit/issues",
+  "name": "@quirekit/flowchart-pdf", "version": "0.0.1-alpha.2", "license": "MIT", "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/flowchart-pdf"}, "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/flowchart-pdf#readme", "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Vector PDF output for neutral QuireKit diagram snapshots.",
   "type": "module", "sideEffects": false,
   "files": ["LICENSE.md", "THIRD_PARTY_NOTICES.md", "dist", "src"],

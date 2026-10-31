@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/edit-history",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Storage-neutral activity record protocol: confirmed edit events, versions, retention, conformance tests and timeline projection.",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/edit-history"},
