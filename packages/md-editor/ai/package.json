@@ -1,0 +1,56 @@
+{
+  "name": "@quirekit/md-editor-ai",
+  "version": "0.0.1-alpha.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/md-editor/ai"
+  },
+  "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/md-editor/ai#readme",
+  "bugs": "https://github.com/quirekit/quirekit/issues",
+  "description": "First-party AI assistant panel for md-editor: Markdown document SDK, conversation workspace and model settings.",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "build": "tsdown src/index.ts --format esm --dts --clean --out-dir dist",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@quirekit/ai-assistant": "workspace:*",
+    "@quirekit/ai-chat": "workspace:*",
+    "@quirekit/ai-orchestrator-pi": "workspace:*",
+    "@quirekit/flow-editor": "workspace:*",
+    "@quirekit/md-editor": "workspace:*",
+    "@quirekit/mind-editor": "workspace:*",
+    "@quirekit/msfe-ai": "workspace:*",
+    "@quirekit/msfe-core": "workspace:*",
+    "@quirekit/msfe-flowchart": "workspace:*",
+    "@quirekit/msfe-mind-map": "workspace:*",
+    "@quirekit/ui": "workspace:*",
+    "uuid": "14.0.3"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "vue": "3.5.40",
+    "vue-tsc": "^3.3.7"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "name": "@quirekit/ai-chat",
+  "version": "0.0.1-alpha.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/ai/chat"
+  },
+  "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/ai/chat#readme",
+  "bugs": "https://github.com/quirekit/quirekit/issues",
+  "description": "Host-agnostic AI conversation workspace built from public Chat components and document tools.",
+  "type": "module",
+  "sideEffects": [
+    "./dist/styles.css",
+    "./src/styles.css"
+  ],
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "dist",
+    "src/styles.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./vue": {
+      "types": "./dist/vue.d.mts",
+      "import": "./dist/vue.mjs"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "build": "tsdown --config tsdown.config.ts && cp src/styles.css dist/styles.css",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@quirekit/ui": "workspace:*",
+    "@quirekit/ai-runtime": "workspace:*",
+    "@quirekit/incremark": "workspace:*",
+    "uuid": "14.0.3"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "unplugin-vue": "^7.2.0",
+    "vitest": "catalog:",
+    "vue": "^3.5.40",
+    "vue-tsc": "^3.3.7"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "name": "@quirekit/ai-assistant",
+  "version": "0.0.1-alpha.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/ai/assistant"
+  },
+  "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/ai/assistant#readme",
+  "bugs": "https://github.com/quirekit/quirekit/issues",
+  "description": "Product-neutral first-party AI assistant parts: model connections, provider settings, preference stores and the Pi responder.",
+  "type": "module",
+  "sideEffects": [
+    "./dist/styles.css"
+  ],
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./settings": {
+      "types": "./dist/settings.d.mts",
+      "import": "./dist/settings.mjs"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "build": "tsdown --config tsdown.config.ts && mv dist/style.css dist/styles.css",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@quirekit/ai-contract": "workspace:*",
+    "@quirekit/ai-chat": "workspace:*",
+    "@quirekit/ai-orchestrator-pi": "workspace:*",
+    "@quirekit/ai-runtime": "workspace:*",
+    "@quirekit/ui": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-ai": "0.87.1",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "unplugin-vue": "^7.2.0",
+    "vitest": "catalog:",
+    "vue": "3.5.40",
+    "vue-tsc": "^3.3.7"
+  }
+}

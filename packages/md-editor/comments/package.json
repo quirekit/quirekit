@@ -1,0 +1,58 @@
+{
+  "name": "@quirekit/md-editor-comments",
+  "version": "0.0.1-alpha.1",
+  "description": "Comment workspace for md-editor: stand-off threads, side rail, list, document comments and CriticMarkup file actions.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/md-editor/comments"
+  },
+  "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/md-editor/comments#readme",
+  "bugs": "https://github.com/quirekit/quirekit/issues",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./styles.css": "./dist/style.css"
+  },
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "build": "tsdown --config tsdown.config.ts",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@lezer/common": "1.5.3",
+    "@quirekit/cm-state": "workspace:*",
+    "@quirekit/cm-view": "workspace:*",
+    "@quirekit/lezer-markdown": "workspace:*",
+    "@quirekit/md-editor": "workspace:*",
+    "@quirekit/msfe-comments": "workspace:*",
+    "@quirekit/msfe-core": "workspace:*",
+    "@quirekit/ui": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "happy-dom": "20.10.6",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "unplugin-vue": "^7.2.0",
+    "vite": "^8.1.0",
+    "vitest": "catalog:",
+    "vue": "3.5.40",
+    "vue-tsc": "^3.3.7"
+  }
+}

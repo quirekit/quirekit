@@ -2,11 +2,7 @@
   "name": "@quirekit/extension-whiteboard",
   "version": "0.0.1-alpha.1",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/quirekit/quirekit.git",
-    "directory": "packages/extensions/whiteboard"
-  },
+  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/extensions/whiteboard"},
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/extensions/whiteboard#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit extension that embeds editable whiteboards in documents.",
@@ -42,6 +38,7 @@
   },
   "devDependencies": {
     "@quirekit/ai-contract": "workspace:*",
+    "@quirekit/ai-runtime": "workspace:*",
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",

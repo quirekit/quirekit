@@ -1,7 +1,11 @@
 packages:
   - packages/accessibility
   - packages/accessibility-contract
+  - packages/ai/assistant
+  - packages/ai/chat
   - packages/ai/contract
+  - packages/ai/orchestrator-pi
+  - packages/ai/runtime
   - packages/block-editor
   - packages/block-numbering
   - packages/block-table
@@ -82,22 +86,27 @@ packages:
   - packages/input/ime
   - packages/layout
   - packages/lezer-markdown
+  - packages/license
   - packages/lit-docx-contract
   - packages/math
   - packages/math-mathjax
   - packages/math-omml
   - packages/math-ui
+  - packages/md-editor/ai
   - packages/md-editor/basic-export
+  - packages/md-editor/comments
   - packages/md-editor/editor
   - packages/media
   - packages/mind-editor
   - packages/mind-map
   - packages/mind-map-docx
   - packages/mind-map-simple
+  - packages/msfe/ai
   - packages/msfe/bold
   - packages/msfe/code-block
   - packages/msfe/collaboration
   - packages/msfe/collaboration-hocuspocus
+  - packages/msfe/comments
   - packages/msfe/core
   - packages/msfe/data-view
   - packages/msfe/flowchart

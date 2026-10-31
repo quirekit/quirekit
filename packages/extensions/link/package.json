@@ -2,11 +2,7 @@
   "name": "@quirekit/extension-link",
   "version": "0.0.1-alpha.1",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/quirekit/quirekit.git",
-    "directory": "packages/extensions/link"
-  },
+  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/extensions/link"},
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/extensions/link#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit safe hyperlink mark extension.",
@@ -39,6 +35,7 @@
   "devDependencies": {
     "@quirekit/accessibility-contract": "workspace:*",
     "@quirekit/ai-contract": "workspace:*",
+    "@quirekit/ai-runtime": "workspace:*",
     "@quirekit/starter-kit": "workspace:*",
     "tsdown": "catalog:",
     "typescript": "catalog:",

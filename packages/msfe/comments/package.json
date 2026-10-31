@@ -1,0 +1,62 @@
+{
+  "name": "@quirekit/msfe-comments",
+  "version": "0.0.1-alpha.1",
+  "description": "Stand-off comments for MSFE: editor integration, exchange format and source re-anchoring.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/msfe/comments"
+  },
+  "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/msfe/comments#readme",
+  "bugs": "https://github.com/quirekit/quirekit/issues",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./protocol": {
+      "types": "./dist/protocol/index.d.mts",
+      "import": "./dist/protocol/index.mjs"
+    },
+    "./collaboration": {
+      "types": "./dist/collaboration/index.d.mts",
+      "import": "./dist/collaboration/index.mjs"
+    },
+    "./critic-markup": {
+      "types": "./dist/critic-markup/index.d.mts",
+      "import": "./dist/critic-markup/index.mjs"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "build": "tsdown src/index.ts src/protocol/index.ts src/collaboration/index.ts src/critic-markup/index.ts --format esm --dts --clean --out-dir dist",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@quirekit/cm-commands": "workspace:*",
+    "@quirekit/cm-state": "workspace:*",
+    "@quirekit/cm-view": "workspace:*",
+    "@quirekit/lezer-markdown": "workspace:*",
+    "@quirekit/msfe-collaboration": "workspace:*",
+    "@quirekit/msfe-core": "workspace:*",
+    "uuid": "14.0.3",
+    "yjs": "13.6.33"
+  },
+  "devDependencies": {
+    "@quirekit/ai-contract": "workspace:*",
+    "happy-dom": "20.10.6",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

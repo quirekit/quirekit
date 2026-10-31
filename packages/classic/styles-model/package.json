@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@quirekit/ai-contract": "workspace:*",
+    "@quirekit/ai-runtime": "workspace:*",
     "@quirekit/dom-view": "workspace:*",
     "@quirekit/starter-kit": "workspace:*",
     "@types/node": "catalog:",

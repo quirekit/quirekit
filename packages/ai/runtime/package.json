@@ -1,0 +1,50 @@
+{
+  "name": "@quirekit/ai-runtime",
+  "version": "0.0.1-alpha.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/ai/runtime"
+  },
+  "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/ai/runtime#readme",
+  "bugs": "https://github.com/quirekit/quirekit/issues",
+  "description": "Headless AI-native document runtime contracts for QuireKit.",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./source": {
+      "types": "./dist/source/index.d.mts",
+      "import": "./dist/source/index.mjs"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "build": "tsdown src/index.ts src/source/index.ts --format esm --dts --clean --out-dir dist",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@quirekit/ai-contract": "workspace:*",
+    "@quirekit/core": "workspace:*",
+    "@quirekit/pm": "workspace:*",
+    "fflate": "0.8.3",
+    "typebox": "1.1.38",
+    "uuid": "14.0.3"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

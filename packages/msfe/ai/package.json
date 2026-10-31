@@ -1,0 +1,55 @@
+{
+  "name": "@quirekit/msfe-ai",
+  "version": "0.0.1-alpha.1",
+  "description": "Connects MSFE to the QuireKit AI core: source document port, AI change highlighting and document SDK.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/msfe/ai"
+  },
+  "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/msfe/ai#readme",
+  "bugs": "https://github.com/quirekit/quirekit/issues",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "build": "tsdown src/index.ts --format esm --dts --clean --out-dir dist",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@lezer/common": "1.5.3",
+    "@quirekit/ai-runtime": "workspace:*",
+    "@quirekit/cm-commands": "workspace:*",
+    "@quirekit/cm-language": "workspace:*",
+    "@quirekit/cm-state": "workspace:*",
+    "@quirekit/cm-view": "workspace:*",
+    "@quirekit/msfe-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@quirekit/flowchart": "workspace:*",
+    "@quirekit/mind-map": "workspace:*",
+    "@quirekit/msfe-comments": "workspace:*",
+    "@quirekit/msfe-flowchart": "workspace:*",
+    "@quirekit/msfe-markdown-extras": "workspace:*",
+    "@quirekit/msfe-mind-map": "workspace:*",
+    "@quirekit/msfe-starter-kit": "workspace:*",
+    "happy-dom": "20.10.6",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

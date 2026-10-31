@@ -121,6 +121,9 @@
       "@quirekit/mind-editor/vue": [
         "packages/mind-editor/src/vue/index.ts"
       ],
+      "@quirekit/md-editor-comments": [
+        "packages/md-editor/comments/src/index.ts"
+      ],
       "@quirekit/chart": [
         "packages/chart/src/index.ts"
       ],
@@ -232,8 +235,17 @@
       "@quirekit/view-engine/test-support/layout": [
         "packages/view-engine/test-support/layout/index.ts"
       ],
+      "@quirekit/ai-runtime": [
+        "packages/ai/runtime/src/index.ts"
+      ],
       "@quirekit/ai-contract": [
         "packages/ai/contract/src/index.ts"
+      ],
+      "@quirekit/ai-orchestrator-pi": [
+        "packages/ai/orchestrator-pi/src/index.ts"
+      ],
+      "@quirekit/ai-chat": [
+        "packages/ai/chat/src/index.ts"
       ],
       "@quirekit/clipboard": [
         "packages/input/clipboard/src/index.ts"
@@ -249,6 +261,9 @@
       ],
       "@quirekit/core/selection-adapter": [
         "packages/core/editor/src/selection-adapter/index.ts"
+      ],
+      "@quirekit/license": [
+        "packages/license/src/index.ts"
       ],
       "@quirekit/suggestion": [
         "packages/suggestion/src/index.ts"

@@ -1,0 +1,30 @@
+{
+  "name": "@quirekit/license",
+  "version": "0.0.1-alpha.1",
+  "license": "MIT",
+  "description": "Offline license keys and evaluation notices for QuireKit commercial components.",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

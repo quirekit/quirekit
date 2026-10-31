@@ -1,0 +1,44 @@
+{
+  "name": "@quirekit/ai-orchestrator-pi",
+  "version": "0.0.1-alpha.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/ai/orchestrator-pi"
+  },
+  "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/ai/orchestrator-pi#readme",
+  "bugs": "https://github.com/quirekit/quirekit/issues",
+  "description": "Optional Pi-backed, QuireKit-authorized document Agent coordinator.",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "build": "tsdown --config tsdown.config.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@earendil-works/pi-agent-core": "0.87.1",
+    "@earendil-works/pi-ai": "0.87.1",
+    "@quirekit/ai-runtime": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:",
+    "typebox": "1.1.38",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
