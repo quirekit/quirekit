@@ -51,3 +51,4 @@ export * from "./ooxml/schema.js";
 export * from "./round-trip/budget.js";
 export * from "./round-trip/metadata.js";
 export * from "./round-trip/types.js";
+export * from "./source-package/types.js";

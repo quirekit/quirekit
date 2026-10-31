@@ -154,10 +154,14 @@ export interface DocxPackagePartPlan {
   readonly unsafeXml?: DocxUnsafeXmlPlan | undefined;
   /** Browser-safe binary part payload. */
   readonly data?: Uint8Array | undefined;
+  /** Original zero-edge `.rels` document owned by this part, if one existed. */
+  readonly emptyRelationshipsXml?: string | undefined;
 }
 
 /** Complete unresolved package graph submitted to the package resolver. */
 export interface DocxPackageSourcePlan {
+  /** Deferred source dependencies, resolved against final emitted XML before identity allocation. */
+  readonly preservedXmlResources?: unknown;
   /** Semantic resources awaiting concrete package paths. */
   readonly resources: readonly DocxResourcePlan[];
   /** Semantic relationships awaiting part-local ids. */

@@ -21,8 +21,17 @@ async function renderDiagram(text: string, signal: AbortSignal, typography: Text
     mindmap: { layout: "cose-bilkent" }, flowchart: { htmlLabels: false },
     ...typography, themeVariables: { fontFamily: typography.fontFamily, fontSize: `${typography.fontSize}px` },
     secure: ["securityLevel", "startOnLoad", "maxTextSize", "maxEdges", "suppressErrorRendering", "htmlLabels"] });
-  const { svg } = await mermaid.render(`qk-diagram-${uuidv4()}`, text);
-  return svg;
+  // SVG text needs connected layout, but the engine's temporary drawing must never enter the host's document flow.
+  const container = document.createElement("div");
+  container.setAttribute("aria-hidden", "true");
+  container.inert = true;
+  container.style.cssText = "position:fixed;inset:0;visibility:hidden;pointer-events:none;overflow:hidden";
+  document.body.append(container);
+  try {
+    const { svg } = await mermaid.render(`qk-diagram-${uuidv4()}`, text, container);
+    signal.throwIfAborted();
+    return svg;
+  } finally { container.remove(); }
 }
 
 /** @param text - Confirmed Mermaid source. @param signal - Explicit rendering lifetime.

@@ -424,6 +424,8 @@ export interface ParseWarning {
  * 包含递归解析子节点的帮助函数、各类定义表及选项。
  */
 export interface ParseContext {
+  /** Captures detached XML references using the explicitly named source part. */
+  preserveXmlRelationships?: (element: XmlElement, sourcePart: string) => XmlElement
   /** Immutable opaque chart graph captured before story parsing. */
   chartSourceRegistry?: ChartSourceRegistry
   /** 递归解析 XML 子元素，返回 LitNode 数组 */

@@ -1,0 +1,32 @@
+name: Release
+
+# Publishes every package whose version is not on npm yet, started by hand from the Actions tab.
+# npm trusts this workflow (trusted publishing over OIDC), so no token or one-time password is
+# involved and every package gets a provenance attestation. Each package's trusted publisher
+# must name this file, release.yml.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      # Trusted publishing needs npm 11.5.1 or later; pnpm hands the final upload to npm.
+      - run: npm install -g npm@^11.5.1
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm release
