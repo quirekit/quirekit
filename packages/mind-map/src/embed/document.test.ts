@@ -38,6 +38,7 @@ describe("source-bound mind map embeds", () => {
     const linked = readMindMapEmbed({ ...base, version: 2, preview: { url: "/assets/m.png", width: 10, height: 20 } });
     expect(linked.version).toBe(2); expect(parseMindMapEmbed(serializeMindMapEmbed(linked))).toEqual(linked);
     expect(() => readMindMapEmbed({ ...base, version: 1, preview: { url: "/assets/m.png", width: 10, height: 20 } })).toThrow();
-    expect(() => readMindMapEmbed({ ...base, version: 2, preview: { url: "javascript:alert(1)", width: 10, height: 20 } })).toThrow();
+    expect(readMindMapEmbed({ ...base, version: 2, preview: { url: "assets/m.png", width: 10, height: 20 } }).preview?.url).toBe("assets/m.png");
+    for (const url of ["javascript:alert(1)", "//evil.example/m.png", "../m.png"]) expect(() => readMindMapEmbed({ ...base, version: 2, preview: { url, width: 10, height: 20 } })).toThrow();
   });
 });

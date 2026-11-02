@@ -20,7 +20,7 @@ export const MsfeFlowchart = Node.create<MsfeFlowchartOptions>({ name: "flowchar
   /** @returns Incremental static projections with mapped source ownership. */
   addProjectionLayers() {
     const owner = this;
-    const renderer: ReturnType<typeof flowchartPreview> = mount => flowchartPreview(owner.editor, owner.options.open)(mount);
+    const renderer: ReturnType<typeof flowchartPreview> = mount => flowchartPreview(owner.editor, owner.options.open, owner.options.resolve)(mount);
     return [{ key: "flowchart-preview", placement: "block", incremental: true,
       /** @param input - Accepted source query. @returns Static previews for valid semantic matches. */
       build(input) {

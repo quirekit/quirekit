@@ -33,4 +33,4 @@ const comments = mdComments({ user: { id: "lin", name: "小林" }, onChange: cha
 
 ## 许可
 
-[商业许可](./LICENSE.md)：开发与评估免费，生产使用需要授权码；第三方声明见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。
+[MIT](./LICENSE.md)；第三方声明见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。

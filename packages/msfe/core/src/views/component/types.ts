@@ -50,3 +50,22 @@ export interface ComponentViewEntry {
   /** Props passed as the component's view prop. */
   readonly props: object;
 }
+
+/** An image ready for display, with an optional release for host-created object URLs. */
+export interface MsfeDisplayImage {
+  /** Displayable `http(s)`, `blob:` or `data:` URL. */
+  readonly url: string;
+  /** Releases the host resource once the image no longer shows it. */
+  readonly release?: () => void;
+}
+
+/** Host mapping from a stored image address, such as a document-relative path, to a displayable one. */
+export type MsfeImageSourceResolver = (source: string, signal: AbortSignal) => string | MsfeDisplayImage | Promise<string | MsfeDisplayImage>;
+
+/** Displays stored addresses in one image element, dropping results that arrive after a newer address. */
+export interface MsfeImageSourceBinding {
+  /** @param source - Stored address; null clears the image. */
+  set(source: string | null): void;
+  /** Cancels pending resolution and releases the shown resource. */
+  destroy(): void;
+}

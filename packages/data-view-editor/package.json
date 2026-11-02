@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/data-view-editor",
-  "version": "0.0.1-alpha.2",
+  "version": "0.0.1-alpha.3",
   "description": "MIT shared table and kanban authoring workspace.",
   "license": "MIT",
   "type": "module",

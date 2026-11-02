@@ -65,7 +65,9 @@ export { TaskScope } from "./tasks/scope";
 export type { ResourceLease } from "./tasks/types";
 export type { ProjectionLayer, ProjectionInput, ProjectionDecoration, ProjectionReplacement } from "./presentation/layers/types";
 export { componentView, componentViewRenderer } from "./views/component/renderer";
-export type { ComponentView, ComponentViewRenderer, ComponentViewMount, ComponentViewHandle, ComponentViewEntry } from "./views/component/types";
+export type { ComponentView, ComponentViewRenderer, ComponentViewMount, ComponentViewHandle, ComponentViewEntry,
+  MsfeDisplayImage, MsfeImageSourceResolver, MsfeImageSourceBinding } from "./views/component/types";
+export { bindImageSource } from "./views/component/image-source";
 export { planBlockInput } from "./input";
 export { sourceInputProxy, focusSourceView, sourceInputHasFocus, sourceInputFocusChanged, sourceInputElement, sourceInputCaret } from "./input/proxy";
 export type { SourceInputProxyOptions } from "./input/proxy";

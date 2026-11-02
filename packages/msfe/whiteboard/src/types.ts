@@ -1,9 +1,11 @@
-import type { MsfeEditor, MsfeSourceRange, SourceBlock } from "@quirekit/msfe-core";
+import type { MsfeEditor, MsfeImageSourceResolver, MsfeSourceRange, SourceBlock } from "@quirekit/msfe-core";
 import type { WhiteboardActionsMount, WhiteboardDocument, WhiteboardEditRequest } from "@quirekit/whiteboard";
 /** Product-neutral task composition. */
 export interface MsfeWhiteboardOptions {
   /** @param request - Mapped source task. @param editor - Owning source editor. @returns Disposable UI. */
   readonly open: ((request: WhiteboardEditRequest, editor: MsfeEditor) => { close(): void }) | null;
+  /** Maps stored preview addresses, such as document-relative paths, to displayable ones; omitted uses them directly. */
+  readonly resolve?: MsfeImageSourceResolver;
   /** Product title dialog using the same source transaction. */ readonly rename?: MsfeWhiteboardOptions["open"];
   /** Product controls for the active static preview. */ readonly mountActions?: WhiteboardActionsMount<HTMLElement>;
 }

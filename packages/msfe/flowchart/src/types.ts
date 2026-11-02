@@ -1,9 +1,11 @@
-import type { MsfeEditor, MsfeSourceRange, SourceBlock } from "@quirekit/msfe-core";
+import type { MsfeEditor, MsfeImageSourceResolver, MsfeSourceRange, SourceBlock } from "@quirekit/msfe-core";
 import type { FlowchartEmbed, FlowchartEditRequest } from "@quirekit/flowchart";
 /** Product-neutral task composition. */
 export interface MsfeFlowchartOptions {
   /** @param request - Mapped source task. @param editor - Owning source editor. @returns Disposable UI. */
   readonly open: ((request: FlowchartEditRequest, editor: MsfeEditor) => { close(): void }) | null;
+  /** Maps stored preview addresses, such as document-relative paths, to displayable ones; omitted uses them directly. */
+  readonly resolve?: MsfeImageSourceResolver;
 }
 /** Source codec attributes. */
 export interface MsfeFlowchartAttributes {

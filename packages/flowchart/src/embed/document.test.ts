@@ -33,7 +33,8 @@ describe("portable flowchart embeds", () => {
     expect(linked.version).toBe(2); expect(parseFlowchartEmbed(serializeFlowchartEmbed(linked))).toEqual(linked);
     expect(readFlowchartEmbed({ ...base(), version: 2, preview: image }).version).toBe(1);
     expect(readFlowchartEmbed({ ...base(), version: 2, preview: { url: "https://cdn.example.com/a.png", width: 1, height: 1 } }).preview?.url).toBe("https://cdn.example.com/a.png");
-    for (const url of ["javascript:alert(1)", "//evil.example/a.png", "data:image/png;base64,AAAA", "/a\"b.png", ""]) {
+    expect(readFlowchartEmbed({ ...base(), version: 2, preview: { url: "assets/a.png", width: 1, height: 1 } }).preview?.url).toBe("assets/a.png");
+    for (const url of ["javascript:alert(1)", "//evil.example/a.png", "data:image/png;base64,AAAA", "/a\"b.png", "", "../a.png", "assets/../../a.png", "#a", "assets:a.png"]) {
       expect(() => readFlowchartEmbed({ ...base(), version: 2, preview: { url, width: 1, height: 1 } })).toThrow();
     }
     expect(() => readFlowchartEmbed({ ...base(), version: 1, preview: { url: "/a.png", width: 1, height: 1 } })).toThrow();

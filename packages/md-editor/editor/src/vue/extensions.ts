@@ -29,6 +29,8 @@ import { openMdWhiteboardDialog, renameMdWhiteboard } from "./whiteboard/open";
 /** @param locale - Control language. @param options - Explicit feature and container overrides. @param edit - Host-owned preview editing dialog. @returns Product preset using the existing Vue/provider host. */
 export function vueMdEditorExtensions(locale: MdEditorLocale, options: MdEditorExtensionOptions = {}, edit?: PreviewOptions["edit"]): readonly AnyExtension[] {
   const text = mdEditorMessages[locale];
+  // Diagram previews stored by the host resolve through the same mapping as Markdown images.
+  const previewSource = options.imageSource ? { resolve: options.imageSource } : {};
   return createMdEditorExtensions({
     ...(options.inlineBoundaries ? { inlineBoundaries: options.inlineBoundaries } : {}),
     ...(options.view ? { view: options.view } : {}),
@@ -58,6 +60,6 @@ export function vueMdEditorExtensions(locale: MdEditorLocale, options: MdEditorE
         definitionLabel: number => locale === "en" ? `Footnote ${number}: return to reference` : `脚注 ${number}：返回引用` }),
       ...options.extras,
     },
-    extensions: [MsfeDataView.configure({open: openMdDataView, render: VueComponentViewRenderer(DataViewInline)}), MsfeMindMap.configure({ open: openMdMindMapDialog }), MsfeFlowchart.configure({ open: openMdFlowchartDialog }), MsfeWhiteboard.configure({ open: openMdWhiteboardDialog, rename: renameMdWhiteboard }), ...(options.extensions ?? [])],
+    extensions: [MsfeDataView.configure({open: openMdDataView, render: VueComponentViewRenderer(DataViewInline)}), MsfeMindMap.configure({ open: openMdMindMapDialog, ...previewSource }), MsfeFlowchart.configure({ open: openMdFlowchartDialog, ...previewSource }), MsfeWhiteboard.configure({ open: openMdWhiteboardDialog, rename: renameMdWhiteboard, ...previewSource }), ...(options.extensions ?? [])],
   });
 }

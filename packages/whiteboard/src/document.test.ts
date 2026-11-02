@@ -29,7 +29,8 @@ describe("portable whiteboards", () => {
     expect(linked.version).toBe(2); expect(parseWhiteboard(serializeWhiteboard(linked))).toEqual(linked);
     expect(readWhiteboardDocument({ ...board, version: 2 }).version).toBe(1);
     expect(() => readWhiteboardDocument({ ...board, preview: { url: "/assets/w.png", width: 1, height: 1 } })).toThrow();
-    expect(() => readWhiteboardDocument({ ...board, version: 2, preview: { url: "vbscript:x", width: 1, height: 1 } })).toThrow();
+    expect(readWhiteboardDocument({ ...board, version: 2, preview: { url: "assets/w.png", width: 1, height: 1 } }).preview?.url).toBe("assets/w.png");
+    for (const url of ["vbscript:x", "//evil.example/w.png", "../w.png"]) expect(() => readWhiteboardDocument({ ...board, version: 2, preview: { url, width: 1, height: 1 } })).toThrow();
   });
   it("rejects active image content, missing resources and duplicated identities", () => {
     const scene = createWhiteboardDocument("board").scene;

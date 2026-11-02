@@ -20,7 +20,7 @@ export const MsfeMindMap = Node.create<MsfeMindMapOptions>({ name: "mindMap",
   /** @returns Incremental static projections with mapped source ownership. */
   addProjectionLayers() {
     const owner = this;
-    const renderer: ReturnType<typeof mindMapPreview> = mount => mindMapPreview(owner.editor, owner.options.open)(mount);
+    const renderer: ReturnType<typeof mindMapPreview> = mount => mindMapPreview(owner.editor, owner.options.open, owner.options.resolve)(mount);
     return [{ key: "mindMap-preview", placement: "block", incremental: true,
       /** @param input - Accepted source query. @returns Static previews for valid semantic matches. */
       build(input) {

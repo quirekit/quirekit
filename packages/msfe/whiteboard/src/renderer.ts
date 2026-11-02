@@ -1,4 +1,4 @@
-import type { ComponentViewRenderer, MsfeEditor } from "@quirekit/msfe-core";
+import { bindImageSource, type ComponentViewRenderer, type MsfeEditor } from "@quirekit/msfe-core";
 import { whiteboardPreviewSize, whiteboardPreviewMessages, type WhiteboardActionsHandle, whiteboardPreviewSource } from "@quirekit/whiteboard";
 import type { MsfeWhiteboardOptions, MsfeWhiteboardPreviewProps } from "./types";
 import { openMsfeWhiteboard } from "./session";
@@ -13,6 +13,7 @@ export function whiteboardPreview(editor: MsfeEditor, options: MsfeWhiteboardOpt
     figure.style.cssText = "position:relative;margin:16px 0;width:100%;border:1px solid var(--qk-color-border-subtle,#e2e8f0);border-radius:8px;overflow:hidden;background:white;cursor:pointer";
     image.style.cssText = "display:block;width:100%;height:auto;max-height:460px;margin:auto;object-fit:contain";
     figure.append(image, toolbar); dom.append(figure);
+    const source = bindImageSource(image, options.resolve);
     let current = props, anchor = editor.captureAnchor(props.range);
     let actions: WhiteboardActionsHandle | undefined;
     /** @param open - Explicit task factory. */
@@ -32,9 +33,9 @@ export function whiteboardPreview(editor: MsfeEditor, options: MsfeWhiteboardOpt
     /** @param next - Accepted semantic source. */
     function update(next: MsfeWhiteboardPreviewProps): void {
       if (current.board !== next.board) { anchor.release(); anchor = editor.captureAnchor(next.range); }
-      current = next; image.hidden = !next.board.preview;
+      current = next; image.hidden = !next.board.preview; source.set(whiteboardPreviewSource(next.board));
       figure.style.maxWidth = `${whiteboardPreviewSize(next.board.preview).width}px`;
-      if (next.board.preview) { image.src = whiteboardPreviewSource(next.board)!; image.width = next.board.preview.width; image.height = next.board.preview.height; }
+      if (next.board.preview) { image.width = next.board.preview.width; image.height = next.board.preview.height; }
       image.alt = next.board.title; label();
       if (actions) showActions(); requestMeasure();
     }
@@ -56,7 +57,7 @@ export function whiteboardPreview(editor: MsfeEditor, options: MsfeWhiteboardOpt
     figure.addEventListener("dblclick", activate); figure.addEventListener("keydown", activate); image.addEventListener("load", requestMeasure); update(props);
     const relabel = dom.isConnected ? 0 : dom.ownerDocument.defaultView?.requestAnimationFrame(label) ?? 0;
     return { update, ignoreEvent: () => true,
-      destroy() { if (relabel) dom.ownerDocument.defaultView?.cancelAnimationFrame(relabel); actions?.destroy(); anchor.release(); figure.removeEventListener("focusin", showActions); figure.removeEventListener("focusout", blur); figure.removeEventListener("dblclick", activate); figure.removeEventListener("keydown", activate); image.removeEventListener("load", requestMeasure); figure.remove(); }
+      destroy() { source.destroy(); if (relabel) dom.ownerDocument.defaultView?.cancelAnimationFrame(relabel); actions?.destroy(); anchor.release(); figure.removeEventListener("focusin", showActions); figure.removeEventListener("focusout", blur); figure.removeEventListener("dblclick", activate); figure.removeEventListener("keydown", activate); image.removeEventListener("load", requestMeasure); figure.remove(); }
     };
   };
 }
