@@ -78,7 +78,7 @@ export function applyQuireWidowOrphanControl(
  * @param nextIndex - Exclusive end of the accepted range and resume index.
  * @returns Spill result for the accepted range.
  */
-function recomputeQuireMeasuredContainerSpill(
+export function recomputeQuireMeasuredContainerSpill(
   options: QuireMeasuredContainerPaginationOptions,
   startIndex: number,
   nextIndex: number

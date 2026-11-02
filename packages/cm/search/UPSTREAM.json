@@ -10,7 +10,8 @@
   "sourceSha256": "e8c76e1f9fc43a9070841421b03fc39b8e7d796135937bb0c2c676d8677ee8a6",
   "licenseSha256": "05c6130cda97e7600ca91427a41e8a065efcf82365fc0293e7de80faec494c07",
   "localChanges": [
-    "Package names, imports and build/test configuration use QuireKit workspace identities."
+    "Package names, imports and build/test configuration use QuireKit workspace identities.",
+    "src/selection-match.ts: keep selection-match highlights mapped, not recomputed, while a native composition is active, and recompute once it ends."
   ],
   "sourceEntry": "src/search.ts"
 }

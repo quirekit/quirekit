@@ -246,7 +246,7 @@ class TileBuilder {
 
   getBuffer(side: -1 | 1) {
     let flags = TileFlag.Synced | (side < 0 ? TileFlag.Before : TileFlag.After)
-    let found = this.cache.find(WidgetBufferTile, undefined, Reused.Full)
+    let found = this.cache.findNewest(WidgetBufferTile, Reused.Full)
     if (found) found.flags = flags
     return found || new WidgetBufferTile(flags)
   }
@@ -329,6 +329,23 @@ class TileCache {
       if ((!test || test(tile)) && !this.reused.has(tile)) {
         bucket.splice(index, 1)
         if (index < off) this.index[i]--
+        this.reused.set(tile, type)
+        return tile
+      }
+    }
+    return null
+  }
+
+  // Widget buffers are interchangeable, so take the one walked last: it sits at
+  // the current position, and reusing it in place leaves the DOM there untouched.
+  findNewest<Cls extends Tile>(cls: new (...args: any) => Cls, type: Reused): Cls | null {
+    let i: number = (cls as any).bucket, bucket = this.buckets[i]
+    let start = bucket.length < C.Bucket ? bucket.length - 1 : this.index[i]
+    for (let j = 0; j < bucket.length; j++) {
+      let index = (start - j + bucket.length) % bucket.length, tile = bucket[index] as Cls
+      if (!this.reused.has(tile)) {
+        bucket.splice(index, 1)
+        if (index < this.index[i]) this.index[i]--
         this.reused.set(tile, type)
         return tile
       }
@@ -436,14 +453,20 @@ export class TileUpdate {
       // that point in the document.
       if (composition && next.fromA <= composition.range.fromA && next.toA >= composition.range.toA) {
         LOG_builder && console.log("Emit composition", posB, "to", next.toB, "over", posA, "to", next.toA)
-        this.forward(next.fromA, composition.range.fromA, composition.range.fromA < composition.range.toA ? 1 : -1)
+        // Walk zero-length tiles at an inserted composition too, so the widget
+        // buffer the composed text follows is cached and reused in place.
+        this.forward(next.fromA, composition.range.fromA, 1)
         this.emit(posB, composition.range.fromB)
         this.builder.flushBuffer()
         this.cache.clear() // Must not reuse DOM across composition
         this.builder.addComposition(composition, compositionContext!)
         this.text.skip(composition.range.toB - composition.range.fromB)
         this.forward(composition.range.fromA, next.toA)
-        this.emit(composition.range.toB, next.toB)
+        // An empty tail would clip a widget starting at the composition end into a
+        // fresh tile (the cache was just cleared), replacing the uneditable DOM next
+        // to the composed text, which makes WebKit drop the composition. `preserve`
+        // reuses the existing widget instead.
+        if (composition.range.toB < next.toB) this.emit(composition.range.toB, next.toB)
       } else {
         LOG_builder && console.log("Emit", posB, "to", next.toB, "over", posA, "to", next.toA)
         this.forward(next.fromA, next.toA)

@@ -33,7 +33,9 @@ export function shouldSpillBeforeQuireMeasuredGroup(
     : 0;
   const shouldKeepTogether = item.keepTogether === true;
   const nextItem = items[groupEnd];
-  const keepWithNextHeight = item.keepWithNext === true && nextItem !== undefined
+  // A splittable keep-with-next group flows line by line; its tail is carried to the successor afterwards.
+  const keepWithNextHeight = item.keepWithNext === true && !canQuireMeasuredGroupSplit(options, index, groupEnd)
+    && nextItem !== undefined
     && items[groupEnd - 1]?.breakAfter === undefined && nextItem.breakBefore !== "page"
     ? groupHeight
       + Math.max(0, nextItem.gapBefore ?? 0)
@@ -77,7 +79,7 @@ function measureSuccessorPrefix(options: QuireMeasuredContainerPaginationOptions
   while (!cache.has(cursor)) {
     const first = items[cursor]!;
     const end = findQuireMeasuredGroupEnd(items, cursor);
-    if (first.keepWithNext === true && items[end] !== undefined
+    if (first.keepWithNext === true && !canQuireMeasuredGroupSplit(options, cursor, end) && items[end] !== undefined
       && items[end - 1]?.breakAfter === undefined && items[end]?.breakBefore !== "page") {
       chain.push(cursor);
       cursor = end;
@@ -96,6 +98,21 @@ function measureSuccessorPrefix(options: QuireMeasuredContainerPaginationOptions
     cache.set(current, height <= options.availableHeight ? height : measureUnlinkedPrefix(options, current, end));
   }
   return cache.get(start)!;
+}
+
+/**
+ * Tests whether a group may break across pages with its orphan and widow minimums on either side.
+ * @param options - Container pagination inputs supplying the default minimums.
+ * @param start - First group item.
+ * @param end - Exclusive group end.
+ * @returns Whether the group is neither kept together nor too short to split.
+ */
+export function canQuireMeasuredGroupSplit(options: QuireMeasuredContainerPaginationOptions, start: number, end: number): boolean {
+  const first = options.container.items[start]!;
+  if (first.keepTogether === true || first.group === undefined) return false;
+  const widows = Math.max(1, Math.trunc(first.groupWidows ?? options.widows ?? 1));
+  const orphans = Math.max(1, Math.trunc(first.groupOrphans ?? options.orphans ?? 1));
+  return end - start >= widows + orphans;
 }
 
 /**

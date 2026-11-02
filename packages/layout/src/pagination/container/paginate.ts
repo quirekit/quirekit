@@ -3,6 +3,7 @@ import type {
   QuireMeasuredContainerPaginationResult
 } from "./types";
 import { paginateQuireMeasuredContainerCore } from "./core";
+import { applyQuireKeepWithNextTail } from "./keep-tail";
 import { applyQuireWidowOrphanControl } from "./widow-orphan";
 import { placeQuireFragmentNotes, withQuirePendingNotes } from "./notes";
 import { clampQuireMeasuredContainerStartIndex } from "./range";
@@ -14,7 +15,8 @@ import { clampQuireMeasuredContainerStartIndex } from "./range";
  * paragraph) spans the page break with too few lines on either side, the spill
  * point is moved earlier so more lines fall to the next page. This never rebuilds a
  * prior page, so no backtrack is needed. Control is off by default (widows and
- * orphans both `1`).
+ * orphans both `1`). A splittable keep-with-next group then carries its tail to
+ * its successor's page the same forward-only way.
  *
  * @param options - Measured container pagination inputs.
  * @returns Pagination result for the accepted fragment.
@@ -30,7 +32,8 @@ export function paginateQuireMeasuredContainer(
     return withQuireFragmentNotes(result, options);
   }
 
-  return withQuireFragmentNotes(applyQuireWidowOrphanControl(result, options), options);
+  const controlled = applyQuireWidowOrphanControl(result, options);
+  return withQuireFragmentNotes(controlled.kind === "spill" ? applyQuireKeepWithNextTail(controlled, options) : controlled, options);
 }
 
 /**

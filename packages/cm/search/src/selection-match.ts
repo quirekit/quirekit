@@ -61,13 +61,24 @@ function insideWord (check: (char: string) => CharCategory, state: EditorState, 
 
 const matchHighlighter = ViewPlugin.fromClass(class {
   decorations: DecorationSet
+  stale = false
 
   constructor(view: EditorView) {
     this.decorations = this.getDeco(view)
   }
 
   update(update: ViewUpdate) {
-    if (update.selectionSet || update.docChanged || update.viewportChanged) this.decorations = this.getDeco(update.view)
+    let changed = update.selectionSet || update.docChanged || update.viewportChanged
+    // Native IME owns the composing text node. Adding or removing marks in its
+    // line (the selection covers the preedit) makes WebKit reinsert the preedit
+    // in a new node, which maps to the line start. Recompute once it ends.
+    if (update.view.compositionStarted) {
+      if (update.docChanged) this.decorations = this.decorations.map(update.changes)
+      this.stale ||= changed
+    } else if (changed || this.stale) {
+      this.stale = false
+      this.decorations = this.getDeco(update.view)
+    }
   }
 
   getDeco(view: EditorView) {

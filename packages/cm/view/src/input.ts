@@ -97,7 +97,15 @@ export class InputState {
   }
 
   handleEvent(event: Event) {
-    if (!eventBelongsToEditor(this.view, event) || this.ignoreDuringComposition(event)) return
+    if (!eventBelongsToEditor(this.view, event)) return
+    if (this.composing >= 0 && compositionEndWasLost(this.view, event)) {
+      // WebKit can end a composition without compositionend when its text node is
+      // disturbed. Report the end so later keys, pointer selection and DOM reads
+      // leave composition mode, without swallowing the key that revealed it.
+      this.view.contentDOM.dispatchEvent(new CompositionEvent("compositionend", {bubbles: true, data: ""}))
+      this.compositionPendingKey = false
+    }
+    if (this.ignoreDuringComposition(event)) return
     if (event.type == "keydown" && this.keydown(event as KeyboardEvent)) return
     if (this.view.updateState != UpdateState.Idle) Promise.resolve().then(() => this.runHandlers(event.type, event))
     else this.runHandlers(event.type, event)
@@ -442,6 +450,16 @@ function isInPrimarySelection(view: EditorView, event: MouseEvent) {
     if (rect.left <= event.clientX && rect.right >= event.clientX &&
         rect.top <= event.clientY && rect.bottom >= event.clientY) return true
   }
+  return false
+}
+
+// A composition cannot nest, a key outside composition is not process key 229,
+// and a pointer press with no composed text left in the DOM cannot be preedit.
+function compositionEndWasLost(view: EditorView, event: Event): boolean {
+  if (view.observer.editContext || (event as any).synthetic) return false
+  if (event.type == "compositionstart") return true
+  if (event.type == "keydown") return !(event as KeyboardEvent).isComposing && (event as KeyboardEvent).keyCode != 229
+  if (event.type == "mousedown") return !view.docView.hasComposition
   return false
 }
 

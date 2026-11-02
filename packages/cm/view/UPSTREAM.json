@@ -20,7 +20,9 @@
     "src/editorview.ts: give one explicit target scroll a separate bounded measurement phase after mounting the distant target.",
     "src/editorview.ts, src/extension.ts and src/docview.ts: retain measured source anchors for outer scroll snapshots without synchronous geometry reads during capture.",
     "src/dom.ts: resolve physical scroll owners by axis from both overflow dimensions and computed CSS, ignoring visible or clipped decoration overflow while retaining programmatic hidden scrolling.",
-    "src/cursor.ts, src/input.ts and src/domchange.ts: require mounted keyboard and pointer endpoints to own a positive-height line, excluding phantom font rectangles on collapsed rows and preserving corrected undirectional atomic ranges."
+    "src/cursor.ts, src/input.ts and src/domchange.ts: require mounted keyboard and pointer endpoints to own a positive-height line, excluding phantom font rectangles on collapsed rows and preserving corrected undirectional atomic ranges.",
+    "src/input.ts: end a composition whose compositionend the browser never sent when a new composition, a non-composing key or a pointer press with no composed DOM arrives.",
+    "src/buildtile.ts: keep DOM beside a composition in place: skip the empty tail after it so a widget starting at its end is preserved, walk zero-length tiles at an inserted composition, and reuse the widget buffer walked last."
   ],
   "sourceEntry": "src/index.ts"
 }
