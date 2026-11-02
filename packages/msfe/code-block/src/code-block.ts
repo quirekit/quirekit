@@ -8,6 +8,7 @@ import type { MsfeCommand, MsfeExtension } from "@quirekit/msfe-core";
 import type { CodeBlockOptions } from "./types";
 import { emptyCodeLayer } from "./empty/layer";
 import { codeBlockBoundary } from "./boundaries";
+import { indentCode } from "./indent";
 
 /** @returns Code container projection retaining the outer editor as the only input owner. */
 function codeBlockBackend(): MsfeExtension {
@@ -70,7 +71,11 @@ export const CodeBlock = Node.create<CodeBlockOptions>({ name: "code-block",
   addEditingBoundaries: () => [codeBlockBoundary],
   /** @returns Measured placeholder only when the canonical block has no body line. */
   addProjectionLayers() { return emptyCodeLayer(this.name, this.options, () => this.editor); },
-  addCommands() { return { setCodeLanguage: (language: string) => sourceCommand(setCodeLanguage(language)) }; },
+  addCommands() { return { setCodeLanguage: (language: string) => sourceCommand(setCodeLanguage(language)),
+    indentCode: () => sourceCommand(indentCode(1)), outdentCode: () => sourceCommand(indentCode(-1)) }; },
+  /** @returns Code-editor indentation inside fenced bodies; elsewhere the keys fall through to other owners. */
+  addKeyboardShortcuts() { return { Tab: () => this.editor.commands.indentCode(), "Shift-Tab": () => this.editor.commands.outdentCode(),
+    "Mod-]": () => this.editor.commands.indentCode(), "Mod-[": () => this.editor.commands.outdentCode() }; },
   addAttributes() { return { language: { default: "", validate: value => typeof value === "string" && /^[a-zA-Z0-9_+#.-]{0,40}$/u.test(value) } }; },
   addSource() { return defineSource({ nodes: ["FencedCode"], placement: "before", read: readCodeBlock, patch: patchCodeBlock,
     source: (document, node) => document.lineAt(node.from).text, renderer: codeBlockRenderer }); },

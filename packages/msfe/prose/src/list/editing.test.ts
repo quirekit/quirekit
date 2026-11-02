@@ -23,7 +23,7 @@ describe("list structural commands", () => {
     const spec = changeListIndent(1)(before)!;
     expect(spec).not.toBeNull();
     const after = before.update(spec).state;
-    expect(after.doc.toString()).toBe("> 10. first\n>     11. second\n>     12. third");
+    expect(after.doc.toString()).toBe("> 10. first\n>     1. second\n>     2. third");
     expect(after.selection.main.anchor).toBeGreaterThan(after.selection.main.head);
   });
   it("refuses first-item indentation and can unwrap a root task without losing its body", () => {
@@ -46,5 +46,41 @@ describe("list structural commands", () => {
     expect(changeListIndent(-1)(state("- - shared", "shared"))).toBeNull();
     const empty = state("-", "-");
     expect(empty.update(changeListIndent(-1)(empty)!).state.doc.toString()).toBe("");
+  });
+  it("targets the nested item when the caret sits at its line end", () => {
+    const before = state("1. top\n   - first\n   - second", "first");
+    expect(before.update(changeListIndent(-1)(before)!).state.doc.toString()).toBe("1. top\n- first\n   - second");
+  });
+  it("separates unwrapped root items from neighboring items with blank lines", () => {
+    const middle = state("- a\n- b\n- c", "b");
+    expect(middle.update(changeListIndent(-1)(middle)!).state.doc.toString()).toBe("- a\n\nb\n\n- c");
+    let pair = state("1. a\n2. b\n3. c\n4. d", "b");
+    pair = pair.update({ selection: EditorSelection.range(pair.doc.toString().indexOf("b"), pair.doc.toString().indexOf("c") + 1) }).state;
+    expect(pair.update(changeListIndent(-1)(pair)!).state.doc.toString()).toBe("1. a\n\nb\n\nc\n\n2. d");
+    const quoted = state("> - a\n> - b", "b");
+    expect(quoted.update(changeListIndent(-1)(quoted)!).state.doc.toString()).toBe("> - a\n>\n> b");
+    const loose = state("- a\n\n- b\n\n- c", "b");
+    expect(loose.update(changeListIndent(-1)(loose)!).state.doc.toString()).toBe("- a\n\nb\n\n- c");
+  });
+  it("keeps ordered numbers consecutive when nesting into a new or existing list", () => {
+    const fresh = state("1. a\n2. b\n3. c", "b");
+    expect(fresh.update(changeListIndent(1)(fresh)!).state.doc.toString()).toBe("1. a\n   1. b\n2. c");
+    const paren = state("9) a\n10) b", "b");
+    expect(paren.update(changeListIndent(1)(paren)!).state.doc.toString()).toBe("9) a\n   1) b");
+    const join = state("1. a\n   1. x\n2. b", "b");
+    expect(join.update(changeListIndent(1)(join)!).state.doc.toString()).toBe("1. a\n   1. x\n   2. b");
+    const nested = fresh.update(changeListIndent(1)(fresh)!).state;
+    const lifted = state(nested.doc.toString(), "b");
+    expect(lifted.update(changeListIndent(-1)(lifted)!).state.doc.toString()).toBe("1. a\n2. b\n3. c");
+  });
+  it("continues the outer numbers and restarts the siblings left under a lifted item", () => {
+    const before = state("1. top\n   1. a\n   2. b\n   3. c", "a");
+    expect(before.update(changeListIndent(-1)(before)!).state.doc.toString()).toBe("1. top\n2. a\n   1. b\n   2. c");
+  });
+  it("leaves code inside a list item to the code block", () => {
+    const doc = "- one\n- two\n\n  ```ts\n  code\n  ```";
+    expect(changeListIndent(1)(state(doc, "code"))).toBeNull();
+    expect(changeListIndent(-1)(state(doc, "code"))).toBeNull();
+    expect(continueList()(state(doc, "code"))).toBeNull();
   });
 });

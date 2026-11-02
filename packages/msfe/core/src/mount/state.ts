@@ -2,7 +2,7 @@ import { createSearchPanel } from "../search/panel";
 import { navigationEffect } from "../search/navigation/effect";
 import { defaultEditorIcon } from "../presentation/icons";
 import type { MsfeIconFactory } from "../presentation/types";
-import { EditorState, type Extension } from "@quirekit/cm-state";
+import { EditorState, Prec, type Extension } from "@quirekit/cm-state";
 import { EditorView, drawSelection, dropCursor, highlightSpecialChars, keymap, rectangularSelection } from "@quirekit/cm-view";
 import { defaultKeymap } from "@quirekit/cm-commands";
 import { bracketMatching, codeFolding, defaultHighlightStyle, foldKeymap, syntaxHighlighting } from "@quirekit/cm-language";
@@ -14,6 +14,15 @@ import { markdownParser } from "../source/parsing/parser";
 import { createMarkdownLanguage } from "../markdown/parsing/language";
 import type { LanguageDescription } from "@quirekit/cm-language";
 import type { Panel } from "@quirekit/cm-view";
+
+/**
+ * Keeps Tab inside an editable document once no feature claims it; Escape then Tab still moves focus.
+ * @param view - Focused editor.
+ * @returns Whether the key was consumed.
+ */
+function holdTab(view: EditorView): boolean {
+  return view.state.facet(EditorView.editable) && !view.state.readOnly;
+}
 
 /**
  * Creates a document state only on initial mount or explicit document replacement.
@@ -41,6 +50,9 @@ export function createDocumentState(text: string, extensions: Extension, revisio
     }), highlightSelectionMatches(), syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
     createMarkdownLanguage(syntax, codeLanguages),
     keymap.of([...closeBracketsKeymap, ...defaultKeymap, ...searchKeymap, ...foldKeymap]),
+    Prec.lowest(keymap.of([{ key: "Tab", run: holdTab, shift: holdTab }])),
+    // Observers run even when a feature consumes Escape, so Escape then Tab always leaves the editor.
+    EditorView.domEventObservers({ keydown(event, view) { if (event.key === "Escape") view.setTabFocusMode(2000); } }),
     extensions,
   ] });
 }

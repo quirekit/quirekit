@@ -2,6 +2,7 @@ import { countColumn, type ChangeSpec, type TransactionSpec } from "@quirekit/cm
 import { insertNewlineContinueMarkup } from "@quirekit/cm-lang-markdown";
 import type { MsfeCommand } from "@quirekit/msfe-core";
 import { listContext, listIndentStart, markerWidth, previousListItem } from "./context";
+import { renumberMove, separateUnwrapped } from "./restructure";
 
 /** @param direction - Nest or lift one level. @returns Atomic whole-item edit that maps the directed source selection. */
 export function changeListIndent(direction: 1 | -1): MsfeCommand {
@@ -32,6 +33,8 @@ export function changeListIndent(direction: 1 | -1): MsfeCommand {
         }
       }
     }
+    changes.push(...renumberMove(state, context, direction));
+    if (direction < 0 && !context.parent) changes.push(...separateUnwrapped(state, context));
     const edits = state.changes(changes);
     return { changes: edits, selection: state.selection.map(edits), scrollIntoView: true };
   };

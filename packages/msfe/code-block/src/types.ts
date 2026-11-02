@@ -20,6 +20,10 @@ declare module "@quirekit/msfe-core" {
     codeBlock: {
     /** @param language - Feature command input. @returns The caller’s result or pending chain. */
     setCodeLanguage(language: string): ReturnType;
+    /** @returns The caller’s result or pending chain. */
+    indentCode(): ReturnType;
+    /** @returns The caller’s result or pending chain. */
+    outdentCode(): ReturnType;
     };
   }
 }

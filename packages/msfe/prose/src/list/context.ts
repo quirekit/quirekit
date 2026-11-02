@@ -3,17 +3,27 @@ import type { EditorState } from "@quirekit/cm-state";
 import type { SyntaxNode } from "@lezer/common";
 import type { ListContext } from "./types";
 
-/** @param node - Accepted node at a selection endpoint. @returns Nearest item ancestor. */
+/** @param node - Accepted node at a selection endpoint. @returns Nearest item ancestor; code inside an item belongs to the code block. */
 function itemAt(node: SyntaxNode | null): SyntaxNode | null {
-  while (node && node.name !== "ListItem") node = node.parent;
+  while (node && node.name !== "ListItem") {
+    if (node.name === "FencedCode" || node.name === "CodeBlock") return null;
+    node = node.parent;
+  }
   return node;
+}
+
+/** @param tree - Current syntax tree. @param pos - Selection endpoint. @returns Innermost item on either side; a line end touches its nested item and the enclosing list. */
+function innermostItem(tree: ReturnType<typeof syntaxTree>, pos: number): SyntaxNode | null {
+  const after = itemAt(tree.resolveInner(pos, 1)), before = itemAt(tree.resolveInner(pos, -1));
+  if (!after || !before) return after ?? before;
+  return before.from >= after.from && before.to <= after.to ? before : after;
 }
 
 /** @param state - Canonical source. @param enumerate - Explicit actions enumerate affected siblings; status reads endpoints only. @returns Common sibling selection without walking descendants. */
 export function listContext(state: EditorState, enumerate = true): ListContext | null {
   if (state.selection.ranges.length !== 1) return null;
   const range = state.selection.main, tree = syntaxTree(state);
-  let first = itemAt(tree.resolveInner(range.from, 1)) ?? itemAt(tree.resolveInner(range.from, -1));
+  let first = innermostItem(tree, range.from);
   const end = range.empty ? range.to : range.to - 1;
   while (first?.parent && end > first.parent.to) first = itemAt(first.parent.parent);
   const list = first?.parent;
