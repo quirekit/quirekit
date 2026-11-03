@@ -7,7 +7,7 @@ Embeds editable data views in Markdown, storing their data in code fences.
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-data-view@alpha
+npm install @quirekit/msfe-data-view
 ```
 
 ## Usage

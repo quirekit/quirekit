@@ -7,7 +7,7 @@ Data tools for mind maps. Create maps from an outline, change topics and layout,
 ## Installation
 
 ```bash
-npm install @quirekit/mind-map@alpha
+npm install @quirekit/mind-map
 ```
 
 ## Usage

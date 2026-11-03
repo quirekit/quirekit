@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/suggestion@alpha
+npm install @quirekit/suggestion
 ```
 
 ## 使用方式

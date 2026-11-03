@@ -7,7 +7,7 @@ Embeds whiteboards as document blocks in Core, Block or Classic, retaining edita
 ## Installation
 
 ```bash
-npm install @quirekit/extension-whiteboard@alpha
+npm install @quirekit/extension-whiteboard
 ```
 
 ## Usage

@@ -7,7 +7,7 @@ A Markdown editor with a toolbar. Switch between live editing and source editing
 ## Installation
 
 ```bash
-npm install @quirekit/md-editor@alpha
+npm install @quirekit/md-editor
 ```
 
 ## Usage

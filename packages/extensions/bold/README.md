@@ -7,7 +7,7 @@ Adds bold text with commands to set, remove or toggle it.
 ## Installation
 
 ```bash
-npm install @quirekit/extension-bold@alpha
+npm install @quirekit/extension-bold
 ```
 
 ## Usage

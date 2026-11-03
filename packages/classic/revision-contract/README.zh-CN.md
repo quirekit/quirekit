@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/classic-revision-contract@alpha
+npm install @quirekit/classic-revision-contract
 ```
 
 ## 使用方式

@@ -7,7 +7,7 @@ Connects the simple-mind-map drawing interface to QuireKit data for mind maps, i
 ## Installation
 
 ```bash
-npm install @quirekit/mind-map-simple@alpha
+npm install @quirekit/mind-map-simple
 ```
 
 ## Usage

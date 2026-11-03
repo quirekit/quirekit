@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-html-sandbox@alpha
+npm install @quirekit/msfe-html-sandbox
 ```
 
 ## 使用方式

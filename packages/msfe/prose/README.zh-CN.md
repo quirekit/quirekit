@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-prose@alpha
+npm install @quirekit/msfe-prose
 ```
 
 ## 使用方式

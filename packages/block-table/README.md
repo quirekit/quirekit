@@ -7,7 +7,7 @@ Adds Word table nodes and commands to Block Editor.
 ## Installation
 
 ```bash
-npm install @quirekit/block-table@alpha
+npm install @quirekit/block-table
 ```
 
 ## Usage

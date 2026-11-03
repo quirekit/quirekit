@@ -7,7 +7,7 @@ export interface ParsedLicenseKey {
   /** Decoded payload. */ readonly payload: QuireKitLicensePayload;
 }
 
-const plans = new Set(["community", "education", "nonprofit", "commercial", "enterprise"]);
+const plans = new Set(["community", "education", "nonprofit", "commercial", "enterprise", "open-source"]);
 const products = new Set<string>(["classic", "classic-pro", "export", "md", "docx", "*"] satisfies (QuireKitProduct | "*")[]);
 const isoDate = /^\d{4}-\d{2}-\d{2}$/u;
 

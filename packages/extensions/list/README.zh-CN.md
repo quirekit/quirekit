@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-list@alpha
+npm install @quirekit/extension-list
 ```
 
 ## 使用方式

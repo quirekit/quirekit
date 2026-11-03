@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/data-view-editor@alpha
+npm install @quirekit/data-view-editor
 ```
 
 使用本包还需要：`vue` (^3.5.0)。

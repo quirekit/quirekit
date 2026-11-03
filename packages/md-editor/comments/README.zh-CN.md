@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/md-editor-comments@alpha
+npm install @quirekit/md-editor-comments
 ```
 
 ## 使用方式

@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-text-style@alpha
+npm install @quirekit/extension-text-style
 ```
 
 ## 使用方式

@@ -7,7 +7,7 @@ Adds an AI side panel to Md Editor for conversations and edits about the current
 ## Installation
 
 ```bash
-npm install @quirekit/md-editor-ai@alpha
+npm install @quirekit/md-editor-ai
 ```
 
 The consuming project also needs: `vue` (^3.5.0).

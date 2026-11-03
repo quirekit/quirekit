@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-code-block@alpha
+npm install @quirekit/msfe-code-block
 ```
 
 ## 使用方式

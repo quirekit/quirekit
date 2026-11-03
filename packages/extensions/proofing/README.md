@@ -7,7 +7,7 @@ Adds spelling and grammar findings, suggestions and correction commands. A repla
 ## Installation
 
 ```bash
-npm install @quirekit/extension-proofing@alpha
+npm install @quirekit/extension-proofing
 ```
 
 ## Usage

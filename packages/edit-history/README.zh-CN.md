@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/edit-history@alpha
+npm install @quirekit/edit-history
 ```
 
 ## 使用方式

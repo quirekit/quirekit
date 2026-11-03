@@ -7,7 +7,7 @@ Provides Markdown prose features including emphasis, inline code, strikethrough,
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-prose@alpha
+npm install @quirekit/msfe-prose
 ```
 
 ## Usage

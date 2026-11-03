@@ -7,7 +7,7 @@ Shared model settings, connections and supporting tools for AI assistants across
 ## Installation
 
 ```bash
-npm install @quirekit/ai-assistant@alpha
+npm install @quirekit/ai-assistant
 ```
 
 The consuming project also needs: `vue` (^3.5.0).

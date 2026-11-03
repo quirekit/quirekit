@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/block-editor@alpha
+npm install @quirekit/block-editor
 ```
 
 ## 使用方式

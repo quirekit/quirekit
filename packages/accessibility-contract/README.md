@@ -7,7 +7,7 @@ Defines accessibility data types shared by document features and user interfaces
 ## Installation
 
 ```bash
-npm install @quirekit/accessibility-contract@alpha
+npm install @quirekit/accessibility-contract
 ```
 
 ## Usage

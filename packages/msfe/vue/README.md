@@ -14,11 +14,11 @@ Vue 3 integration for MSFE, managing editor mounting, cleanup, state subscriptio
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-vue@alpha @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha vue@^3.5.40
+npm install @quirekit/msfe-vue @quirekit/msfe-core @quirekit/msfe-starter-kit vue@^3.5.40
 ```
 
 ```bash
-pnpm add @quirekit/msfe-vue@alpha @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha vue@^3.5.40
+pnpm add @quirekit/msfe-vue @quirekit/msfe-core @quirekit/msfe-starter-kit vue@^3.5.40
 ```
 
 The peer dependency is `vue: ^3.5.40`; check that range even in an existing Vue app. Core is a regular dependency, listed explicitly because the example imports its types. StarterKit supplies example features and is not a peer dependency. Packages expose ESM exports.

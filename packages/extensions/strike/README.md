@@ -7,7 +7,7 @@ Adds a strikethrough to indicate completed or discarded text.
 ## Installation
 
 ```bash
-npm install @quirekit/extension-strike@alpha
+npm install @quirekit/extension-strike
 ```
 
 ## Usage

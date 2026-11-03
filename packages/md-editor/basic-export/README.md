@@ -7,7 +7,7 @@ Open-source basic Word import/export and PDF export for Md Editor. Established o
 ## Install
 
 ```bash
-npm install @quirekit/md-editor-basic-export@alpha
+npm install @quirekit/md-editor-basic-export
 ```
 
 ## Usage

@@ -9,7 +9,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/pm-commands@alpha
+npm install @quirekit/pm-commands
 ```
 
 ## 使用方式

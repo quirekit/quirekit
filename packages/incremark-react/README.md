@@ -7,7 +7,7 @@ Incremark’s React reader for Markdown articles and streaming AI responses. It 
 ## Installation
 
 ```bash
-npm install @quirekit/incremark-react@alpha
+npm install @quirekit/incremark-react
 ```
 
 The consuming project also needs: `react` (^19.3.0), `react-dom` (^19.3.0).

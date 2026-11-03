@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-hard-break@alpha
+npm install @quirekit/extension-hard-break
 ```
 
 ## 使用方式

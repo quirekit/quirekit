@@ -7,7 +7,7 @@ Embeds flowcharts as document blocks in Core, Block or Classic, retaining editab
 ## Installation
 
 ```bash
-npm install @quirekit/extension-flowchart@alpha
+npm install @quirekit/extension-flowchart
 ```
 
 ## Usage

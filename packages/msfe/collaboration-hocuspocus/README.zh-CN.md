@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-collaboration-hocuspocus@alpha
+npm install @quirekit/msfe-collaboration-hocuspocus
 ```
 
 ## 使用方式

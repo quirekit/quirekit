@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-html@alpha
+npm install @quirekit/msfe-html
 ```
 
 ## 使用方式

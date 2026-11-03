@@ -29,7 +29,7 @@ const checks = new Map<string, Promise<QuireKitLicenseCheck>>();
 
 /**
  * Sets or clears the license key for every QuireKit commercial component on the page.
- * @param key - Issued key, `open-source`, or null to clear.
+ * @param key - Issued key, or null to clear.
  */
 export function setQuireKitLicense(key: string | null): void {
   const shared = state(), next = key?.trim() || undefined;
@@ -57,10 +57,10 @@ export function recordReleaseDate(product: QuireKitProduct, date: string): void 
  */
 export function checkQuireKitLicense(product: QuireKitProduct): Promise<QuireKitLicenseCheck> {
   const shared = state(), release = shared.releaseDates.get(product) ?? releaseDate();
-  const cacheKey = `${product}\n${shared.key ?? ""}\n${release ?? ""}`, cached = checks.get(cacheKey);
+  const location = currentLocation(), development = isDevelopmentLocation(location);
+  const cacheKey = `${product}\n${shared.key ?? ""}\n${release ?? ""}\n${development}`, cached = checks.get(cacheKey);
   if (cached) return cached;
-  const location = currentLocation();
-  const check = isDevelopmentLocation(location)
+  const check = development
     ? Promise.resolve<QuireKitLicenseCheck>({ status: "licensed" })
     : verifyQuireKitLicenseKey(shared.key, { product, hostname: location?.hostname, releaseDate: release });
   const reported = check.then((result) => {

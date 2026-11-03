@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/chart@alpha
+npm install @quirekit/chart
 ```
 
 ## 使用方式

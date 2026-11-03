@@ -7,7 +7,7 @@ Provides document content, selection information and status announcements for sc
 ## Installation
 
 ```bash
-npm install @quirekit/accessibility@alpha
+npm install @quirekit/accessibility
 ```
 
 ## Usage

@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/cm-lang-css",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1",
   "description": "CSS language support for the CodeMirror code editor",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/cm/lang-css"},

@@ -7,7 +7,7 @@ Inserts a horizontal separator between content blocks.
 ## Installation
 
 ```bash
-npm install @quirekit/extension-horizontal-rule@alpha
+npm install @quirekit/extension-horizontal-rule
 ```
 
 ## Usage

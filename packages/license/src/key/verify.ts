@@ -11,9 +11,6 @@ const includedProducts: Readonly<Record<QuireKitProduct, readonly QuireKitProduc
   docx: []
 };
 
-/** Self-declared value for OSI-licensed open-source projects; governed by the license terms only. */
-export const openSourceLicenseValue = "open-source";
-
 /**
  * Verifies one key for one product. Pure apart from WebCrypto, so it runs the same in
  * browsers, workers and Node.
@@ -23,7 +20,6 @@ export const openSourceLicenseValue = "open-source";
  */
 export async function verifyQuireKitLicenseKey(key: string | undefined, context: QuireKitLicenseContext): Promise<QuireKitLicenseCheck> {
   if (key === undefined || key.trim() === "") return { status: "evaluation", reason: "missing" };
-  if (key.trim() === openSourceLicenseValue) return { status: "licensed", plan: "open-source" };
   const parsed = parseLicenseKey(key);
   if (!parsed) return { status: "invalid", reason: "malformed" };
   const subtle = globalThis.crypto?.subtle;

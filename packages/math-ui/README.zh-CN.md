@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/math-ui@alpha
+npm install @quirekit/math-ui
 ```
 
 使用本包还需要：`vue` (^3.5.0)。

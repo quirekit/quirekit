@@ -7,7 +7,7 @@ Adds Python language support to CodeMirror.
 ## Installation
 
 ```bash
-npm install @quirekit/cm-lang-python@alpha
+npm install @quirekit/cm-lang-python
 ```
 
 ## Usage

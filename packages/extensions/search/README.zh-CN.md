@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-search@alpha
+npm install @quirekit/extension-search
 ```
 
 ## 使用方式

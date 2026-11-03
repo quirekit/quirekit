@@ -14,11 +14,11 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha
+npm install @quirekit/msfe-core @quirekit/msfe-starter-kit
 ```
 
 ```bash
-pnpm add @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha
+pnpm add @quirekit/msfe-core @quirekit/msfe-starter-kit
 ```
 
 本包没有 peer 依赖；内含功能包是普通依赖，会自动安装。示例直接导入 Core，所以将它显式列出。包提供 ESM 导出。
@@ -91,10 +91,10 @@ const configuredKit = StarterKit.configure({
 直接导入子包时，请显式安装它，不要依赖包管理器把传递依赖提升到顶层：
 
 ```bash
-npm install @quirekit/msfe-heading@alpha
+npm install @quirekit/msfe-heading
 ```
 
-pnpm 对应命令为 `pnpm add @quirekit/msfe-heading@alpha`。
+pnpm 对应命令为 `pnpm add @quirekit/msfe-heading`。
 
 ```ts
 import { Heading } from '@quirekit/msfe-heading'

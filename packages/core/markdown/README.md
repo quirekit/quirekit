@@ -7,7 +7,7 @@ Converts Markdown text to and from QuireKit document JSON for rich-text import, 
 ## Installation
 
 ```bash
-npm install @quirekit/markdown@alpha
+npm install @quirekit/markdown
 ```
 
 ## Usage

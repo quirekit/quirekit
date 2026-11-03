@@ -7,7 +7,7 @@ Defines data, styles and editing operations for statistical charts such as bar, 
 ## Installation
 
 ```bash
-npm install @quirekit/chart@alpha
+npm install @quirekit/chart
 ```
 
 ## Usage

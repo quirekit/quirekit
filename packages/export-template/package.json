@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/export-template",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1",
   "description": "Format-neutral, validated export styles and host-owned template contracts.",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/export-template"},

@@ -14,11 +14,11 @@ A Markdown feature preset for MSFE, combining headings, bold, links, images, and
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha
+npm install @quirekit/msfe-core @quirekit/msfe-starter-kit
 ```
 
 ```bash
-pnpm add @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha
+pnpm add @quirekit/msfe-core @quirekit/msfe-starter-kit
 ```
 
 This package has no peer dependencies. Included feature packages are regular dependencies and install automatically. Core is listed explicitly because the example imports it directly. Packages expose ESM exports.
@@ -91,10 +91,10 @@ Use `[configuredKit]` instead of `[StarterKit]` when creating an Editor. Disabli
 When importing a child package directly, install it explicitly rather than relying on transitive dependencies being hoisted:
 
 ```bash
-npm install @quirekit/msfe-heading@alpha
+npm install @quirekit/msfe-heading
 ```
 
-The pnpm equivalent is `pnpm add @quirekit/msfe-heading@alpha`.
+The pnpm equivalent is `pnpm add @quirekit/msfe-heading`.
 
 ```ts
 import { Heading } from '@quirekit/msfe-heading'

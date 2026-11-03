@@ -15,11 +15,11 @@ A preset that installs common rich-text structures, text formatting, keyboard sh
 These commands also install Core and the native DOM view required by the example.
 
 ```bash
-npm install @quirekit/core@alpha @quirekit/starter-kit@alpha @quirekit/dom-view@alpha
+npm install @quirekit/core @quirekit/starter-kit @quirekit/dom-view
 ```
 
 ```bash
-pnpm add @quirekit/core@alpha @quirekit/starter-kit@alpha @quirekit/dom-view@alpha
+pnpm add @quirekit/core @quirekit/starter-kit @quirekit/dom-view
 ```
 
 This package has no peer dependencies. Regular dependencies are installed automatically. Core and the DOM view are listed because the example imports them directly. Packages expose ESM exports.

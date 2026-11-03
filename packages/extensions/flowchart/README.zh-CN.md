@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-flowchart@alpha
+npm install @quirekit/extension-flowchart
 ```
 
 ## 使用方式

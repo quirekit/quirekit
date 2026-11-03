@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/whiteboard-docx",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1",
   "description": "Shared whiteboard DOCX projection and Markdown source recovery.",
   "license": "MIT",
   "repository": {

@@ -7,7 +7,7 @@ Provides bullet lists, ordered lists, list items and their keyboard behavior.
 ## Installation
 
 ```bash
-npm install @quirekit/extension-list@alpha
+npm install @quirekit/extension-list
 ```
 
 ## Usage

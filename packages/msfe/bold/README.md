@@ -7,7 +7,7 @@ Recognizes Markdown bold markers and provides a command to toggle them.
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-bold@alpha
+npm install @quirekit/msfe-bold
 ```
 
 ## Usage

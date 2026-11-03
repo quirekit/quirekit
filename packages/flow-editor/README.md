@@ -7,7 +7,7 @@ An editor for flowcharts. Provides an editing interface that can also be opened 
 ## Installation
 
 ```bash
-npm install @quirekit/flow-editor@alpha
+npm install @quirekit/flow-editor
 ```
 
 ## Usage

@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/cm-autocomplete@alpha
+npm install @quirekit/cm-autocomplete
 ```
 
 ## 使用方式

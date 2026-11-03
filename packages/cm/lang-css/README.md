@@ -7,7 +7,7 @@ Adds CSS language support to CodeMirror.
 ## Installation
 
 ```bash
-npm install @quirekit/cm-lang-css@alpha
+npm install @quirekit/cm-lang-css
 ```
 
 ## Usage

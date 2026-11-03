@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/html@alpha
+npm install @quirekit/html
 ```
 
 ## 使用方式

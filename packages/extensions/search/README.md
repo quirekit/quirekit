@@ -7,7 +7,7 @@ Finds text, navigates matches and replaces content. Your application supplies th
 ## Installation
 
 ```bash
-npm install @quirekit/extension-search@alpha
+npm install @quirekit/extension-search
 ```
 
 ## Usage

@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-italic@alpha
+npm install @quirekit/extension-italic
 ```
 
 ## 使用方式

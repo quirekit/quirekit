@@ -7,7 +7,7 @@ AI 助手的模型设置、连接和通用配套工具。供不同编辑器共�
 ## 安装
 
 ```bash
-npm install @quirekit/ai-assistant@alpha
+npm install @quirekit/ai-assistant
 ```
 
 使用本包还需要：`vue` (^3.5.0)。

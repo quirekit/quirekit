@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/cm-lint@alpha
+npm install @quirekit/cm-lint
 ```
 
 ## 使用方式

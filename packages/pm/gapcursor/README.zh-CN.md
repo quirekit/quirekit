@@ -9,7 +9,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/pm-gapcursor@alpha
+npm install @quirekit/pm-gapcursor
 ```
 
 ## 使用方式

@@ -16,11 +16,11 @@ A CodeMirror-based Markdown source editor core with switchable source and live p
 The example also installs the default feature preset. Core has no peer dependencies to install separately and requires neither Vue nor React.
 
 ```bash
-npm install @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha
+npm install @quirekit/msfe-core @quirekit/msfe-starter-kit
 ```
 
 ```bash
-pnpm add @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha
+pnpm add @quirekit/msfe-core @quirekit/msfe-starter-kit
 ```
 
 The package manager installs regular dependencies. For source editing without the preset's visual features, you can install Core alone. Packages expose ESM exports.

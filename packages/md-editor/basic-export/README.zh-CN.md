@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/md-editor-basic-export@alpha
+npm install @quirekit/md-editor-basic-export
 ```
 
 ## 使用方式

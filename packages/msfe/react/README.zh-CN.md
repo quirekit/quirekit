@@ -14,11 +14,11 @@ MSFE 的 React 接入层，通过组件和 Hook 管理 Markdown 编辑器及 Rea
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-react@alpha @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha react@^19.3.0 react-dom@^19.3.0
+npm install @quirekit/msfe-react @quirekit/msfe-core @quirekit/msfe-starter-kit react@^19.3.0 react-dom@^19.3.0
 ```
 
 ```bash
-pnpm add @quirekit/msfe-react@alpha @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha react@^19.3.0 react-dom@^19.3.0
+pnpm add @quirekit/msfe-react @quirekit/msfe-core @quirekit/msfe-starter-kit react@^19.3.0 react-dom@^19.3.0
 ```
 
 peer 依赖是 `react: ^19.3.0` 和 `react-dom: ^19.3.0`，两个都需要。Core 是普通依赖，这里显式安装是因为示例导入其类型；StarterKit 是示例功能预设，不是 peer 依赖。包提供 ESM 导出。

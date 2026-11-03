@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-paragraph@alpha
+npm install @quirekit/extension-paragraph
 ```
 
 ## 使用方式

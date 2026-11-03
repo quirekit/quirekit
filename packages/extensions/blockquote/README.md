@@ -7,7 +7,7 @@ Adds block quotes for excerpts, quotations and notes.
 ## Installation
 
 ```bash
-npm install @quirekit/extension-blockquote@alpha
+npm install @quirekit/extension-blockquote
 ```
 
 ## Usage

@@ -7,7 +7,7 @@ Connects MSFE collaboration sessions to a Hocuspocus service.
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-collaboration-hocuspocus@alpha
+npm install @quirekit/msfe-collaboration-hocuspocus
 ```
 
 ## Usage

@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-heading@alpha
+npm install @quirekit/msfe-heading
 ```
 
 ## 使用方式

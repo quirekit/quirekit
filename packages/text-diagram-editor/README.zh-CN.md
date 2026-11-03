@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/text-diagram-editor@alpha
+npm install @quirekit/text-diagram-editor
 ```
 
 ## 使用方式

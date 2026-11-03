@@ -7,7 +7,7 @@ Connects the Excalidraw drawing interface to QuireKit data for whiteboards, incl
 ## Installation
 
 ```bash
-npm install @quirekit/whiteboard-excalidraw@alpha
+npm install @quirekit/whiteboard-excalidraw
 ```
 
 ## Usage

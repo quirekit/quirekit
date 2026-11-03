@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/data-view@alpha
+npm install @quirekit/data-view
 ```
 
 ## 使用方式

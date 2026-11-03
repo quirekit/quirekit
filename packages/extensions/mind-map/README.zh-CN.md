@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-mind-map@alpha
+npm install @quirekit/extension-mind-map
 ```
 
 ## 使用方式

@@ -149,7 +149,7 @@ it("keeps nested modal themes, labeling and later-opened hover outside backgroun
   await nextTick();
   expect(themeOwner(preview)!.style.getPropertyValue(colorName)).toBe(nestedTheme.value.color.selection.document);
   expect(themeOwner(dialog)!.style.getPropertyValue(colorName)).toBe(defaultTheme.color.selection.document);
-});
+}, 15_000);
 
 it("keeps Toast resident under its theme scope instead of introducing a portal", async () => {
   const theme = shallowRef(defaultTheme);

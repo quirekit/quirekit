@@ -7,7 +7,7 @@ Checks spelling with Hunspell dictionaries, for applications that need to choose
 ## Installation
 
 ```bash
-npm install @quirekit/proofing-hunspell@alpha
+npm install @quirekit/proofing-hunspell
 ```
 
 ## Usage

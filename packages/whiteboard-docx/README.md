@@ -7,7 +7,7 @@ Includes whiteboards in Word exports while preserving the data needed to edit th
 ## Installation
 
 ```bash
-npm install @quirekit/whiteboard-docx@alpha
+npm install @quirekit/whiteboard-docx
 ```
 
 ## Usage

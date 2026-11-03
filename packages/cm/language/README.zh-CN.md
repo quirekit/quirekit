@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/cm-language@alpha
+npm install @quirekit/cm-language
 ```
 
 ## 使用方式

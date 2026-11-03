@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/devtools@alpha
+npm install @quirekit/devtools
 ```
 
 ## 使用方式

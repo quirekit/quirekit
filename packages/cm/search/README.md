@@ -7,7 +7,7 @@ Provides search, replacement, a search panel and match highlighting for CodeMirr
 ## Installation
 
 ```bash
-npm install @quirekit/cm-search@alpha
+npm install @quirekit/cm-search
 ```
 
 ## Usage

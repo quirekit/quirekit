@@ -7,7 +7,7 @@ Word 兼容的段落格式：对齐、缩进、间距、制表位、分页符与
 ## 安装
 
 ```bash
-npm install @quirekit/classic-paragraph-model@alpha
+npm install @quirekit/classic-paragraph-model
 ```
 
 ## 使用方式

@@ -7,7 +7,7 @@ Adds optional Markdown features such as footnotes, math, callouts, frontmatter a
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-markdown-extras@alpha
+npm install @quirekit/msfe-markdown-extras
 ```
 
 ## Usage

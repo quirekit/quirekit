@@ -7,7 +7,7 @@ Stores multiline code with a language attribute and fenced-code input rules.
 ## Installation
 
 ```bash
-npm install @quirekit/extension-code-block@alpha
+npm install @quirekit/extension-code-block
 ```
 
 ## Usage

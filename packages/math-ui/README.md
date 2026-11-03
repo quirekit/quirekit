@@ -7,7 +7,7 @@ Vue interfaces for formula editing, including input, template selection and prev
 ## Installation
 
 ```bash
-npm install @quirekit/math-ui@alpha
+npm install @quirekit/math-ui
 ```
 
 The consuming project also needs: `vue` (^3.5.0).

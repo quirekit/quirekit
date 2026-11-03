@@ -9,7 +9,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/pm-decoration@alpha
+npm install @quirekit/pm-decoration
 ```
 
 ## 使用方式

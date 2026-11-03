@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, expect, it, vi } from "vitest";
+import { ensureSyntaxTree } from "@quirekit/cm-language";
 import { EditorSelection } from "@quirekit/cm-state";
 import { dataViewMarkdown, serializeDataView, type DataViewEditRequest } from "@quirekit/data-view";
 import type { MsfeEditor } from "@quirekit/msfe-core";
@@ -21,6 +22,7 @@ const source = "| a | b |\n| --- | --- |\n| one | two |";
 function fixture() {
   const parent = document.createElement("div"); document.body.append(parent);
   const editor = createMdEditor({ parent, markdown: source }); editors.push(editor);
+  expect(ensureSyntaxTree(editor.state, editor.state.doc.length, 5000)).not.toBeNull();
   editor.setSelection(EditorSelection.single(source.indexOf("one") + 1));
   const adjacent = captureAdjacentInsertion(editor, editor.captureTarget())!;
   const writer = createBlockInsertionWriter({ ...adjacent.target("after")!, value: "dataView" })!;

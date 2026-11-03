@@ -7,7 +7,7 @@ Checks English spelling and grammar through Harper, returning issue locations an
 ## Installation
 
 ```bash
-npm install @quirekit/proofing-harper@alpha
+npm install @quirekit/proofing-harper
 ```
 
 ## Usage

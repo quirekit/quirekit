@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/flow-editor@alpha
+npm install @quirekit/flow-editor
 ```
 
 ## 使用方式

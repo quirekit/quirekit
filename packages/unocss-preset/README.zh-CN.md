@@ -7,7 +7,7 @@ QuireKit UI 的样式和 UnoCSS 预设。可以直接引入编译好的 CSS，�
 ## 安装
 
 ```bash
-npm install @quirekit/unocss-preset@alpha
+npm install @quirekit/unocss-preset
 ```
 
 ## 使用方式

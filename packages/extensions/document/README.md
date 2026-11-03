@@ -7,7 +7,7 @@ Defines the outer doc node that holds paragraphs, headings and other blocks.
 ## Installation
 
 ```bash
-npm install @quirekit/extension-document@alpha
+npm install @quirekit/extension-document
 ```
 
 ## Usage

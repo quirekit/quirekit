@@ -7,7 +7,7 @@ Turns paragraphs into headings at different levels for document structure and ou
 ## Installation
 
 ```bash
-npm install @quirekit/extension-heading@alpha
+npm install @quirekit/extension-heading
 ```
 
 ## Usage

@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/whiteboard@alpha
+npm install @quirekit/whiteboard
 ```
 
 ## 使用方式

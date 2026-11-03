@@ -16,11 +16,11 @@
 示例一起安装默认功能预设。Core 本身没有需要另装的 peer 依赖，也不要求 Vue 或 React。
 
 ```bash
-npm install @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha
+npm install @quirekit/msfe-core @quirekit/msfe-starter-kit
 ```
 
 ```bash
-pnpm add @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha
+pnpm add @quirekit/msfe-core @quirekit/msfe-starter-kit
 ```
 
 普通依赖由包管理器安装。只要源码编辑、不需要预设的视觉功能时，可以只安装 Core。包提供 ESM 导出。

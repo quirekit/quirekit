@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/cm-state@alpha
+npm install @quirekit/cm-state
 ```
 
 ## 使用方式

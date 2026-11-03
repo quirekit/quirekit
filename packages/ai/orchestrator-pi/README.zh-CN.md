@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/ai-orchestrator-pi@alpha
+npm install @quirekit/ai-orchestrator-pi
 ```
 
 ## 使用方式

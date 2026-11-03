@@ -7,7 +7,7 @@ Parses Markdown text into a tree for editing, positioning and syntax analysis.
 ## Installation
 
 ```bash
-npm install @quirekit/lezer-markdown@alpha
+npm install @quirekit/lezer-markdown
 ```
 
 ## Usage

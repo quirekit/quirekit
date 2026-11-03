@@ -7,7 +7,7 @@ Inspects editor state, interaction records and rendering information to help dia
 ## Installation
 
 ```bash
-npm install @quirekit/devtools@alpha
+npm install @quirekit/devtools
 ```
 
 ## Usage

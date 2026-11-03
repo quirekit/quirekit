@@ -7,7 +7,7 @@ Recognizes Markdown images and provides hooks for display, pasting and uploads.
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-image@alpha
+npm install @quirekit/msfe-image
 ```
 
 ## Usage

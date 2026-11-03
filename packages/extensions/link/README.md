@@ -7,7 +7,7 @@ Adds text links, with commands to insert, update and remove them and helpers to 
 ## Installation
 
 ```bash
-npm install @quirekit/extension-link@alpha
+npm install @quirekit/extension-link
 ```
 
 ## Usage

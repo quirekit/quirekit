@@ -7,7 +7,7 @@ Stores CodeMirror text, selections and extension settings, with transactions pro
 ## Installation
 
 ```bash
-npm install @quirekit/cm-state@alpha
+npm install @quirekit/cm-state
 ```
 
 ## Usage

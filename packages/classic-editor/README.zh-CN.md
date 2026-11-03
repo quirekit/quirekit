@@ -7,7 +7,7 @@ QuireKit 的分页文档编辑器界面，提供工具栏、页面、选区和�
 ## 安装
 
 ```bash
-npm install @quirekit/classic-editor@alpha
+npm install @quirekit/classic-editor
 ```
 
 ## 使用方式

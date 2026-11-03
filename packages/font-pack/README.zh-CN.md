@@ -7,7 +7,7 @@ QuireKit 可选的开源字体资源。应用可以按需加载中文、拉丁�
 ## 安装
 
 ```bash
-npm install @quirekit/font-pack@alpha
+npm install @quirekit/font-pack
 ```
 
 ## 使用方式

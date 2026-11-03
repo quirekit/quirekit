@@ -7,7 +7,7 @@ Data tools for presenting records as tables or boards. Includes fields, records,
 ## Installation
 
 ```bash
-npm install @quirekit/data-view@alpha
+npm install @quirekit/data-view
 ```
 
 ## Usage

@@ -7,7 +7,7 @@ Manages suggestions shown while typing, such as @ mentions, / commands and searc
 ## Installation
 
 ```bash
-npm install @quirekit/suggestion@alpha
+npm install @quirekit/suggestion
 ```
 
 ## Usage

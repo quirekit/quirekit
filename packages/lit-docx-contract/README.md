@@ -7,7 +7,7 @@ Document types, node builders and extension interfaces shared by DOCX-related pa
 ## Installation
 
 ```bash
-npm install @quirekit/lit-docx-contract@alpha
+npm install @quirekit/lit-docx-contract
 ```
 
 ## Usage

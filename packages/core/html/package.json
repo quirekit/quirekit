@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/html",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/core/html"},
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/core/html#readme",

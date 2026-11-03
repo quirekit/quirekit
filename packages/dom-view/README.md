@@ -7,7 +7,7 @@ Mounts QuireKit documents in a traditional browser DOM editor. Use it when you n
 ## Installation
 
 ```bash
-npm install @quirekit/dom-view@alpha
+npm install @quirekit/dom-view
 ```
 
 ## Usage

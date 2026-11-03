@@ -7,7 +7,7 @@ A Vue Markdown reader for complete articles and AI responses that arrive a littl
 ## Installation
 
 ```bash
-npm install @quirekit/incremark@alpha
+npm install @quirekit/incremark
 ```
 
 ## Usage

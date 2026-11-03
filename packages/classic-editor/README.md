@@ -7,7 +7,7 @@ QuireKit’s paginated document editor interface, with a toolbar, pages, selecti
 ## Installation
 
 ```bash
-npm install @quirekit/classic-editor@alpha
+npm install @quirekit/classic-editor
 ```
 
 ## Usage

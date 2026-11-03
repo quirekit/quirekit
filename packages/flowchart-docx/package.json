@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/flowchart-docx",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1",
   "description": "Shared Flow Editor Word image projection and source recovery.",
   "license": "MIT",
   "repository": {

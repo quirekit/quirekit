@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/incremark-react",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1",
   "description": "React Markdown reading and incremental streaming over QuireKit Lezer.",
   "type": "module",
   "license": "MIT",

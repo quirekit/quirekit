@@ -7,7 +7,7 @@ An editor for mind maps. Provides an editing interface that can also be opened f
 ## Installation
 
 ```bash
-npm install @quirekit/mind-editor@alpha
+npm install @quirekit/mind-editor
 ```
 
 ## Usage

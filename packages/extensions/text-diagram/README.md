@@ -7,7 +7,7 @@ Embeds text diagrams as document blocks in Core, Block or Classic, retaining edi
 ## Installation
 
 ```bash
-npm install @quirekit/extension-text-diagram@alpha
+npm install @quirekit/extension-text-diagram
 ```
 
 ## Usage

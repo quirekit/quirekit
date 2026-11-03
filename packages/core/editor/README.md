@@ -16,13 +16,13 @@ QuireKit's rich-text editing core: it manages structured documents, extensions, 
 The browser example also installs the basic extension preset and the native DOM view. That view uses the browser's editable elements; it does not paginate content.
 
 ```bash
-npm install @quirekit/core@alpha @quirekit/starter-kit@alpha @quirekit/dom-view@alpha
+npm install @quirekit/core @quirekit/starter-kit @quirekit/dom-view
 ```
 
 Or with pnpm:
 
 ```bash
-pnpm add @quirekit/core@alpha @quirekit/starter-kit@alpha @quirekit/dom-view@alpha
+pnpm add @quirekit/core @quirekit/starter-kit @quirekit/dom-view
 ```
 
 Core has no peer dependencies to install separately. The other two packages are explicit dependencies of this example; the package manager installs Core's regular dependencies. Packages expose ESM exports.

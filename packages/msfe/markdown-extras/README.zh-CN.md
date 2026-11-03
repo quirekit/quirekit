@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-markdown-extras@alpha
+npm install @quirekit/msfe-markdown-extras
 ```
 
 ## 使用方式

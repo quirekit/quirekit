@@ -7,7 +7,7 @@ Provides text color, background, size, font family, subscript, superscript and r
 ## Installation
 
 ```bash
-npm install @quirekit/extension-text-style@alpha
+npm install @quirekit/extension-text-style
 ```
 
 ## Usage

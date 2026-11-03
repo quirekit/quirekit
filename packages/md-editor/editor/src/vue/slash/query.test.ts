@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, expect, it, vi } from "vitest";
+import { ensureSyntaxTree } from "@quirekit/cm-language";
 import { EditorSelection } from "@quirekit/cm-state";
 import * as core from "@quirekit/msfe-core";
 import type { MsfeEditor } from "@quirekit/msfe-core";
@@ -15,6 +16,7 @@ const editors: MsfeEditor[] = [];
 function fixture(source: string) {
   const parent = document.createElement("div"); document.body.append(parent);
   const editor = createMdEditor({ parent, markdown: source }); editors.push(editor);
+  expect(ensureSyntaxTree(editor.state, editor.state.doc.length, 5000)).not.toBeNull();
   const at = source.indexOf("/"), end = source.indexOf("\n", at);
   editor.setSelection(EditorSelection.single(end < 0 ? source.length : end));
   return editor;

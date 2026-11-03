@@ -7,7 +7,7 @@ Shared QuireKit interface components and theme tools, including buttons, inputs,
 ## Installation
 
 ```bash
-npm install @quirekit/ui@alpha
+npm install @quirekit/ui
 ```
 
 The consuming project also needs: `@ark-ui/vue` (^5.39.1).

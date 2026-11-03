@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/ai-chat@alpha
+npm install @quirekit/ai-chat
 ```
 
 使用本包还需要：`vue` (^3.5.0)。

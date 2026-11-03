@@ -7,7 +7,7 @@ Provides shared CodeMirror tools for parsing, highlighting, indentation and fold
 ## Installation
 
 ```bash
-npm install @quirekit/cm-language@alpha
+npm install @quirekit/cm-language
 ```
 
 ## Usage

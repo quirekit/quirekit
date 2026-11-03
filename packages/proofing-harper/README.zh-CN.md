@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/proofing-harper@alpha
+npm install @quirekit/proofing-harper
 ```
 
 ## 使用方式

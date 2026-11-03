@@ -7,7 +7,7 @@ Word-compatible named styles: the data model, resolution and editing commands fo
 ## Install
 
 ```bash
-npm install @quirekit/classic-styles-model@alpha
+npm install @quirekit/classic-styles-model
 ```
 
 ## Usage

@@ -7,7 +7,7 @@ The parsing core behind Markdown readers. It keeps the original text and parser 
 ## Installation
 
 ```bash
-npm install @quirekit/incremark-core@alpha
+npm install @quirekit/incremark-core
 ```
 
 ## Usage

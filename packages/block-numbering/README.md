@@ -7,7 +7,7 @@ Adds shared Word bullets and automatic numbering to Block Editor.
 ## Installation
 
 ```bash
-npm install @quirekit/block-numbering@alpha
+npm install @quirekit/block-numbering
 ```
 
 ## Usage

@@ -7,7 +7,7 @@ Lets extensions describe data that participates in Word tracked changes without 
 ## Installation
 
 ```bash
-npm install @quirekit/classic-revision-contract@alpha
+npm install @quirekit/classic-revision-contract
 ```
 
 ## Usage

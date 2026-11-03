@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/ai-contract@alpha
+npm install @quirekit/ai-contract
 ```
 
 ## 使用方式

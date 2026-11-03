@@ -9,7 +9,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/pm-view@alpha
+npm install @quirekit/pm-view
 ```
 
 ## 使用方式

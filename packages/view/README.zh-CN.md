@@ -7,7 +7,7 @@ QuireKit 的文档显示与输入层。它负责把文档画出来，处理鼠�
 ## 安装
 
 ```bash
-npm install @quirekit/view@alpha
+npm install @quirekit/view
 ```
 
 ## 使用方式

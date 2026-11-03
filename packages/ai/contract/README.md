@@ -7,7 +7,7 @@ The type contract extensions use to describe themselves to AI. Extensions declar
 ## Installation
 
 ```bash
-npm install @quirekit/ai-contract@alpha
+npm install @quirekit/ai-contract
 ```
 
 ## Usage

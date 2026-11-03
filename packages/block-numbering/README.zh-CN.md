@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/block-numbering@alpha
+npm install @quirekit/block-numbering
 ```
 
 ## 使用方式

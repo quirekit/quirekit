@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/text-diagram@alpha
+npm install @quirekit/text-diagram
 ```
 
 ## 使用方式

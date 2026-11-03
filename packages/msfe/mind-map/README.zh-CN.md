@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-mind-map@alpha
+npm install @quirekit/msfe-mind-map
 ```
 
 ## 使用方式

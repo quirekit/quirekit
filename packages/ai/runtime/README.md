@@ -7,7 +7,7 @@ Core services for AI to read and edit documents, including the document view, bl
 ## Installation
 
 ```bash
-npm install @quirekit/ai-runtime@alpha
+npm install @quirekit/ai-runtime
 ```
 
 ## Usage

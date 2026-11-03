@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-strike@alpha
+npm install @quirekit/extension-strike
 ```
 
 ## 使用方式

@@ -16,11 +16,11 @@
 下面安装本包，以及示例需要的 Core、基础预设和原生 DOM 视图。
 
 ```bash
-npm install @quirekit/extensions@alpha @quirekit/core@alpha @quirekit/starter-kit@alpha @quirekit/dom-view@alpha
+npm install @quirekit/extensions @quirekit/core @quirekit/starter-kit @quirekit/dom-view
 ```
 
 ```bash
-pnpm add @quirekit/extensions@alpha @quirekit/core@alpha @quirekit/starter-kit@alpha @quirekit/dom-view@alpha
+pnpm add @quirekit/extensions @quirekit/core @quirekit/starter-kit @quirekit/dom-view
 ```
 
 本包没有 peer 依赖；普通依赖由包管理器安装。以上其他包是示例直接使用的依赖。包提供 ESM 导出。

@@ -7,7 +7,7 @@ Reusable interface logic for editor toolbars, suggestion lists, block menus and 
 ## Installation
 
 ```bash
-npm install @quirekit/editor-ui@alpha
+npm install @quirekit/editor-ui
 ```
 
 ## Usage

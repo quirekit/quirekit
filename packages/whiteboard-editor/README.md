@@ -7,7 +7,7 @@ An editor for whiteboards. Provides an editing interface that can also be opened
 ## Installation
 
 ```bash
-npm install @quirekit/whiteboard-editor@alpha
+npm install @quirekit/whiteboard-editor
 ```
 
 ## Usage

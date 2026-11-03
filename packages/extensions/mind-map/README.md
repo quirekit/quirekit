@@ -7,7 +7,7 @@ Embeds mind maps as document blocks in Core, Block or Classic, retaining editabl
 ## Installation
 
 ```bash
-npm install @quirekit/extension-mind-map@alpha
+npm install @quirekit/extension-mind-map
 ```
 
 ## Usage

@@ -7,7 +7,7 @@ Calculates paths, connection points and text areas for document shapes so displa
 ## Installation
 
 ```bash
-npm install @quirekit/drawing-geometry@alpha
+npm install @quirekit/drawing-geometry
 ```
 
 ## Usage

@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/media@alpha
+npm install @quirekit/media
 ```
 
 ## 使用方式

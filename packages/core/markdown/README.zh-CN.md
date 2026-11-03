@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/markdown@alpha
+npm install @quirekit/markdown
 ```
 
 ## 使用方式

@@ -7,7 +7,7 @@ An AI chat interface with conversation state, messages, model selection, executi
 ## Installation
 
 ```bash
-npm install @quirekit/ai-chat@alpha
+npm install @quirekit/ai-chat
 ```
 
 The consuming project also needs: `vue` (^3.5.0).

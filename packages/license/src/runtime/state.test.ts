@@ -22,7 +22,7 @@ describe("page license state", () => {
     expect((await checkQuireKitLicense("docx")).status).toBe("evaluation");
     setQuireKitLicense("open-source");
     expect(listener).toHaveBeenCalledTimes(1);
-    expect((await checkQuireKitLicense("docx")).plan).toBe("open-source");
+    expect(await checkQuireKitLicense("docx")).toEqual({ status: "invalid", reason: "malformed" });
     setQuireKitLicense("open-source");
     expect(listener).toHaveBeenCalledTimes(1);
     stop();
@@ -33,7 +33,9 @@ describe("page license state", () => {
     const shared = (globalThis as unknown as Record<symbol, object>)[Symbol.for("quirekit.license.state.v1")]!;
     expect(Object.keys(shared).sort()).toEqual(["key", "listeners", "releaseDates"]);
   });
-  it("never shows the notice on local development hosts", async () => {
+  it("never shows the notice on local development hosts, rechecking when the host changes", async () => {
+    vi.spyOn(console, "info").mockImplementation(() => {});
+    expect((await checkQuireKitLicense("export")).status).toBe("evaluation");
     vi.stubGlobal("location", { protocol: "http:", hostname: "localhost", port: "5173" });
     expect((await checkQuireKitLicense("export")).status).toBe("licensed");
     const dev = (hostname: string, protocol = "http:", port = "5173") => isDevelopmentLocation({ protocol, hostname, port });
@@ -58,7 +60,7 @@ describe("declared product lines", () => {
     declareQuireKitProducts(["classic"]);
     expect(listener).toHaveBeenCalledTimes(1);
     expect((await checkDeclaredQuireKitProducts()).map(({ product }) => product)).toEqual(["classic", "md"]);
-    setQuireKitLicense("open-source");
+    vi.stubGlobal("location", { protocol: "http:", hostname: "localhost", port: "5173" });
     expect(await checkDeclaredQuireKitProducts()).toEqual([]);
     stop();
   });

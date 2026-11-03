@@ -5,14 +5,14 @@
  */
 export type QuireKitProduct = "classic" | "classic-pro" | "export" | "md" | "docx";
 
-/** License plans; every plan removes the evaluation notice for the products it covers. */
+/** License plans; every plan removes the evaluation notice for the products it covers. `open-source` keys are issued to reviewed open-source projects. */
 export type QuireKitPlan = "community" | "education" | "nonprofit" | "commercial" | "enterprise" | "open-source";
 
 /** Signed content of a license key. */
 export interface QuireKitLicensePayload {
   /** Issuance identifier used for support and revocation. */ readonly id: string;
   /** Licensed person or organization. */ readonly licensee: string;
-  /** Plan that issued the key. */ readonly plan: Exclude<QuireKitPlan, "open-source">;
+  /** Plan that issued the key. */ readonly plan: QuireKitPlan;
   /** Covered product lines; `*` covers every product. */ readonly products: readonly (QuireKitProduct | "*")[];
   /** Optional host names, with `*.example.com` wildcards; absent means any host, including headless use. */ readonly domains?: readonly string[];
   /** Issue date, `YYYY-MM-DD`. */ readonly issuedAt: string;
@@ -36,7 +36,7 @@ export type QuireKitLicenseReason =
 /** Result of a license check for one product. */
 export interface QuireKitLicenseCheck {
   /** Whether the evaluation notice must be shown. */ readonly status: QuireKitLicenseStatus;
-  /** Plan of a licensed key; `open-source` for the self-declared open-source value. */ readonly plan?: QuireKitPlan;
+  /** Plan of a verified key; absent on local development hosts. */ readonly plan?: QuireKitPlan;
   /** Licensee of a verified key. */ readonly licensee?: string;
   /** Cause of an evaluation or invalid result. */ readonly reason?: QuireKitLicenseReason;
 }

@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { ensureSyntaxTree } from "@quirekit/cm-language";
 import { EditorSelection } from "@quirekit/cm-state";
 import { sourceBlockAt, type MsfeEditor, type SourceBlockControls } from "@quirekit/msfe-core";
 import { createMdEditor } from "../../editor";
@@ -18,6 +19,7 @@ const table = "| a | b |\n| --- | --- |\n| one | two |";
 function fixture(markdown: string, position = 0): MsfeEditor {
   const parent = document.createElement("div"); document.body.append(parent);
   const editor = createMdEditor({ parent, markdown }); editors.push(editor);
+  expect(ensureSyntaxTree(editor.state, editor.state.doc.length, 5000)).not.toBeNull();
   editor.run(() => ({ selection: EditorSelection.cursor(position) }));
   return editor;
 }

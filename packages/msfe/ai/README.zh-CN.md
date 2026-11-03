@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-ai@alpha
+npm install @quirekit/msfe-ai
 ```
 
 ## 使用方式

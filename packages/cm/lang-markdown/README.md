@@ -7,7 +7,7 @@ Adds Markdown language support to CodeMirror.
 ## Installation
 
 ```bash
-npm install @quirekit/cm-lang-markdown@alpha
+npm install @quirekit/cm-lang-markdown
 ```
 
 ## Usage

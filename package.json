@@ -22,7 +22,7 @@
     "check": "pnpm licenses:check && pnpm publish:closure:check && pnpm typecheck && pnpm test && pnpm build && pnpm licenses:pack:check",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "pnpm licenses:check && pnpm publish:closure:check && pnpm build && pnpm licenses:pack:check && pnpm release:install:check && changeset publish --tag alpha"
+    "release": "pnpm licenses:check && pnpm publish:closure:check && pnpm build && pnpm licenses:pack:check && pnpm release:install:check && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "2.31.0",

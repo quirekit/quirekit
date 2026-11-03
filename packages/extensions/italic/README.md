@@ -7,7 +7,7 @@ Adds or removes italic formatting on text.
 ## Installation
 
 ```bash
-npm install @quirekit/extension-italic@alpha
+npm install @quirekit/extension-italic
 ```
 
 ## Usage

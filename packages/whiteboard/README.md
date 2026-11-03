@@ -7,7 +7,7 @@ Whiteboard data formats and persistence helpers. Stores a board scene and its pr
 ## Installation
 
 ```bash
-npm install @quirekit/whiteboard@alpha
+npm install @quirekit/whiteboard
 ```
 
 ## Usage

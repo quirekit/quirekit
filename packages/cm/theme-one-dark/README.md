@@ -7,7 +7,7 @@ Provides a One Dark theme and syntax-highlighting colors for CodeMirror.
 ## Installation
 
 ```bash
-npm install @quirekit/cm-theme-one-dark@alpha
+npm install @quirekit/cm-theme-one-dark
 ```
 
 ## Usage

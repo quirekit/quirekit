@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/docx@alpha
+npm install @quirekit/docx
 ```
 
 ## 使用方式

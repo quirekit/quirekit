@@ -9,7 +9,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/pm-transform@alpha
+npm install @quirekit/pm-transform
 ```
 
 ## 使用方式

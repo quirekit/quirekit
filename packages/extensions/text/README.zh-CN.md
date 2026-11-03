@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-text@alpha
+npm install @quirekit/extension-text
 ```
 
 ## 使用方式

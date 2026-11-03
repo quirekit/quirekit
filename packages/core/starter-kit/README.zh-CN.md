@@ -15,11 +15,11 @@
 下面同时安装运行示例需要的 Core 和原生 DOM 视图。
 
 ```bash
-npm install @quirekit/core@alpha @quirekit/starter-kit@alpha @quirekit/dom-view@alpha
+npm install @quirekit/core @quirekit/starter-kit @quirekit/dom-view
 ```
 
 ```bash
-pnpm add @quirekit/core@alpha @quirekit/starter-kit@alpha @quirekit/dom-view@alpha
+pnpm add @quirekit/core @quirekit/starter-kit @quirekit/dom-view
 ```
 
 本包没有 peer 依赖；其普通依赖自动安装。Core 和 DOM 视图列在命令里，是因为示例直接导入它们。包提供 ESM 导出。

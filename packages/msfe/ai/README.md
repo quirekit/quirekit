@@ -7,7 +7,7 @@ Lets AI tools read and edit MSFE Markdown and displays changes awaiting review.
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-ai@alpha
+npm install @quirekit/msfe-ai
 ```
 
 ## Usage

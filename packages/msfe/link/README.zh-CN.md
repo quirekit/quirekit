@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-link@alpha
+npm install @quirekit/msfe-link
 ```
 
 ## 使用方式

@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/md-editor@alpha
+npm install @quirekit/md-editor
 ```
 
 ## 使用方式

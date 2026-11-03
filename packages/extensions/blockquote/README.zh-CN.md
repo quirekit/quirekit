@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-blockquote@alpha
+npm install @quirekit/extension-blockquote
 ```
 
 ## 使用方式

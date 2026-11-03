@@ -7,7 +7,7 @@ Converts between HTML and QuireKit document JSON using your installed document e
 ## Installation
 
 ```bash
-npm install @quirekit/html@alpha
+npm install @quirekit/html
 ```
 
 ## Usage

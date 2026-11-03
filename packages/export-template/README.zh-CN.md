@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/export-template@alpha
+npm install @quirekit/export-template
 ```
 
 ## 使用方式

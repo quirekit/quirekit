@@ -9,7 +9,7 @@ This package maintains the corresponding ProseMirror functionality under the `@q
 ## Installation
 
 ```bash
-npm install @quirekit/pm-state@alpha
+npm install @quirekit/pm-state
 ```
 
 ## Usage

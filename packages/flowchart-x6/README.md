@@ -7,7 +7,7 @@ Connects the X6 drawing interface to QuireKit data for flowcharts, including dra
 ## Installation
 
 ```bash
-npm install @quirekit/flowchart-x6@alpha
+npm install @quirekit/flowchart-x6
 ```
 
 ## Usage

@@ -9,7 +9,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/pm-history@alpha
+npm install @quirekit/pm-history
 ```
 
 ## 使用方式

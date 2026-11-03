@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-flowchart@alpha
+npm install @quirekit/msfe-flowchart
 ```
 
 ## 使用方式

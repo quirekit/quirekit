@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-image@alpha
+npm install @quirekit/msfe-image
 ```
 
 ## 使用方式

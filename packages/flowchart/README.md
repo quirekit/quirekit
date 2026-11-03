@@ -7,7 +7,7 @@ Data tools for flowcharts: create nodes and edges, validate data, save JSON and 
 ## Installation
 
 ```bash
-npm install @quirekit/flowchart@alpha
+npm install @quirekit/flowchart
 ```
 
 ## Usage

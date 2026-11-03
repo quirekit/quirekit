@@ -7,7 +7,7 @@ Recognizes HTML fragments in MSFE and optionally shows sanitized static content.
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-html@alpha
+npm install @quirekit/msfe-html
 ```
 
 ## Usage

@@ -7,7 +7,7 @@ Adds JavaScript / TypeScript language support to CodeMirror.
 ## Installation
 
 ```bash
-npm install @quirekit/cm-lang-javascript@alpha
+npm install @quirekit/cm-lang-javascript
 ```
 
 ## Usage

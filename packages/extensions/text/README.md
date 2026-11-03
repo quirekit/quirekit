@@ -7,7 +7,7 @@ Defines the text nodes used inside paragraphs, headings and other text container
 ## Installation
 
 ```bash
-npm install @quirekit/extension-text@alpha
+npm install @quirekit/extension-text
 ```
 
 ## Usage

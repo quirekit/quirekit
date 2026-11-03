@@ -7,7 +7,7 @@ QuireKit 共用的界面组件与主题工具，包含按钮、输入框、弹�
 ## 安装
 
 ```bash
-npm install @quirekit/ui@alpha
+npm install @quirekit/ui
 ```
 
 使用本包还需要：`@ark-ui/vue` (^5.39.1)。

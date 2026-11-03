@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-proofing@alpha
+npm install @quirekit/extension-proofing
 ```
 
 ## 使用方式

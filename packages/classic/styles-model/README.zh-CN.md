@@ -7,7 +7,7 @@ Word 兼容的命名样式：段落样式、字符样式、文档主题与默认
 ## 安装
 
 ```bash
-npm install @quirekit/classic-styles-model@alpha
+npm install @quirekit/classic-styles-model
 ```
 
 ## 使用方式

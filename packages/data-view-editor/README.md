@@ -7,7 +7,7 @@ An editor for data views. Provides an editing interface that can also be opened 
 ## Installation
 
 ```bash
-npm install @quirekit/data-view-editor@alpha
+npm install @quirekit/data-view-editor
 ```
 
 The consuming project also needs: `vue` (^3.5.0).

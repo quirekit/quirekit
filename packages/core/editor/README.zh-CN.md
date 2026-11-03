@@ -16,13 +16,13 @@ QuireKit 的富文本编辑内核：管理结构化文档、扩展和编辑命�
 下面的浏览器示例一起安装基础扩展集和原生 DOM 视图。DOM 视图使用浏览器的可编辑元素，不提供分页。
 
 ```bash
-npm install @quirekit/core@alpha @quirekit/starter-kit@alpha @quirekit/dom-view@alpha
+npm install @quirekit/core @quirekit/starter-kit @quirekit/dom-view
 ```
 
 或使用 pnpm：
 
 ```bash
-pnpm add @quirekit/core@alpha @quirekit/starter-kit@alpha @quirekit/dom-view@alpha
+pnpm add @quirekit/core @quirekit/starter-kit @quirekit/dom-view
 ```
 
 Core 没有需要另装的 peer 依赖。后两个包是此示例的显式依赖；Core 自身的普通依赖由包管理器安装。包提供 ESM 导出。

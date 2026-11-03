@@ -7,7 +7,7 @@ Lets users edit the same Markdown document with synchronization, collaborative u
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-collaboration@alpha
+npm install @quirekit/msfe-collaboration
 ```
 
 ## Usage

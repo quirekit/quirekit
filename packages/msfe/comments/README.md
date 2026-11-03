@@ -7,7 +7,7 @@ Adds comments, replies, resolution status and anchored text quotes to Markdown d
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-comments@alpha
+npm install @quirekit/msfe-comments
 ```
 
 ## Usage

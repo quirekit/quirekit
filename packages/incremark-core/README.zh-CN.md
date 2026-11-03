@@ -7,7 +7,7 @@ Markdown 阅读功能的解析核心。保存原始文本和解析状态，支�
 ## 安装
 
 ```bash
-npm install @quirekit/incremark-core@alpha
+npm install @quirekit/incremark-core
 ```
 
 ## 使用方式

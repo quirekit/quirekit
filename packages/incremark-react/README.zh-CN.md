@@ -7,7 +7,7 @@ Incremark 的 React 阅读组件，用来显示 Markdown 文章或流式 AI 回�
 ## 安装
 
 ```bash
-npm install @quirekit/incremark-react@alpha
+npm install @quirekit/incremark-react
 ```
 
 使用本包还需要：`react` (^19.3.0), `react-dom` (^19.3.0)。

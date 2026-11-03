@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/mind-map-docx@alpha
+npm install @quirekit/mind-map-docx
 ```
 
 ## 使用方式

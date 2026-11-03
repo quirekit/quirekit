@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-bold@alpha
+npm install @quirekit/extension-bold
 ```
 
 ## 使用方式

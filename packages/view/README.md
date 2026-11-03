@@ -7,7 +7,7 @@ QuireKit’s document view and input layer. It draws documents, handles mouse se
 ## Installation
 
 ```bash
-npm install @quirekit/view@alpha
+npm install @quirekit/view
 ```
 
 ## Usage

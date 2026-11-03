@@ -14,11 +14,11 @@ React integration for MSFE, using components and hooks to mount and clean up Mar
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-react@alpha @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha react@^19.3.0 react-dom@^19.3.0
+npm install @quirekit/msfe-react @quirekit/msfe-core @quirekit/msfe-starter-kit react@^19.3.0 react-dom@^19.3.0
 ```
 
 ```bash
-pnpm add @quirekit/msfe-react@alpha @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha react@^19.3.0 react-dom@^19.3.0
+pnpm add @quirekit/msfe-react @quirekit/msfe-core @quirekit/msfe-starter-kit react@^19.3.0 react-dom@^19.3.0
 ```
 
 Both peer dependencies are required: `react: ^19.3.0` and `react-dom: ^19.3.0`. Core is a regular dependency, installed explicitly because the example imports its types. StarterKit is the example's feature preset, not a peer dependency. Packages expose ESM exports.

@@ -7,7 +7,7 @@ Uses MathJax to lay out formulas and produce SVG for formula editors and documen
 ## Installation
 
 ```bash
-npm install @quirekit/math-mathjax@alpha
+npm install @quirekit/math-mathjax
 ```
 
 ## Usage

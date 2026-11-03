@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/mind-editor@alpha
+npm install @quirekit/mind-editor
 ```
 
 ## 使用方式

@@ -7,7 +7,7 @@ Marks a short piece of text as code, such as a function or command name.
 ## Installation
 
 ```bash
-npm install @quirekit/extension-code@alpha
+npm install @quirekit/extension-code
 ```
 
 ## Usage

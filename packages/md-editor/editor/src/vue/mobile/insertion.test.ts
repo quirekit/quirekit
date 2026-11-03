@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { createApp, h, nextTick, ref, shallowRef } from "vue";
 import { afterEach, expect, it, vi } from "vitest";
+import { ensureSyntaxTree } from "@quirekit/cm-language";
 import { EditorSelection } from "@quirekit/cm-state";
 import { createMdEditor } from "../../editor";
 import Insertion from "./insertion.vue";
@@ -14,6 +15,7 @@ async function fixture() {
   const source = document.createElement("div"), host = document.createElement("div");
   document.body.append(source, host);
   const editor = createMdEditor({ parent: source, markdown: table });
+  expect(ensureSyntaxTree(editor.state, editor.state.doc.length, 5000)).not.toBeNull();
   editor.run(() => ({ selection: EditorSelection.cursor(table.indexOf("one") + 1) }));
   const state = shallowRef(editor.state), open = ref(true);
   const app = createApp({ render: () => h(Insertion, { editor, state: state.value, open: open.value, locale: "zh-CN",

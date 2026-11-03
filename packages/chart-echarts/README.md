@@ -7,7 +7,7 @@ Converts QuireKit chart data into ECharts options and produces chart images for 
 ## Installation
 
 ```bash
-npm install @quirekit/chart-echarts@alpha
+npm install @quirekit/chart-echarts
 ```
 
 ## Usage

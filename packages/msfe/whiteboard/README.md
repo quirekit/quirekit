@@ -7,7 +7,7 @@ Embeds editable whiteboards in Markdown, storing their data in code fences.
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-whiteboard@alpha
+npm install @quirekit/msfe-whiteboard
 ```
 
 ## Usage

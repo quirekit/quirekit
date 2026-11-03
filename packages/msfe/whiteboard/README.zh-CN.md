@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-whiteboard@alpha
+npm install @quirekit/msfe-whiteboard
 ```
 
 ## 使用方式

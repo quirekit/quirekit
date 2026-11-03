@@ -7,7 +7,7 @@ Recognizes Markdown links and provides insertion, editing and navigation helpers
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-link@alpha
+npm install @quirekit/msfe-link
 ```
 
 ## Usage

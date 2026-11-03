@@ -7,7 +7,7 @@ Manages image and other media references, separating identifiers stored in docum
 ## Installation
 
 ```bash
-npm install @quirekit/media@alpha
+npm install @quirekit/media
 ```
 
 ## Usage

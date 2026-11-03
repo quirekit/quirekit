@@ -7,7 +7,7 @@ Includes mind maps in Word exports while preserving the data needed to edit them
 ## Installation
 
 ```bash
-npm install @quirekit/mind-map-docx@alpha
+npm install @quirekit/mind-map-docx
 ```
 
 ## Usage

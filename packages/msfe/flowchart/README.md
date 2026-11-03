@@ -7,7 +7,7 @@ Embeds editable flowcharts in Markdown, storing their data in code fences.
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-flowchart@alpha
+npm install @quirekit/msfe-flowchart
 ```
 
 ## Usage

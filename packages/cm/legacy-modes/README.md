@@ -7,7 +7,7 @@ Provides older CodeMirror language modes for syntaxes without a dedicated modern
 ## Installation
 
 ```bash
-npm install @quirekit/cm-legacy-modes@alpha
+npm install @quirekit/cm-legacy-modes
 ```
 
 ## Usage

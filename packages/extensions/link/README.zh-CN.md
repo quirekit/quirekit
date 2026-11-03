@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-link@alpha
+npm install @quirekit/extension-link
 ```
 
 ## 使用方式

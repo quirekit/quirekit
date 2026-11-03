@@ -7,7 +7,7 @@ Stores HTML examples in rich-text documents and provides isolated previews under
 ## Installation
 
 ```bash
-npm install @quirekit/extension-html-sandbox@alpha
+npm install @quirekit/extension-html-sandbox
 ```
 
 ## Usage

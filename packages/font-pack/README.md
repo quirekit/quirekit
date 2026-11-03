@@ -7,7 +7,7 @@ Optional open font assets for QuireKit. Applications can load Chinese, Latin and
 ## Installation
 
 ```bash
-npm install @quirekit/font-pack@alpha
+npm install @quirekit/font-pack
 ```
 
 ## Usage

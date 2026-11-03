@@ -7,7 +7,7 @@ Word-compatible paragraph formatting: the data model, schema and editing command
 ## Install
 
 ```bash
-npm install @quirekit/classic-paragraph-model@alpha
+npm install @quirekit/classic-paragraph-model
 ```
 
 ## Usage

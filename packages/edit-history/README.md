@@ -7,7 +7,7 @@ Records queryable editing activity with categories, grouping and content summari
 ## Installation
 
 ```bash
-npm install @quirekit/edit-history@alpha
+npm install @quirekit/edit-history
 ```
 
 ## Usage

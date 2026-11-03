@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/lezer-markdown@alpha
+npm install @quirekit/lezer-markdown
 ```
 
 ## 使用方式

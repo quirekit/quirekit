@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/cm-commands@alpha
+npm install @quirekit/cm-commands
 ```
 
 ## 使用方式

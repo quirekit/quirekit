@@ -24,5 +24,5 @@ export function reportEvaluation(product: QuireKitProduct, check: QuireKitLicens
   reported.add(token);
   console.info(`[QuireKit] ${product}：${reasons[check.reason ?? ""] ?? "未授权"}，以评估版运行，功能不受限制，导出的 DOCX、PDF、OFD 带评估标记。`
     + "开发与评估不限时间；用于生产需要授权码，调用 setQuireKitLicense(key) 设置后去除界面与导出文件中的评估标记。"
-    + "开源项目可使用 open-source 声明。");
+    + "教育、公益与开源项目可申请免费授权码。");
 }

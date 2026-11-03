@@ -7,7 +7,7 @@ Recognizes fenced Markdown code blocks and lets users change their language.
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-code-block@alpha
+npm install @quirekit/msfe-code-block
 ```
 
 ## Usage

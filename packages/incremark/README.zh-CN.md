@@ -7,7 +7,7 @@ Vue 的 Markdown 阅读组件，既能显示完整文章，也能显示正在逐
 ## 安装
 
 ```bash
-npm install @quirekit/incremark@alpha
+npm install @quirekit/incremark
 ```
 
 ## 使用方式

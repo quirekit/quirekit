@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/dom-view@alpha
+npm install @quirekit/dom-view
 ```
 
 ## 使用方式

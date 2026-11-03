@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/md-editor-ai@alpha
+npm install @quirekit/md-editor-ai
 ```
 
 使用本包还需要：`vue` (^3.5.0)。

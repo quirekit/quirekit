@@ -7,7 +7,7 @@ Runs AI requests and tool calls through Pi and connects the results to QuireKit 
 ## Installation
 
 ```bash
-npm install @quirekit/ai-orchestrator-pi@alpha
+npm install @quirekit/ai-orchestrator-pi
 ```
 
 ## Usage

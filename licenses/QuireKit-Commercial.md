@@ -1,6 +1,6 @@
 # QuireKit Commercial License / QuireKit 商业许可证
 
-Version 0.8. 中文版见下文。The Chinese version follows the English version.
+Version 0.9. 中文版见下文。The Chinese version follows the English version.
 
 Copyright (c) 2026 Wang Yishuai (王一帅). All rights reserved.
 
@@ -42,28 +42,24 @@ configure or assemble it so that a notice it would otherwise display is not show
 ## 4. Production
 
 Production use of a Commercial Component, with or without a user interface, requires
-an Agreement covering it, a free license key issued under section 5, or the open-source
-value under section 5.
+an Agreement covering it or a free license key issued under section 5.
 Production use without one is unlicensed use, even though the Commercial Component
 does not block its features. A license key removes the evaluation notices for the
 product lines it names.
 
 ## 5. Free licenses
 
-Projects whose complete corresponding source, including the deployed version of any
-hosted service, is published under a license approved by the Open Source Initiative
-may use the value `open-source` in place of a license key, only within that project.
-It removes the notices of Commercial Components in that project and permits its
-Production use.
-
-The Licensor may also, at its sole discretion and case by case, issue free license
-keys through its official channel, for example to individuals for personal,
-non-commercial use, to schools and research institutions for teaching and
-non-commercial research, or to non-profit organizations for their non-commercial
-activities. No one is entitled to such a key, and each key states its permitted use.
+The Licensor may, at its sole discretion and case by case, issue free license keys
+through its official channel after reviewing an application, only to: schools and
+research institutions for teaching and non-commercial research; non-profit
+organizations for their non-commercial activities; and projects whose complete
+corresponding source, including the deployed version of any hosted service, is
+publicly available under a license approved by the Open Source Initiative, for use
+within that project. No one is entitled to such a key, and each key states its
+permitted use.
 
 The Licensor may request reasonable evidence of eligibility; a false statement
-terminates the key or the right to use the open-source value. When a holder no longer
+terminates the key. When a holder no longer
 qualifies, it has ninety days to obtain an Agreement; afterwards continued Production
 use requires an Agreement. Section 11 does not extend a free key beyond its holder's
 eligibility.
@@ -177,7 +173,7 @@ In case of any inconsistency between them, the Chinese version prevails.
 
 ## 中文版
 
-0.8 版。版权所有 (c) 2026 王一帅（Wang Yishuai）。保留所有权利。
+0.9 版。版权所有 (c) 2026 王一帅（Wang Yishuai）。保留所有权利。
 
 ### 1. 定义
 
@@ -204,20 +200,17 @@ In case of any inconsistency between them, the Chinese version prevails.
 
 ### 4. 生产
 
-无论是否带有用户界面，在生产中使用商业组件都需要覆盖该组件的授权协议、依第 5 条签发的免费授权码，
-或依第 5 条使用的 `open-source` 值。不具备上述任一条件的生产使用属于未经授权的使用，即使商业组件
+无论是否带有用户界面，在生产中使用商业组件都需要覆盖该组件的授权协议或依第 5 条签发的免费授权码。不具备上述任一条件的生产使用属于未经授权的使用，即使商业组件
 不会锁定其功能。授权码会去除其所列产品线的评估提示。
 
 ### 5. 免费授权
 
-完整对应源代码（包括任何托管服务所部署的版本）以开放源代码促进会（OSI）认可的许可证公开的项目，
-可以在该项目内使用 `open-source` 值代替授权码。该值去除该项目中商业组件的提示并允许其用于生产。
+许可方可以自行决定，在审核申请后逐案通过官方渠道签发免费授权码，仅限于：学校和科研机构用于教学和
+非商业研究；非营利组织用于其非营利活动；完整对应源代码（包括任何托管服务所部署的版本）以开放源代码
+促进会（OSI）认可的许可证公开的项目，在该项目内使用。任何人均无权要求签发此类授权码，每个授权码均
+写明其允许的用途。
 
-许可方还可以自行决定、逐案通过官方渠道签发免费授权码，例如签发给个人用于个人非商业用途、签发给
-学校和科研机构用于教学和非商业研究，或签发给非营利组织用于其非营利活动。任何人均无权要求签发此类
-授权码，每个授权码均写明其允许的用途。
-
-许可方可以要求提供合理的资格证明；虚假陈述将终止该授权码或使用 `open-source` 值的权利。持有人不再
+许可方可以要求提供合理的资格证明；虚假陈述将终止该授权码。持有人不再
 符合条件时，有九十天时间取得授权协议；此后继续用于生产需要授权协议。第 11 条不会使免费授权码的效力
 延续到持有人资格结束之后。
 

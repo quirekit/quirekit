@@ -7,7 +7,7 @@ Adds JSON language support to CodeMirror.
 ## Installation
 
 ```bash
-npm install @quirekit/cm-lang-json@alpha
+npm install @quirekit/cm-lang-json
 ```
 
 ## Usage

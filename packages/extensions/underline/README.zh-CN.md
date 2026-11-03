@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-underline@alpha
+npm install @quirekit/extension-underline
 ```
 
 ## 使用方式

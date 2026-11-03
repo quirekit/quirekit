@@ -7,7 +7,7 @@ A block editor for web documents, including paragraphs, lists, images and embedd
 ## Installation
 
 ```bash
-npm install @quirekit/block-editor@alpha
+npm install @quirekit/block-editor
 ```
 
 ## Usage

@@ -7,7 +7,7 @@ Adds HTML language support to CodeMirror.
 ## Installation
 
 ```bash
-npm install @quirekit/cm-lang-html@alpha
+npm install @quirekit/cm-lang-html
 ```
 
 ## Usage

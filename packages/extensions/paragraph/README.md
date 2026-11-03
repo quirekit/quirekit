@@ -7,7 +7,7 @@ Defines ordinary paragraphs and HTML `<p>` support. Use Core’s `setNode` comma
 ## Installation
 
 ```bash
-npm install @quirekit/extension-paragraph@alpha
+npm install @quirekit/extension-paragraph
 ```
 
 ## Usage

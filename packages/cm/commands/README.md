@@ -7,7 +7,7 @@ Provides CodeMirror cursor movement, editing commands, undo history and default 
 ## Installation
 
 ```bash
-npm install @quirekit/cm-commands@alpha
+npm install @quirekit/cm-commands
 ```
 
 ## Usage

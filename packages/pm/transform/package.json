@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/pm-transform",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1",
   "description": "QuireKit vendored ProseMirror transform boundary.",
   "license": "MIT",
   "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/pm/transform"},

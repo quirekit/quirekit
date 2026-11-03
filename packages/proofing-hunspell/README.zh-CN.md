@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/proofing-hunspell@alpha
+npm install @quirekit/proofing-hunspell
 ```
 
 ## 使用方式

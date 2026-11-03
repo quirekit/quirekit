@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/cm-legacy-modes@alpha
+npm install @quirekit/cm-legacy-modes
 ```
 
 ## 使用方式

@@ -7,7 +7,7 @@ Exports flowcharts to PDF for downloading, sharing or printing.
 ## Installation
 
 ```bash
-npm install @quirekit/flowchart-pdf@alpha
+npm install @quirekit/flowchart-pdf
 ```
 
 ## Usage

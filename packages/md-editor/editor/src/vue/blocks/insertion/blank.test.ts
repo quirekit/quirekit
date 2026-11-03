@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, expect, it } from "vitest";
+import { ensureSyntaxTree } from "@quirekit/cm-language";
 import { EditorSelection } from "@quirekit/cm-state";
 import { sourceBlankLineAt, type MsfeEditor, type SourceInsertionControls } from "@quirekit/msfe-core";
 import { createMdEditor } from "../../../editor";
@@ -14,6 +15,7 @@ beforeEach(() => {
 function fixture(source = "before\n\nafter", position = 7) {
   const parent = document.createElement("div"); document.body.append(parent);
   const editor = createMdEditor({ parent, markdown: source }); editors.push(editor);
+  expect(ensureSyntaxTree(editor.state, editor.state.doc.length, 5000)).not.toBeNull();
   const line = sourceBlankLineAt(editor.state, position)!;
   expect(line).not.toBeNull();
   const controls = { editor, line, target: { ...editor.captureTarget(), selection: EditorSelection.single(line.from, line.to) } } as SourceInsertionControls;
@@ -65,11 +67,13 @@ it("does not offer a blank line inside an incomplete container or mathematical s
   for (const source of ["::: note\n\nunfinished", "$$\n\nx^2\n$$", "---\ntitle: Example\n\n---"]) {
     const parent = document.createElement("div"); document.body.append(parent);
     const editor = createMdEditor({ parent, markdown: source }); editors.push(editor);
+    expect(ensureSyntaxTree(editor.state, editor.state.doc.length, 5000)).not.toBeNull();
     expect(sourceBlankLineAt(editor.state, source.indexOf("\n\n") + 1)).toBeNull();
   }
   for (const source of ["::: note\n", "$$\n", "---\ntitle: Example\n"]) {
     const parent = document.createElement("div"); document.body.append(parent);
     const editor = createMdEditor({ parent, markdown: source }); editors.push(editor);
+    expect(ensureSyntaxTree(editor.state, editor.state.doc.length, 5000)).not.toBeNull();
     expect(sourceBlankLineAt(editor.state, source.length), source).toBeNull();
   }
   for (const source of ["::: note\nbody\n:::\n", "$$\nx\n$$\n", "---\ntitle: Example\n---\n"]) {

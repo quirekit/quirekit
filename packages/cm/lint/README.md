@@ -7,7 +7,7 @@ Shows diagnostics and their locations in CodeMirror.
 ## Installation
 
 ```bash
-npm install @quirekit/cm-lint@alpha
+npm install @quirekit/cm-lint
 ```
 
 ## Usage

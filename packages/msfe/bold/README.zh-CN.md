@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-bold@alpha
+npm install @quirekit/msfe-bold
 ```
 
 ## 使用方式

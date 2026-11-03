@@ -7,7 +7,7 @@ Provides completion lists and automatic bracket closing in CodeMirror.
 ## Installation
 
 ```bash
-npm install @quirekit/cm-autocomplete@alpha
+npm install @quirekit/cm-autocomplete
 ```
 
 ## Usage

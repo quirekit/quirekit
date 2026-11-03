@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-comments@alpha
+npm install @quirekit/msfe-comments
 ```
 
 ## 使用方式

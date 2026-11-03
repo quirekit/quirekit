@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/editor-ui@alpha
+npm install @quirekit/editor-ui
 ```
 
 ## 使用方式

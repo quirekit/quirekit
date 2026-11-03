@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/cm-lang-javascript@alpha
+npm install @quirekit/cm-lang-javascript
 ```
 
 ## 使用方式

@@ -7,7 +7,7 @@ Stores isolated HTML examples in MSFE using html-preview fences.
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-html-sandbox@alpha
+npm install @quirekit/msfe-html-sandbox
 ```
 
 ## Usage

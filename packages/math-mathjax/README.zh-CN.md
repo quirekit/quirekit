@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/math-mathjax@alpha
+npm install @quirekit/math-mathjax
 ```
 
 ## 使用方式

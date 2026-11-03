@@ -9,7 +9,7 @@ This package maintains the corresponding ProseMirror functionality under the `@q
 ## Installation
 
 ```bash
-npm install @quirekit/pm-decoration@alpha
+npm install @quirekit/pm-decoration
 ```
 
 ## Usage

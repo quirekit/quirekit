@@ -7,7 +7,7 @@ Includes flowcharts in Word exports while preserving the data needed to edit the
 ## Installation
 
 ```bash
-npm install @quirekit/flowchart-docx@alpha
+npm install @quirekit/flowchart-docx
 ```
 
 ## Usage

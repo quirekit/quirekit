@@ -7,7 +7,7 @@ QuireKit 的连续流 HTML 显示层。它用浏览器排版显示文档，同�
 ## 安装
 
 ```bash
-npm install @quirekit/view-html@alpha
+npm install @quirekit/view-html
 ```
 
 ## 使用方式

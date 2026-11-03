@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/block-table@alpha
+npm install @quirekit/block-table
 ```
 
 ## 使用方式

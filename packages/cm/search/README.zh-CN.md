@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/cm-search@alpha
+npm install @quirekit/cm-search
 ```
 
 ## 使用方式

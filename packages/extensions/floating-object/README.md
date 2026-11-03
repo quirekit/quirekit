@@ -7,7 +7,7 @@ Stores movable, resizable floating objects and their geometry.
 ## Installation
 
 ```bash
-npm install @quirekit/extension-floating-object@alpha
+npm install @quirekit/extension-floating-object
 ```
 
 ## Usage

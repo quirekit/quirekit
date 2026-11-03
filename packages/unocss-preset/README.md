@@ -7,7 +7,7 @@ Styles and an UnoCSS preset for QuireKit UI. Import the prebuilt CSS directly or
 ## Installation
 
 ```bash
-npm install @quirekit/unocss-preset@alpha
+npm install @quirekit/unocss-preset
 ```
 
 ## Usage

@@ -7,7 +7,7 @@ Word 兼容的多级列表编号：编号定义、多级层次、编号重排、
 ## 安装
 
 ```bash
-npm install @quirekit/classic-numbering-model@alpha
+npm install @quirekit/classic-numbering-model
 ```
 
 ## 使用方式

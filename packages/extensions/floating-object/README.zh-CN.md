@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-floating-object@alpha
+npm install @quirekit/extension-floating-object
 ```
 
 ## 使用方式

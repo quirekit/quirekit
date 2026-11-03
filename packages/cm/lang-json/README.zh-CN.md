@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/cm-lang-json@alpha
+npm install @quirekit/cm-lang-json
 ```
 
 ## 使用方式

@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/ai-runtime@alpha
+npm install @quirekit/ai-runtime
 ```
 
 ## 使用方式

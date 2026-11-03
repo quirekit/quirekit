@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/drawing-geometry@alpha
+npm install @quirekit/drawing-geometry
 ```
 
 ## 使用方式

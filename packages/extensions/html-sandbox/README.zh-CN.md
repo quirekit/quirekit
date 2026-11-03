@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-html-sandbox@alpha
+npm install @quirekit/extension-html-sandbox
 ```
 
 ## 使用方式

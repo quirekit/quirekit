@@ -7,7 +7,7 @@ An editor for text diagrams. Edit diagram source and view a preview, with Mermai
 ## Installation
 
 ```bash
-npm install @quirekit/text-diagram-editor@alpha
+npm install @quirekit/text-diagram-editor
 ```
 
 ## Usage

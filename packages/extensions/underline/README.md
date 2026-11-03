@@ -7,7 +7,7 @@ Adds underlining, including single lines and other supported styles.
 ## Installation
 
 ```bash
-npm install @quirekit/extension-underline@alpha
+npm install @quirekit/extension-underline
 ```
 
 ## Usage

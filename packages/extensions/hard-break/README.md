@@ -7,7 +7,7 @@ Adds a line break within a paragraph, useful for addresses or verse.
 ## Installation
 
 ```bash
-npm install @quirekit/extension-hard-break@alpha
+npm install @quirekit/extension-hard-break
 ```
 
 ## Usage

@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/extension-document@alpha
+npm install @quirekit/extension-document
 ```
 
 ## 使用方式

@@ -7,7 +7,7 @@ DOCX 相关包共用的文档类型、节点构造工具和扩展接口。扩展
 ## 安装
 
 ```bash
-npm install @quirekit/lit-docx-contract@alpha
+npm install @quirekit/lit-docx-contract
 ```
 
 ## 使用方式

@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-collaboration@alpha
+npm install @quirekit/msfe-collaboration
 ```
 
 ## 使用方式

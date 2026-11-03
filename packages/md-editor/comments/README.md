@@ -7,7 +7,7 @@ Comments for Md Editor: comments on selected text, replies, resolving, @ mention
 ## Installation
 
 ```bash
-npm install @quirekit/md-editor-comments@alpha
+npm install @quirekit/md-editor-comments
 ```
 
 ## Usage

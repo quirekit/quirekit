@@ -7,7 +7,7 @@ Connects QuireKit editors to DOCX file tools. It collects conversion rules from 
 ## Installation
 
 ```bash
-npm install @quirekit/docx@alpha
+npm install @quirekit/docx
 ```
 
 ## Usage

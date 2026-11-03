@@ -7,7 +7,7 @@ Recognizes Markdown headings and provides heading-level editing and navigation.
 ## Installation
 
 ```bash
-npm install @quirekit/msfe-heading@alpha
+npm install @quirekit/msfe-heading
 ```
 
 ## Usage

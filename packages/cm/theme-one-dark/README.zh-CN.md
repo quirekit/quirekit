@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/cm-theme-one-dark@alpha
+npm install @quirekit/cm-theme-one-dark
 ```
 
 ## 使用方式

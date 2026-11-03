@@ -7,7 +7,7 @@ QuireKit’s continuous-flow HTML view. The browser lays out the document while 
 ## Installation
 
 ```bash
-npm install @quirekit/view-html@alpha
+npm install @quirekit/view-html
 ```
 
 ## Usage

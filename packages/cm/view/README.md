@@ -7,7 +7,7 @@ Displays CodeMirror state as an editable browser surface.
 ## Installation
 
 ```bash
-npm install @quirekit/cm-view@alpha
+npm install @quirekit/cm-view
 ```
 
 ## Usage

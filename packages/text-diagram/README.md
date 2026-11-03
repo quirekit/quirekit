@@ -7,7 +7,7 @@ Manages diagrams written as text, including Mermaid, PlantUML and Graphviz DOT. 
 ## Installation
 
 ```bash
-npm install @quirekit/text-diagram@alpha
+npm install @quirekit/text-diagram
 ```
 
 ## Usage

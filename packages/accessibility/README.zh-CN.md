@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/accessibility@alpha
+npm install @quirekit/accessibility
 ```
 
 ## 使用方式

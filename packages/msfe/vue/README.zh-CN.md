@@ -14,11 +14,11 @@ MSFE 的 Vue 3 接入层，负责编辑器挂载、卸载、状态订阅和 Vue 
 ## 安装
 
 ```bash
-npm install @quirekit/msfe-vue@alpha @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha vue@^3.5.40
+npm install @quirekit/msfe-vue @quirekit/msfe-core @quirekit/msfe-starter-kit vue@^3.5.40
 ```
 
 ```bash
-pnpm add @quirekit/msfe-vue@alpha @quirekit/msfe-core@alpha @quirekit/msfe-starter-kit@alpha vue@^3.5.40
+pnpm add @quirekit/msfe-vue @quirekit/msfe-core @quirekit/msfe-starter-kit vue@^3.5.40
 ```
 
 peer 依赖是 `vue: ^3.5.40`。已有 Vue 应用也应检查版本范围。Core 是本包的普通依赖，这里显式列出是因为示例导入其类型；StarterKit 提供示例功能，不是 peer 依赖。包提供 ESM 导出。

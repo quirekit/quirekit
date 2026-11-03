@@ -7,7 +7,7 @@ Describes page, font, paragraph and other layout styles for document export. Mul
 ## Installation
 
 ```bash
-npm install @quirekit/export-template@alpha
+npm install @quirekit/export-template
 ```
 
 ## Usage

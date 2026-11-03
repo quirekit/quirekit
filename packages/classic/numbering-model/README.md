@@ -7,7 +7,7 @@ Word-compatible multi-level list numbering: the data model and editing commands 
 ## Install
 
 ```bash
-npm install @quirekit/classic-numbering-model@alpha
+npm install @quirekit/classic-numbering-model
 ```
 
 ## Usage

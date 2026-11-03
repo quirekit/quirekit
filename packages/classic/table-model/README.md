@@ -7,7 +7,7 @@ Word-compatible tables: the data model and schema for tables, rows and cells; ed
 ## Install
 
 ```bash
-npm install @quirekit/classic-table-model@alpha
+npm install @quirekit/classic-table-model
 ```
 
 ## Usage

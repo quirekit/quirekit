@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install @quirekit/cm-view@alpha
+npm install @quirekit/cm-view
 ```
 
 ## 使用方式

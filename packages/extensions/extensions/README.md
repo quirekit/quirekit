@@ -16,11 +16,11 @@ Opt-in editing behaviors for `@quirekit/core`, including placeholders, content c
 Install this package alongside Core, the basic preset, and the native DOM view used by the example.
 
 ```bash
-npm install @quirekit/extensions@alpha @quirekit/core@alpha @quirekit/starter-kit@alpha @quirekit/dom-view@alpha
+npm install @quirekit/extensions @quirekit/core @quirekit/starter-kit @quirekit/dom-view
 ```
 
 ```bash
-pnpm add @quirekit/extensions@alpha @quirekit/core@alpha @quirekit/starter-kit@alpha @quirekit/dom-view@alpha
+pnpm add @quirekit/extensions @quirekit/core @quirekit/starter-kit @quirekit/dom-view
 ```
 
 This package has no peer dependencies. The package manager installs regular dependencies; the other packages above are direct dependencies of the example. Packages expose ESM exports.

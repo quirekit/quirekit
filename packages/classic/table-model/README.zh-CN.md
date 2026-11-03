@@ -7,7 +7,7 @@ Word 兼容的表格：表格、行、单元格的数据模型与结构，插入
 ## 安装
 
 ```bash
-npm install @quirekit/classic-table-model@alpha
+npm install @quirekit/classic-table-model
 ```
 
 ## 使用方式
