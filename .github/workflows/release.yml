@@ -1,15 +1,21 @@
 name: Release
 
-# Publishes every package whose version is not on npm yet, started by hand from the Actions tab.
+# Publishes every package whose version is not on npm yet. Each push to main, which carries a sync
+# from the maintainers' repository, first checks for such versions and stops when there are none,
+# so a version bump in a sync is what releases. A successful release is tagged v<version> with a
+# GitHub release. Run it by hand from the Actions tab to finish a release that failed part-way.
 # npm trusts this workflow (trusted publishing over OIDC), so no token or one-time password is
 # involved and every package gets a provenance attestation. Each package's trusted publisher
-# must name this file, release.yml.
+# must name this file, release.yml; a package new to npm is published once by hand before it can
+# be trusted.
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 concurrency:
@@ -26,7 +32,22 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: pnpm
+      - id: pending
+        run: node scripts/release/pending.mjs
       # Trusted publishing needs npm 11.5.1 or later; pnpm hands the final upload to npm.
-      - run: npm install -g npm@^11.5.1
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm release
+      - if: steps.pending.outputs.count != '0'
+        run: npm install -g npm@^11.5.1
+      - if: steps.pending.outputs.count != '0'
+        run: pnpm install --frozen-lockfile
+      - if: steps.pending.outputs.count != '0'
+        run: pnpm release
+      - if: steps.pending.outputs.version != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v${{ steps.pending.outputs.version }}
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null; then
+            echo "$TAG already exists"
+          else
+            gh release create "$TAG" --target "$GITHUB_SHA" --title "$TAG" --generate-notes
+          fi
