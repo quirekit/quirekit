@@ -9,6 +9,7 @@ import type { CodeBlockOptions } from "./types";
 import { emptyCodeLayer } from "./empty/layer";
 import { codeBlockBoundary } from "./boundaries";
 import { indentCode } from "./indent";
+import { fencePairing } from "./pair";
 
 /** @returns Code container projection retaining the outer editor as the only input owner. */
 function codeBlockBackend(): MsfeExtension {
@@ -66,7 +67,7 @@ export function setCodeLanguage(language: string): MsfeCommand {
 /** Configurable fence semantics with independently replaceable component rendering. */
 export const CodeBlock = Node.create<CodeBlockOptions>({ name: "code-block",
   /** @returns A source-neutral empty code input entry. */
-  addOptions: () => ({ emptyLine: true, emptyLineLabel: "输入代码" }),
+  addOptions: () => ({ emptyLine: true, emptyLineLabel: "输入代码", closeFence: true }),
   /** @returns Declarative shell ownership, active only when syntax is hidden. */
   addEditingBoundaries: () => [codeBlockBoundary],
   /** @returns Measured placeholder only when the canonical block has no body line. */
@@ -80,7 +81,8 @@ export const CodeBlock = Node.create<CodeBlockOptions>({ name: "code-block",
   addSource() { return defineSource({ nodes: ["FencedCode"], placement: "before", read: readCodeBlock, patch: patchCodeBlock,
     source: (document, node) => document.lineAt(node.from).text, renderer: codeBlockRenderer }); },
   addProjections() { return codeBlockBackend().projections!; },
-  addCodeMirrorExtensions() { return codeBlockBackend().extensions!; },
+  /** @returns Fence styling, plus closing-fence pairing unless the host disables it. */
+  addCodeMirrorExtensions() { return [codeBlockBackend().extensions!, this.options.closeFence ? fencePairing : []]; },
 });
 
 /** @returns Independently configured source-backed code container. */

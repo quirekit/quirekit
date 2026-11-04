@@ -1,6 +1,6 @@
 # Quire Render 本地开发者预览
 
-这是 `0.0.0` 本地预览，不代表已公开发布或 API 稳定。
+这是本地开发者预览，不代表 API 稳定。
 
 - `archives/`：通过 pnpm 实际打包的 Renderer 与契约包。
 - `consumer/`：只安装这两个 tgz 的独立 TypeScript 示例，附 npm 锁文件。

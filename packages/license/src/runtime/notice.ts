@@ -10,6 +10,11 @@ const reasons: Readonly<Record<string, string>> = {
   product: "授权码不包含该产品",
   domain: "授权码不包含当前域名",
   "updates-expired": "当前版本晚于授权码的可升级截止日期",
+  certificate: "OEM 子码缺少有效的厂商证书",
+  application: "宿主声明的产品名称与 OEM 证书不符",
+  vendor: "OEM 子码不是该证书的厂商签发的",
+  "certificate-lapsed": "OEM 子码签发于厂商证书到期之后，需要厂商续费后的新证书",
+  countersign: "OEM 子码缺少签发系统加签，或离线子码未按规则绑定地址",
   unsupported: "当前环境不支持授权码验签（需要 WebCrypto Ed25519）"
 };
 

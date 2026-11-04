@@ -2837,7 +2837,14 @@ importers:
         version: 4.1.9(@opentelemetry/api@1.9.0)(@types/node@26.0.0)(happy-dom@20.10.6)(vite@8.3.4(@types/node@26.0.0)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.51.0)(terser@5.51.2)(yaml@2.9.0))
 
   packages/license:
+    dependencies:
+      uuid:
+        specifier: 14.0.3
+        version: 14.0.3
     devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 26.0.0
       tsdown:
         specifier: 'catalog:'
         version: 0.22.3(@tsdown/css@0.22.3)(typescript@6.0.3)(vue-tsc@3.3.7(typescript@6.0.3))

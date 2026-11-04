@@ -16,5 +16,7 @@ describe("Table recipe", () => {
     expect(css).toContain("var(--qk-table-current-background)");
     expect(css).toContain("border-collapse:separate");
     expect(css).not.toMatch(/\.qk-table__cell\{[^}]*height:/);
+    // Text, tags and buttons in one row share a center line.
+    expect(css).toMatch(/\.qk-table__cell\{[^}]*vertical-align:middle/);
   });
 });

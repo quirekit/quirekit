@@ -105,7 +105,7 @@ interest in and to Your Contributions.
 本协议既保护作为贡献者的你，也保护维护者和 QuireKit 的用户；它不改变你将自己的贡献用于任何其他目的的权利。
 
 "维护者"指 QuireKit 著作权人王一帅（Wang Yishuai）及其承继者与受让人，包括受让 QuireKit 著作权的法律主体。
-QuireKit 以 MIT 许可证、GNU AGPL 第 3 版等开源许可证以及 QuireKit 商业许可证分发；你在下文授予的许可允许维护者在上述每一种许可下分发你的贡献。
+QuireKit 以 MIT 许可证等开源许可证以及 QuireKit 商业许可证分发；你在下文授予的许可允许维护者在上述每一种许可下分发你的贡献。
 
 你通过 Pull Request 上的 CLA 检查确认本协议，或以维护者认可的其他书面形式确认，即表示接受本协议。届时会记录你的账号、邮箱与所接受的协议版本。
 

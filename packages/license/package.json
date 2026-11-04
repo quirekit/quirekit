@@ -10,10 +10,17 @@
     "THIRD_PARTY_NOTICES.md",
     "dist"
   ],
+  "bin": {
+    "quirekit-oem": "./dist/cli/oem.mjs"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs"
+    },
+    "./issue": {
+      "types": "./dist/issue/index.d.mts",
+      "import": "./dist/issue/index.mjs"
     }
   },
   "types": "./dist/index.d.mts",
@@ -22,7 +29,11 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run src"
   },
+  "dependencies": {
+    "uuid": "14.0.3"
+  },
   "devDependencies": {
+    "@types/node": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"

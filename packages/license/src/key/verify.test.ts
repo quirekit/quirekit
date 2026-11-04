@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import type { QuireKitLicensePayload } from "../types";
-import { coversProduct, hostMatches, verifyQuireKitLicenseKey } from "./verify";
+import { coversProduct, hostMatches } from "./entitlement";
+import { verifyQuireKitLicenseKey } from "./verify";
 
 const subtle = globalThis.crypto.subtle;
 let signer: CryptoKey;
@@ -16,7 +17,7 @@ async function issue(overrides: Partial<QuireKitLicensePayload> = {}): Promise<s
   const payload: QuireKitLicensePayload = { id: "test-1", licensee: "测试学校", plan: "education", products: ["classic"],
     issuedAt: "2026-10-20", updatesUntil: "2027-10-20", ...overrides };
   const body = new TextEncoder().encode(JSON.stringify(payload));
-  return `${encode(body)}.${encode(new Uint8Array(await subtle.sign({ name: "Ed25519" }, signer, body)))}`;
+  return `qk1_${encode(body)}.${encode(new Uint8Array(await subtle.sign({ name: "Ed25519" }, signer, body)))}`;
 }
 
 beforeAll(async () => {
@@ -26,15 +27,18 @@ beforeAll(async () => {
 });
 
 describe("license key verification", () => {
-  it("licenses a valid key for a covered product and reports its plan", async () => {
-    expect(await verifyQuireKitLicenseKey(await issue(), { product: "classic", publicKey }))
-      .toEqual({ status: "licensed", plan: "education", licensee: "测试学校" });
+  it("licenses a valid key for a covered product and reports its plan and issuance", async () => {
+    const licensed = { status: "licensed", plan: "education", licensee: "测试学校", id: "test-1", updatesUntil: "2027-10-20" };
+    const key = await issue();
+    expect(await verifyQuireKitLicenseKey(key, { product: "classic", publicKey })).toEqual(licensed);
+    // Keys issued before the prefix existed stay valid.
+    expect(await verifyQuireKitLicenseKey(key.slice("qk1_".length), { product: "classic", publicKey })).toEqual(licensed);
   });
   it("treats a missing key as evaluation and accepts only issued open-source keys", async () => {
     expect(await verifyQuireKitLicenseKey(undefined, { product: "classic", publicKey })).toEqual({ status: "evaluation", reason: "missing" });
     expect(await verifyQuireKitLicenseKey(" open-source ", { product: "docx", publicKey })).toEqual({ status: "invalid", reason: "malformed" });
     const project = await issue({ plan: "open-source", licensee: "某开源项目", products: ["docx"] });
-    expect(await verifyQuireKitLicenseKey(project, { product: "docx", publicKey })).toEqual({ status: "licensed", plan: "open-source", licensee: "某开源项目" });
+    expect(await verifyQuireKitLicenseKey(project, { product: "docx", publicKey })).toMatchObject({ status: "licensed", plan: "open-source", licensee: "某开源项目" });
   });
   it("rejects malformed keys, foreign signatures and tampered payloads", async () => {
     expect((await verifyQuireKitLicenseKey("not-a-key", { product: "classic", publicKey })).reason).toBe("malformed");

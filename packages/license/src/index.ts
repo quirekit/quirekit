@@ -1,9 +1,12 @@
-export { setQuireKitLicense, checkQuireKitLicense, subscribeQuireKitLicense } from "./runtime/state";
-export { declareQuireKitProducts, checkDeclaredQuireKitProducts, subscribeQuireKitProducts } from "./runtime/products";
+export { setQuireKitLicense, setQuireKitOemCertificate, checkQuireKitLicense, subscribeQuireKitLicense } from "./runtime/state";
+export { declareQuireKitProducts, declaredQuireKitProducts, checkDeclaredQuireKitProducts, subscribeQuireKitProducts } from "./runtime/products";
 export type { QuireKitProductDeclaration } from "./runtime/products";
 export { verifyQuireKitLicenseKey } from "./key/verify";
+export { quireKitIssuerPublicKey } from "./key/public-key";
+export { quireKitLicenseKeyPrefix, quireKitOemCertificatePrefix, quireKitSubLicensePrefix } from "./key/codec";
+export { quireKitLicenseProperty } from "./mark";
 export type {
-  QuireKitProduct, QuireKitPlan, QuireKitLicensePayload, QuireKitLicenseStatus, QuireKitLicenseReason,
+  QuireKitProduct, QuireKitPlan, QuireKitCheckPlan, QuireKitLicensePayload, QuireKitOemCertificatePayload, QuireKitSubLicensePayload, QuireKitOemDeclaration, QuireKitLicenseStatus, QuireKitLicenseReason,
   QuireKitLicenseCheck, QuireKitLicenseContext
 } from "./types";
 export { quireKitEvaluationMarkText, quireKitEvaluationMarkTag, quireKitEvaluationMarkOutline } from "./mark";

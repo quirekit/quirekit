@@ -39,6 +39,14 @@ export function declareQuireKitProducts(products: readonly QuireKitProduct[], op
 }
 
 /**
+ * Lists the product lines declared on the page.
+ * @returns Product lines in declaration order.
+ */
+export function declaredQuireKitProducts(): readonly QuireKitProduct[] {
+  return [...registry().products];
+}
+
+/**
  * Checks every declared product line.
  * @returns Unlicensed product lines with their results, in declaration order.
  */

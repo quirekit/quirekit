@@ -7,7 +7,7 @@ export const tableShortcuts = [
   ...controlSizeShortcuts("qk-table", "content"),
   ["qk-table__viewport", [{ "max-height": "var(--qk-table-max-height, none)", "overscroll-behavior": "auto" }], { layer: "qk-recipes" }],
   ["qk-table__table", [{ width: "100%", "table-layout": "fixed", "border-collapse": "separate", "border-spacing": "0", "font-size": "inherit", "line-height": "inherit" }], { layer: "qk-recipes" }],
-  ["qk-table__cell", [{ padding: "var(--qk-table-cell-padding, var(--qk-table-padding))", "vertical-align": "top", "overflow-wrap": "anywhere", "font-weight": "normal", "border-bottom": "var(--qk-table-border-width) solid var(--qk-table-border-color)" }], { layer: "qk-recipes" }],
+  ["qk-table__cell", [{ padding: "var(--qk-table-cell-padding, var(--qk-table-padding))", "vertical-align": "middle", "overflow-wrap": "anywhere", "font-weight": "normal", "border-bottom": "var(--qk-table-border-width) solid var(--qk-table-border-color)" }], { layer: "qk-recipes" }],
   ["qk-table__heading", ["qk-table__cell", { color: "var(--qk-table-muted-foreground)", "background-color": "var(--qk-table-header-background)", "vertical-align": "middle", "font-weight": "var(--qk-type-control-font-weight)" }], { layer: "qk-recipes" }],
   ["qk-table__heading--sticky", [{ position: "sticky", top: "0", "z-index": "1" }], { layer: "qk-recipes" }],
   ["qk-table__row", "data-[current]:[background-color:var(--qk-table-current-background)] data-[selected]:[background-color:var(--qk-table-current-background)]", { layer: "qk-recipes" }],

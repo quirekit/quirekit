@@ -1,6 +1,6 @@
 import { Heading } from "@quirekit/msfe-heading";
 import { Bold } from "@quirekit/msfe-bold";
-import { CodeBlock } from "@quirekit/msfe-code-block";
+import { CodeBlock, fencePairing } from "@quirekit/msfe-code-block";
 import { Link } from "@quirekit/msfe-link";
 import { Blockquote, ListMarkers, Emphasis, InlineCode, Strikethrough, Table, HorizontalRule } from "@quirekit/msfe-prose";
 import { CustomContainer, type ContainerStorage } from "@quirekit/msfe-markdown-extras";
@@ -35,8 +35,8 @@ export const ProseBold = Bold.extend({ addCodeMirrorExtensions: () => [],
 });
 /** Editable code retains feature semantics and receives the public CodeBlock frame. */
 export const ProseCodeBlock = CodeBlock.extend({
-  /** @returns Product typography; shared source-boundary input is inherited from CodeBlock. */
-  addCodeMirrorExtensions: () => [],
+  /** @returns Closing-fence pairing only; product typography replaces the base fence theme. */
+  addCodeMirrorExtensions() { return this.options.closeFence ? fencePairing : []; },
   /** @returns Literal input isolation and explicit exit for code blocks. */
   addBlockInput: () => [
     { nodes: ["FencedCode"], enter: fenceInput, lineBreak: "native", exit: exitInput },

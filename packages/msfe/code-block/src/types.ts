@@ -10,6 +10,8 @@ export interface CodeBlockOptions {
   readonly emptyLine: boolean;
   /** Accessible label for the empty code input entry. */
   readonly emptyLineLabel: string;
+  /** Type a closing fence with every new opener so it never pairs with a later block's fence; default true. */
+  readonly closeFence: boolean;
 }
 
 

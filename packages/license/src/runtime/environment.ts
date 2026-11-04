@@ -43,16 +43,28 @@ export function currentLocation(): LicenseLocation | undefined {
 }
 
 /**
+ * Reports whether the page runs inside a packaged desktop or mobile shell.
+ * @returns Whether Electron, NW.js or Capacitor hosts the page.
+ */
+export function isPackagedShell(): boolean {
+  const scope = globalThis as { navigator?: { userAgent?: unknown }; Capacitor?: unknown; process?: { versions?: Record<string, unknown> } };
+  const agent = typeof scope.navigator?.userAgent === "string" ? scope.navigator.userAgent : "";
+  const versions = scope.process?.versions;
+  return /\bElectron\//u.test(agent) || scope.Capacitor !== undefined
+    || typeof versions?.electron === "string" || typeof versions?.nw === "string";
+}
+
+/**
  * Reports whether a location is a local development server, which never shows the notice.
- * Only http(s) on an explicit port counts: packaged desktop and mobile shells such as
- * Capacitor (`https://localhost`) or Tauri (`tauri://localhost`) are production.
+ * Only http(s) on an explicit port of a loopback name counts. Packaged shells are production
+ * even when they serve from `localhost` with a port, and `*.test` is excluded because
+ * intranet DNS can resolve it.
  * @param location - Current location, if any.
- * @returns Whether the location is a loopback, `*.localhost` or `*.test` development server.
+ * @returns Whether the location is a loopback or `*.localhost` development server.
  */
 export function isDevelopmentLocation(location: LicenseLocation | undefined): boolean {
   if (!location || location.port === "" || !/^https?:$/u.test(location.protocol)) return false;
   const host = location.hostname;
-  if (packagedHosts.has(host)) return false;
-  return host === "localhost" || host === "127.0.0.1" || host === "::1"
-    || host.endsWith(".localhost") || host.endsWith(".test");
+  if (packagedHosts.has(host) || isPackagedShell()) return false;
+  return host === "localhost" || host === "127.0.0.1" || host === "::1" || host.endsWith(".localhost");
 }

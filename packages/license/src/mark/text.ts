@@ -1,3 +1,6 @@
+/** Document property name under which exports record the issuance identifier of the key that licensed them. */
+export const quireKitLicenseProperty = "QuireKitLicense";
+
 /** Text exports carry while their product line is unlicensed; fixed-layout exports draw its outline. */
 export const quireKitEvaluationMarkText = "QuireKit 评估版 · quirekit.com";
 

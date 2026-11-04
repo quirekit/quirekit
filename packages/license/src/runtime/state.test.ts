@@ -1,9 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { isDevelopmentLocation } from "./environment";
-import { checkQuireKitLicense, setQuireKitLicense, subscribeQuireKitLicense } from "./state";
+import { checkQuireKitLicense, setQuireKitLicense, setQuireKitOemCertificate, subscribeQuireKitLicense } from "./state";
 
 afterEach(() => {
   setQuireKitLicense(null);
+  setQuireKitOemCertificate(null);
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });
@@ -27,11 +28,22 @@ describe("page license state", () => {
     expect(listener).toHaveBeenCalledTimes(1);
     stop();
   });
+  it("rechecks sub-licenses after the host declares its OEM certificate", async () => {
+    vi.spyOn(console, "info").mockImplementation(() => {});
+    const listener = vi.fn();
+    const stop = subscribeQuireKitLicense(listener);
+    setQuireKitLicense("qks1_eyJ9.eyJ9");
+    expect((await checkQuireKitLicense("classic")).reason).toBe("malformed");
+    setQuireKitOemCertificate("qkc1_eyJ9.eyJ9", { application: "合同管理系统" });
+    setQuireKitOemCertificate("qkc1_eyJ9.eyJ9", { application: "合同管理系统" });
+    expect(listener).toHaveBeenCalledTimes(2);
+    stop();
+  });
   it("keeps verification results out of the page-wide state", async () => {
     vi.spyOn(console, "info").mockImplementation(() => {});
     await checkQuireKitLicense("docx");
     const shared = (globalThis as unknown as Record<symbol, object>)[Symbol.for("quirekit.license.state.v1")]!;
-    expect(Object.keys(shared).sort()).toEqual(["key", "listeners", "releaseDates"]);
+    expect(Object.keys(shared).filter((key) => key !== "oem").sort()).toEqual(["key", "listeners", "releaseDates"]);
   });
   it("never shows the notice on local development hosts, rechecking when the host changes", async () => {
     vi.spyOn(console, "info").mockImplementation(() => {});
@@ -39,13 +51,24 @@ describe("page license state", () => {
     vi.stubGlobal("location", { protocol: "http:", hostname: "localhost", port: "5173" });
     expect((await checkQuireKitLicense("export")).status).toBe("licensed");
     const dev = (hostname: string, protocol = "http:", port = "5173") => isDevelopmentLocation({ protocol, hostname, port });
-    expect(["127.0.0.1", "::1", "app.localhost", "site.test"].every((host) => dev(host))).toBe(true);
+    expect(["127.0.0.1", "::1", "app.localhost"].every((host) => dev(host))).toBe(true);
+    // Reserved names that intranets can resolve are production.
     expect(dev("example.com")).toBe(false);
+    expect(dev("site.test")).toBe(false);
     // Packaged desktop and mobile shells serve production apps from localhost-like origins.
     expect(dev("localhost", "https:", "")).toBe(false);
     expect(dev("localhost", "tauri:", "")).toBe(false);
     expect(dev("tauri.localhost")).toBe(false);
     expect(dev("localhost", "capacitor:", "")).toBe(false);
+  });
+  it("treats packaged shells serving from a local port as production", () => {
+    const dev = () => isDevelopmentLocation({ protocol: "http:", hostname: "localhost", port: "41234" });
+    vi.stubGlobal("navigator", { userAgent: "Mozilla/5.0 (Macintosh) AppleWebKit/537.36 Chrome/130.0 Electron/33.2.0 Safari/537.36" });
+    expect(dev()).toBe(false);
+    vi.stubGlobal("navigator", { userAgent: "Mozilla/5.0 (Macintosh) Chrome/130.0 Safari/537.36" });
+    expect(dev()).toBe(true);
+    vi.stubGlobal("Capacitor", {});
+    expect(dev()).toBe(false);
   });
 });
 

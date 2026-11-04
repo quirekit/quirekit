@@ -265,6 +265,9 @@
       "@quirekit/license": [
         "packages/license/src/index.ts"
       ],
+      "@quirekit/license/issue": [
+        "packages/license/src/issue/index.ts"
+      ],
       "@quirekit/suggestion": [
         "packages/suggestion/src/index.ts"
       ],

@@ -132,7 +132,9 @@ Licensor may revoke a key that was terminated, refunded or disclosed outside its
 licensee; later releases may reject it.
 
 License keys are verified locally. The Commercial Components do not send license,
-usage or document data to the Licensor.
+usage or document data to the Licensor. Files exported under a license key record the
+key's license ID in their document properties; the ID identifies the issuance only and
+carries no licensee, usage or document data.
 
 ## 12. Governing law and disputes
 
@@ -262,7 +264,7 @@ In case of any inconsistency between them, the Chinese version prevails.
 其他后续版本需要续期的授权码或授权协议。许可方可以吊销已终止、已退款或在被许可方之外泄露的授权码；
 后续版本可以拒绝该授权码。
 
-授权码在本地校验。商业组件不向许可方发送授权、使用情况或文档数据。
+授权码在本地校验。商业组件不向许可方发送授权、使用情况或文档数据。凭授权码导出的文件会在文档属性中记录该授权码的授权编号；编号只标识这次签发，不含被许可方、使用情况或文档数据。
 
 ### 12. 适用法律与争议解决
 
