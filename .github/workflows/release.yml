@@ -3,7 +3,8 @@ name: Release
 # Publishes every package whose version is not on npm yet. Each push to main, which carries a sync
 # from the maintainers' repository, first checks for such versions and stops when there are none,
 # so a version bump in a sync is what releases. A successful release is tagged v<version> with a
-# GitHub release. Run it by hand from the Actions tab to finish a release that failed part-way.
+# GitHub release whose notes come from the packages' CHANGELOG.md entries for that version. Run it
+# by hand from the Actions tab to finish a release that failed part-way.
 # npm trusts this workflow (trusted publishing over OIDC), so no token or one-time password is
 # involved and every package gets a provenance attestation. Each package's trusted publisher
 # must name this file, release.yml; a package new to npm is published once by hand before it can
@@ -47,10 +48,11 @@ jobs:
       - if: steps.pending.outputs.version != ''
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: v${{ steps.pending.outputs.version }}
+          VERSION: ${{ steps.pending.outputs.version }}
         run: |
-          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null; then
-            echo "$TAG already exists"
+          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" >/dev/null; then
+            echo "v$VERSION already exists"
           else
-            gh release create "$TAG" --target "$GITHUB_SHA" --title "$TAG" --generate-notes
+            node scripts/release/notes.mjs "$VERSION" > "$RUNNER_TEMP/notes.md"
+            gh release create "v$VERSION" --target "$GITHUB_SHA" --title "v$VERSION" --notes-file "$RUNNER_TEMP/notes.md"
           fi
