@@ -28,12 +28,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      # The check runs on the runner's own Node; setting up Node with the pnpm cache only when
+      # releasing keeps a no-op run from failing to save a cache that was never filled.
+      - id: pending
+        run: node scripts/release/pending.mjs
+      - if: steps.pending.outputs.count != '0'
+        uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: pnpm
-      - id: pending
-        run: node scripts/release/pending.mjs
       # Trusted publishing needs npm 11.5.1 or later; pnpm hands the final upload to npm.
       - if: steps.pending.outputs.count != '0'
         run: npm install -g npm@^11.5.1
