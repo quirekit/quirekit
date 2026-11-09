@@ -1,53 +1,30 @@
 import { matchesQuireRegionOccurrence } from "../../../layout/owner-facts/region";
 import { cloneQuireTextFragmentWithLazyCaretStops } from "@quirekit/layout/text";
-import type { QuireLayoutRegionRef } from "@quirekit/layout/identity";
 import {
   projectQuireLayoutBoxViewProductsToPage
 } from "../../../layout/engine/pagination/projection/split-box/visual-instance";
 import {
   projectQuireSubLayoutProjectionVisualInstance
 } from "../../../layout/engine/pagination/projection/sub-layout-visual-instance";
-import type {
-  QuireLayoutBox,
-  QuireLayoutContainer
-} from "../../../layout/engine/types";
+import type { QuireLayoutBox } from "../../../layout/engine/types";
 import type {
   QuireLayoutBoxSubLayoutFragment
 } from "../../../layout/engine/sub-layout";
+import { identifyQuireStoryTableOccurrence } from "./table-identity";
 
 /**
- * Assigns snapshot-unique ids to one repeated story layout occurrence.
- *
- * @param layout - Translated story occurrence in document coordinates.
- * @param visualInstanceId - Stable page-local occurrence id.
- * @param pageIndex - Zero-based physical page that owns the occurrence.
- * @returns Reidentified layout tree with unchanged source ranges and ownership.
- */
-export function identifyQuireStoryLayoutOccurrence(
-  layout: QuireLayoutContainer,
-  visualInstanceId: string,
-  pageIndex: number
-): QuireLayoutContainer {
-  return identifyLayoutBox(
-    layout,
-    visualInstanceId,
-    pageIndex
-  ) as QuireLayoutContainer;
-}
-
-/**
- * Reidentifies one layout box and all nested paint geometry.
+ * Reidentifies a repeated story layout and all nested paint geometry.
  *
  * @param box - Layout box belonging to a repeated source tree.
  * @param suffix - Visual-instance suffix appended to snapshot-local ids.
  * @param pageIndex - Zero-based physical page that owns the occurrence.
- * @returns Reidentified layout box.
+ * @returns The same layout shape with occurrence ids and unchanged logical ownership.
  */
-function identifyLayoutBox(
-  box: QuireLayoutBox,
+export function identifyQuireStoryLayoutOccurrence<Layout extends QuireLayoutBox>(
+  box: Layout,
   suffix: string,
   pageIndex: number
-): QuireLayoutBox {
+): Layout {
   const viewProducts = projectNestedBoxViewProducts(
     box,
     suffix,
@@ -69,13 +46,14 @@ function identifyLayoutBox(
     identifySubLayoutFragment(fragment, suffix)
   );
   const children = "children" in box && Array.isArray(box.children)
-    ? box.children.map((child) => identifyLayoutBox(child, suffix, pageIndex))
+    ? box.children.map((child) => identifyQuireStoryLayoutOccurrence(child, suffix, pageIndex))
     : undefined;
 
   return {
     ...box,
     ...viewProducts,
     id: `${box.id}:${suffix}`,
+    ...(box.table === undefined ? {} : { table: identifyQuireStoryTableOccurrence(box.table, suffix) }),
     ...(textFragments === undefined ? {} : { textFragments }),
     ...(nodeHandle === undefined ? {} : { nodeHandle }),
     ...(subLayoutFragments === undefined ? {} : { subLayoutFragments }),
@@ -139,10 +117,9 @@ function projectNestedBoxViewProducts(
     return {};
   }
 
-  const visualInstanceId = createNestedVisualInstanceId(
-    occurrenceId,
-    sourceRegion
-  );
+  const visualInstanceId = sourceRegion.visualInstanceId === undefined
+    ? occurrenceId
+    : `${occurrenceId}:${sourceRegion.visualInstanceId}`;
   const installedRect = box.regionProducts?.regions.find((region) =>
     matchesQuireRegionOccurrence(region.ref, sourceRegion)
   )?.rect ?? box.rect;
@@ -153,20 +130,4 @@ function projectNestedBoxViewProducts(
     installedRect,
     visualInstanceId
   );
-}
-
-/**
- * Creates one repeated-story occurrence id for a nested retained region.
- *
- * @param occurrenceId - Enclosing story occurrence id.
- * @param region - Nested region before repeated-story projection.
- * @returns Snapshot-unique nested visual-instance id.
- */
-function createNestedVisualInstanceId(
-  occurrenceId: string,
-  region: QuireLayoutRegionRef
-): string {
-  return region.visualInstanceId === undefined
-    ? occurrenceId
-    : `${occurrenceId}:${region.visualInstanceId}`;
 }

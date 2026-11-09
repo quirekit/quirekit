@@ -829,6 +829,23 @@ describe("layoutQuireInlineTextFragmentsFromQuireLayout", () => {
     }));
   });
 
+  it("ends an inline object fragment after a multi-position source node", () => {
+    // A phonetic guide holding base text spans 2..5 but paints one replacement character.
+    const fragments = layout({
+      runs: [
+        createRun("A", 1, "16px sans-serif", []),
+        { text: "\ufffc", range: { from: 2, to: 5 }, font: "16px sans-serif", marks: [],
+          replacement: { sourceAnchorId: "guide", inlineSize: 20, blockSize: 24 } },
+        createRun("B", 5, "16px sans-serif", [])
+      ],
+      rect: { x: 10, y: 20, width: 200, height: 24 }
+    });
+    const guide = fragments[1]!;
+
+    expect(guide.range).toEqual({ from: 2, to: 5 });
+    expect(guide.caretStops?.map((stop) => stop.position.pos)).toEqual([2, 5]);
+  });
+
   it("forwards a minimum-line step after an inline replacement grows the line", () => {
     const fragments = layoutQuireInlineTextFragmentsFromQuireLayout({
       id: "paragraph-grid-image",

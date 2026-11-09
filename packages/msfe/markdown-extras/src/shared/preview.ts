@@ -51,12 +51,18 @@ export function previewRenderer(load: (props: PreviewProps, signal: AbortSignal,
       if (same) { if (status === "error" || status === "loading" && options.loadingSource !== false) output.textContent = next.source; control?.update(controlProps(next)); return; }
       render(next);
     }
+    /** @returns The font role inherited at the output's mount point. */
+    const typography = (): PreviewTypography => {
+      const style = dom.ownerDocument.defaultView!.getComputedStyle(dom);
+      return { fontFamily: style.fontFamily, fontSize: parseFloat(style.fontSize) };
+    };
     /** @param next - Current source inputs. Starts only for changed content or explicit retry. */
     function render(next: PreviewProps): void {
+      let font: PreviewTypography | undefined;
       request?.dispose();
       // Rehydrate only exact successful output before mounting/measurement. No
       // engine request or font measurement is admitted on a source-only cache hit.
-      const cached = options.cache?.get(next, dom.ownerDocument);
+      const cached = options.cache?.get(next, dom.ownerDocument, dom.isConnected ? typography() : undefined);
       if (cached !== undefined) {
         present(cached); status = "ready"; output.dataset.status = status; output.setAttribute("aria-busy", "false");
         control?.update(controlProps(next)); requestMeasure(); return;
@@ -70,14 +76,16 @@ export function previewRenderer(load: (props: PreviewProps, signal: AbortSignal,
         try {
           // Acquisition runs after mounting. Read the real inherited role once per render,
           // before diagram measurement, rather than changing its font after SVG layout.
-          const style = dom.ownerDocument.defaultView!.getComputedStyle(dom);
-          return { value: await load(next, signal, { fontFamily: style.fontFamily, fontSize: parseFloat(style.fontSize) }, dom.ownerDocument) };
+          font = typography();
+          // A preview created before mounting could not read its font for the synchronous lookup.
+          const mounted = options.cache?.get(next, dom.ownerDocument, font);
+          return { value: mounted ?? await load(next, signal, font, dom.ownerDocument) };
         }
         catch { return { value: null }; }
       }, result => {
         status = result === null ? "error" : "ready"; output.dataset.status = status;
         output.setAttribute("aria-busy", "false");
-        if (result !== null) { options.cache?.set(next, dom.ownerDocument, result); present(result); }
+        if (result !== null) { options.cache?.set(next, dom.ownerDocument, result, font); present(result); }
         else output.textContent = current!.source;
         control?.update(controlProps(current!));
         requestMeasure();

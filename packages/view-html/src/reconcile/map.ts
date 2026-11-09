@@ -133,6 +133,12 @@ function findSmallestDirtyContainer(
       continue;
     }
     const contentRange = htmlDescriptorContentRange(child);
+    // A collapsed deletion at an inline boundary can have changed the adjacent
+    // run. Its shared parent owns reconciliation of both sides of that boundary.
+    const inlineWrapper = child.kind === "mark" || child.kind === "inline-decoration";
+    if (inlineWrapper && (range.from === contentRange.from || range.to === contentRange.to)) {
+      continue;
+    }
     if (contentRange.from <= range.from && range.to <= contentRange.to) {
       return findSmallestDirtyContainer(child, range);
     }

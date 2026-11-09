@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/math-ui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/math-ui"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/math-ui"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/math-ui#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Vue UI implementation for the QuireKit headless formula editor, with host-owned commits.",

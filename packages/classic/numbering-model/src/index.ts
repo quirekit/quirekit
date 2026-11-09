@@ -10,3 +10,4 @@ export * from "./selection";
 export * from "./templates";
 export * from "./types";
 export * from "./layout";
+export { createWordNumberingCollabRules } from "./collab/rules";

@@ -33,7 +33,7 @@ export function normalizeHtmlDirtyContainers(
   }
   return [...normalized].filter((candidate) => (
     ![...normalized].some((other) => (
-      other !== candidate && isAncestor(candidate, other)
+      other !== candidate && isAncestor(other, candidate)
     ))
   )).sort((left, right) => left.range.from - right.range.from);
 }

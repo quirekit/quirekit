@@ -1,6 +1,8 @@
 import {
   projectEditorUIAnchorGeometry,
-  resolveEditorUIAnchorGeometry
+  resolveEditorUIAnchorGeometry,
+  resolveEditorUIStructuredRangeRects,
+  resolveEditorUITextRangeRects
 } from "@quirekit/editor-ui";
 import type { EditorUIClientAnchorResolution } from "@quirekit/editor-ui";
 import type {
@@ -27,9 +29,9 @@ import { projectMountedTableChromeModel } from "../table-chrome";
 import { readMountedObjectPlacement } from "./object-placement";
 import { queryMountedBlockFragments } from "../block-interaction";
 import { readMountedTextblockContentWidth } from "./textblock-width";
-import { readMountedTextRangeRects } from "./text-range";
 import { findMountedPageForPosition } from "./page-for-position";
 import { readMountedCaretRect } from "./caret";
+import { toCanonicalHit, toFramePosition } from "./canonical-positions";
 
 /**
  * Creates the canonical editor-facing geometry facade for a paginated mount.
@@ -114,7 +116,8 @@ export function createMountedPaginatedGeometryFacade(
 
   return {
     getCaretRect: () => readMountedCaretRect(options),
-    getTextRangeRects: (range, sourceDocument) => readMountedTextRangeRects(options, range, sourceDocument),
+    getTextRangeRects: (range, sourceDocument) => resolveEditorUITextRangeRects(options.readRenderResult(), options.readSurface(), range, sourceDocument),
+    getStructuredRangeRects: (range, sourceDocument) => resolveEditorUIStructuredRangeRects(options.readRenderResult(), options.readSurface(), range, sourceDocument),
     getTextblockContentWidth: (position, sourceDocument) => readMountedTextblockContentWidth(options, position, sourceDocument),
     queryBlockFragments: clientY => queryMountedBlockFragments(options, clientY),
     getObjectAnchor,
@@ -137,19 +140,24 @@ export function createMountedPaginatedGeometryFacade(
           : { surfaceBounds: surface.surfaceBounds })
       });
 
-      return options.refinePosAtCoords?.({
+      const hit = options.refinePosAtCoords?.({
         geometrySnapshot,
         coords,
         surface,
         retainedResult
       }) ?? retainedResult;
+      // Retained geometry answers in frame positions; callers expect canonical ones.
+      return hit === null ? null : toCanonicalHit(options.readRenderResult(), hit);
     },
-    coordsAtPos(pos, side = 1) {
+    coordsAtPos(canonicalPos, side = 1) {
+      const renderResult = options.readRenderResult();
       const geometrySnapshot = requireQuireViewInteractionGeometrySnapshot(
-        options.readRenderResult(),
+        renderResult,
         "coordsAtPos",
         options.backendLabel
       );
+      // Callers pass canonical positions; retained geometry is in frame positions.
+      const pos = toFramePosition(renderResult, canonicalPos, side);
       const selectionContext = options.readSelectionContext();
       const surface = options.readSurface();
       const retainedResult = resolveQuireViewCoordsAtPosWithProvenance({

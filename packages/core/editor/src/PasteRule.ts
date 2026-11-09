@@ -1,6 +1,7 @@
 import {
   Fragment,
   Plugin,
+  PluginKey,
   type EditorState as PMEditorState,
   type Node as PMNode
 } from "@quirekit/pm";
@@ -111,6 +112,7 @@ export function pasteRulesPlugin(options: {
 
   return [
     new Plugin({
+      key: new PluginKey("pasteRules"),
       appendTransaction(transactions, oldState, state) {
         const trigger = getPasteRuleTrigger(transactions, oldState, state);
 

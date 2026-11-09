@@ -1,5 +1,6 @@
 export type {
   QuireKitAccordionItem,
   QuireKitAccordionOrientation,
-  QuireKitAccordionSize
+  QuireKitAccordionSize,
+  QuireKitAccordionVariant
 } from "./types";

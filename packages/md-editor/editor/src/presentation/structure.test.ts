@@ -34,6 +34,23 @@ describe("Prose source block adapter", () => {
     }
   });
 
+  it("keeps a list or heading marker without its space as literal text until the space is typed", () => {
+    /** @param doc - Source. @returns Wrapper tag names. */
+    const tags = (doc: string) => {
+      const state = EditorState.create({ doc, extensions: [markdown(), modeFacet.of("live"), proseStructureField] });
+      ensureSyntaxTree(state, state.doc.length, 1000);
+      const names: string[] = [];
+      for (let cursor = state.update({}).state.field(proseStructureField).iter(); cursor.value; cursor.next()) names.push(cursor.value.tagName);
+      return names.sort();
+    };
+    expect(tags("-")).toEqual([]);
+    expect(tags("1.")).toEqual([]);
+    expect(tags("##")).toEqual([]);
+    expect(tags("## a")).toEqual(["div"]);
+    expect(tags("- ")).toEqual(["li", "ul"]);
+    expect(tags("- a\n-")).toEqual(["div", "li", "ul"]);
+  });
+
   it("inserts one canonical block without replacing the surrounding document", () => {
     const state = EditorState.create({ doc: "before\nafter", selection: { anchor: 6 }, extensions: [markdown()] });
     const transaction = insertMarkdownBlock("::: note Title\nbody\n:::")(state);

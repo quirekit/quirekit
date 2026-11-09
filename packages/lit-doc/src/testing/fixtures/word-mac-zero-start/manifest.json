@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "producer": {
+    "application": "Microsoft Word for Mac",
+    "version": "16.109.2",
+    "build": "16.109.26052523"
+  },
+  "created": "2026-11-06",
+  "authoring": {
+    "derivedFromNativeFixtureSha256": "ccd468dc020424d4517b85bfde0e3c8ec0c1714c8863ebe086f3fecdde8b9015",
+    "steps": [
+      "Copy the immutable native decimal DOCX into this new directory.",
+      "Open the copy in native Word, move to document start, use Format > Bullets and Numbering > Customize, set Start at to 0 and confirm.",
+      "Native screenshot shows 0., 1., 2.; AX incorrectly still shows 1., 1., 2.",
+      "Save DOCX, then Save As Word 97-2004 DOC; save and close the task document."
+    ],
+    "visibleMarkers": [
+      "0.",
+      "1.",
+      "2."
+    ]
+  },
+  "expected": {
+    "storedText": "编号甲 Alpha\r编号乙 中文\r编号丙 Gamma\r",
+    "codeUnits": 27,
+    "paragraphEnds": [
+      10,
+      17,
+      27
+    ],
+    "level": 0,
+    "start": 0,
+    "nativeDocx": {
+      "numId": "1",
+      "abstractNumId": "1",
+      "levelStartElement": "absent",
+      "levelStartDefault": 0,
+      "format": "decimal",
+      "text": "%1.",
+      "leftTwips": 440,
+      "hangingTwips": 440
+    },
+    "note": "DOCX omits start on the active level, unlike the other seventeen start=1 elements. Native 0/1/2 and independent HWPF zero-start agree; source facts are not DOCX/Classic conversion acceptance."
+  },
+  "files": [
+    {
+      "name": "numbered-zero-start.doc",
+      "bytes": 25600,
+      "sha256": "d4ff6512fbaf27f2fab05a6f8afe796c4045a3e0523b046f29be04b15f1abeb1"
+    },
+    {
+      "name": "numbered-zero-start.docx",
+      "bytes": 15000,
+      "sha256": "e388ed088c55098c3bc7594c3d512d11fa4448af28f05b76ae0ab8e36635b0c2"
+    }
+  ]
+}

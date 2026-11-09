@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/math-omml",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/math-omml"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/math-omml"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/math-omml#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Convert formulas between LaTeX and Word OMML, the formula format inside DOCX: Word-native encoding and strict, verified decoding.",

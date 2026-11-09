@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/extension-code-block",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/extensions/code-block"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/extensions/code-block"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/extensions/code-block#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit code block node extension.",

@@ -38,3 +38,16 @@ export function sliceQuireInlineTextRunsToRange(
 
   return slicedRuns;
 }
+
+/**
+ * Maps a run-local text offset to its document position. The text end always maps to
+ * the range end: an inline object paints one replacement character for a node that
+ * may span several positions, such as a phonetic guide holding base text.
+ *
+ * @param run - Source run owning the document range.
+ * @param offset - UTF-16 offset in the run text.
+ * @returns Document position clamped to the run range.
+ */
+export function resolveQuireInlineRunPosition(run: QuireInlineTextRun, offset: number): number {
+  return offset >= run.text.length ? run.range.to : Math.min(run.range.from + offset, run.range.to);
+}

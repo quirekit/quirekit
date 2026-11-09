@@ -9,7 +9,8 @@ import { useNarrowToolbar } from "./presentation";
 const props = defineProps<{
   /** Public toolbar field state and original execution bridge. */ scope: QuireKitToolbarRendererScope;
 }>();
-const items = computed(() => (props.scope.item.items ?? []).map(item => ({ value: item.value, label: item.label })));
+const items = computed(() => (props.scope.item.items ?? []).map(item => ({ value: item.value, label: item.label,
+  ...(item.shortcut ? { shortcut: typeof item.shortcut === "string" ? [item.shortcut] : item.shortcut } : {}) })));
 const narrow = inject(mdNarrowKey, () => useNarrowToolbar(() => (props.scope.context as MdToolbarContext).editor), true);
 // Desktop keeps the compact select; narrow screens use the adaptive bottom panel.
 // The presentation stays fixed while a panel is open so a resize cannot swap it mid-task.

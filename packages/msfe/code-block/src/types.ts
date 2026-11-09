@@ -26,6 +26,8 @@ declare module "@quirekit/msfe-core" {
     indentCode(): ReturnType;
     /** @returns The caller’s result or pending chain. */
     outdentCode(): ReturnType;
+    /** @returns The caller’s result or pending chain. */
+    toggleCodeBlock(): ReturnType;
     };
   }
 }

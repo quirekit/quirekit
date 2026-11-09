@@ -41,7 +41,8 @@ export function createHtmlDomMeasurementProvider(
       options.rootId,
       options.regionId,
       pos,
-      side
+      side,
+      options.projectDomPoint
     );
     const key = createHtmlMeasurementCacheKey(options, point.descriptorId, { from: pos, to: pos }, side < 0 ? "caret-before" : "caret");
     let rects = cache.get(key);
@@ -71,7 +72,8 @@ export function createHtmlDomMeasurementProvider(
       options.rootId,
       options.regionId,
       pos,
-      side
+      side,
+      options.projectDomPoint
     ),
     posAtDOM: (node, offset, bias = -1) => resolveHtmlMeasuredPosition(
       options.documentView,

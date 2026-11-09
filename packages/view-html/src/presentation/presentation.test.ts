@@ -1,7 +1,7 @@
 import { createEditor } from "@quirekit/core";
 import { DecorationSet } from "@quirekit/pm";
 import { StarterKit } from "@quirekit/starter-kit";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { FakeSvgMountDocument } from "@quirekit/view/test-support/svg-mount";
 import { createHtmlMountedViewElements } from "../dom";
 import type { HtmlMountedView, HtmlMountedRenderDiagnostics } from "../types";
@@ -9,6 +9,7 @@ import { createHtmlContinuousFlowPresentation } from "./presentation";
 import * as hitRegions from "../measurement/hit/regions";
 
 describe("HtmlContinuousFlowPresentation", () => {
+  afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); });
   it("owns the ordered retained DOM pipeline and destroys it once", () => {
     const ownerDocument = new FakeSvgMountDocument();
     const host = ownerDocument.createElement("section");
@@ -93,9 +94,24 @@ describe("HtmlContinuousFlowPresentation", () => {
     }
     buildHitTree.mockRestore();
 
+    // Browser observers must not synchronously write their own measured size.
+    // Reuse the canonical queue, including coalescing and destruction cleanup.
+    vi.useFakeTimers();
+    const completed = renderPhases.length;
+    presentation.render({ editor, reason: "resize", passiveResize: true });
+    presentation.render({ editor, reason: "resize", passiveResize: true });
+    expect(renderPhases).toHaveLength(completed);
+    presentation.flushPendingRender();
+    expect(renderPhases).toHaveLength(completed + 1);
+    presentation.render({ editor, reason: "resize" });
+    expect(renderPhases).toHaveLength(completed + 2);
+    presentation.render({ editor, reason: "resize", passiveResize: true });
+
     const destroyDocumentView = vi.spyOn(presentation.documentView, "destroy");
     presentation.destroy();
     presentation.destroy();
+    vi.runAllTimers();
+    expect(renderPhases).toHaveLength(completed + 2);
 
     expect(destroyDocumentView).toHaveBeenCalledTimes(1);
     expect(presentation.documentView.root.destroyed).toBe(true);

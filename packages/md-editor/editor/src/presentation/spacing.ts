@@ -2,7 +2,7 @@ import { Decoration, ViewPlugin, EditorView, type DecorationSet, type ViewUpdate
 import { readSourcePresentation, editingBoundaries } from "@quirekit/msfe-core";
 import type { Range } from "@quirekit/cm-state";
 import { syntaxTree } from "@quirekit/cm-language";
-import { collapseBlankLine, separatorBoundary } from "./boundaries/separator";
+import { collapseBlankLine, continuationRow, emptyParagraphRow, separatorBoundary } from "./boundaries/separator";
 
 export { collapseBlankLine } from "./boundaries/separator";
 
@@ -14,6 +14,8 @@ function spacing(view: EditorView) {
   for (const visible of view.visibleRanges) {
     let line = view.state.doc.lineAt(visible.from);
     while (line.from <= visible.to) {
+      if (continuationRow(view.state, line)) ranges.push(Decoration.line({ class: "md-continuation-row" }).range(line.from));
+      else if (emptyParagraphRow(view.state, line)) ranges.push(Decoration.line({ class: "md-empty-paragraph" }).range(line.from));
       if (collapseBlankLine(view.state, line)) {
         ranges.push(Decoration.line({ class: "md-separator-line" }).range(line.from));
         // The two source breaks are internal to the atom. Its endpoints remain

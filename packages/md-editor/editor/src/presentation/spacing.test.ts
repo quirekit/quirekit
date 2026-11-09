@@ -22,11 +22,21 @@ describe("editable paragraph spacing", () => {
     expect(collapseBlankLine(state, state.doc.lineAt(doc.length))).toBe(false);
   });
 
-  it("collapses the structural separator but retains additional authored empty paragraphs", () => {
+  it("collapses the separators around the authored empty paragraph of a blank run", () => {
     const state = fixture("before\n\n\n\nafter", 0);
-    expect([2, 3, 4].map(number => collapseBlankLine(state, state.doc.line(number)))).toEqual([true, false, false]);
+    expect([2, 3, 4].map(number => collapseBlankLine(state, state.doc.line(number)))).toEqual([true, false, true]);
     const selected = state.update({ selection: { anchor: state.doc.line(2).from } }).state;
     expect(collapseBlankLine(selected, selected.doc.line(2))).toBe(true);
+  });
+
+  it.each([["text  \n\n\nafter", 2], ["- item  \n  \n\nafter", 2]])("keeps the row a hard break opened and collapses the separator below: %s", (doc, number) => {
+    const state = fixture(doc, 0);
+    expect([number, number + 1].map(line => collapseBlankLine(state, state.doc.line(line)))).toEqual([false, true]);
+  });
+
+  it("still collapses the separator after a trailing hard break that ends a paragraph", () => {
+    const state = fixture("text  \n\nafter", 0);
+    expect(collapseBlankLine(state, state.doc.line(2))).toBe(true);
   });
 
   it("preserves blank code-body lines independently of selection", () => {

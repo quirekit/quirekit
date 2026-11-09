@@ -24,27 +24,27 @@ export function insertionItems(editor: MsfeEditor, locale: MdEditorLocale, omit:
   const text = mdEditorMessages[locale];
   /** @param name - Public extension storage key. @returns Whether its source command is installed. */
   const installed = (name: string): boolean => Object.hasOwn(editor.storage, name);
-  const icons: Record<string, string> = { quote: "textQuote", list: "listBullet", ordered: "listNumbered", task: "checkbox",
+  const icons: Record<string, string> = { quote: "textQuote", list: "listBullet", ordered: "listNumbered", task: "listTodo",
     table: "table", code: "codeXml", note: "circleInfo", warning: "circleAlert", details: "chevronRight", highlight: "lightbulb", nested: "layers", divider: "horizontalRule", definition: "bookOpen" };
   const blocks = insertionBlocks(locale).filter(block => installed(block.feature)).map(block => ({ value: `insert-${block.id}`, label: block.label, icon: icons[block.id] }));
   const groups: QuireKitMenuEntry[] = [
     { value: "common", label: text.common, kind: "group", children: [
       { value: "image", label: text.image, icon: "image", disabled: !installed("image") },
       { value: "link", label: text.link, icon: "link", disabled: !installed("link") || atSelection && !canEditMdLink(editor.state) },
-      {value: "dataView", label: locale === "en" ? "Database" : "多维表格", icon: "table", disabled: !installed("dataView")},
+      {value: "dataView", label: locale === "en" ? "Database" : "多维表格", icon: "database", disabled: !installed("dataView")},
       ...blocks.filter(block => ["insert-table", "insert-code", "insert-quote", "insert-divider"].includes(block.value)),
     ] },
     { value: "diagrams", label: text.diagrams, kind: "group", children: [
-      { value: "textDiagram", label: text.textDiagram, icon: "codeXml", disabled: !installed("textDiagram") && !installed("mermaid") },
+      { value: "textDiagram", label: text.textDiagram, icon: "textDiagram", disabled: !installed("textDiagram") && !installed("mermaid") },
       { value: "flowchart", label: text.flow, icon: "workflow", disabled: !installed("flowchart") },
-      { value: "mindMap", label: text.mindmap, icon: "listTree", disabled: !installed("mindMap") },
-      { value: "whiteboard", label: locale === "en" ? "Whiteboard" : "白板", icon: "edit", disabled: !installed("whiteboard") },
+      { value: "mindMap", label: text.mindmap, icon: "mindMap", disabled: !installed("mindMap") },
+      { value: "whiteboard", label: locale === "en" ? "Whiteboard" : "白板", icon: "whiteboard", disabled: !installed("whiteboard") },
       { value: "inlineMath", label: text.inlineMath, icon: "sigma", disabled: !installed("math") },
       { value: "displayMath", label: text.displayMath, icon: "superscriptSquare", disabled: !installed("math") },
     ] },
     { value: "structure", label: text.structure, kind: "group", children: blocks.filter(block => !["insert-table", "insert-code", "insert-quote", "insert-divider"].includes(block.value)) },
     { value: "references", label: text.references, kind: "group", children: [
-      { value: "footnote", label: text.footnote, icon: "superscript", disabled: !installed("footnotes") },
+      { value: "footnote", label: text.footnote, icon: "footnote", disabled: !installed("footnotes") },
     ] },
   ];
   const blockDisabled = atSelection && !canInsertSourceBlock(editor.state);

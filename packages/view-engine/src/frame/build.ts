@@ -35,6 +35,7 @@ import {
   resolveQuireViewEngineImePreeditRange,
   resolveQuireViewEnginePageChunkPages
 } from "./pages";
+import { resolveQuireFramePositionMapping } from "./positions";
 import { traceQuireViewEnginePhase } from "./trace";
 import type {
   QuireViewEngineFrame,
@@ -238,9 +239,11 @@ export function buildQuireViewEngineFrame(
     observerBridgeUses: layerCollector === undefined ? 0 : 1
   });
 
+  const canonicalPositionMapping = resolveQuireFramePositionMapping(options);
   return {
     layoutSnapshot,
     interactionSnapshot,
+    ...(canonicalPositionMapping === undefined ? {} : { canonicalPositionMapping }),
     ...(options.selectionContext === undefined
       ? {}
       : { selectionContext: options.selectionContext }),

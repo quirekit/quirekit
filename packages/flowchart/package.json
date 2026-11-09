@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/flowchart",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/flowchart"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/flowchart"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/flowchart#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Renderer-neutral flowchart documents, validation and atomic drafts.",
@@ -26,7 +30,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run src"
   },
-  "dependencies": { "fast-xml-parser": "5.10.1" },
+  "dependencies": {
+    "fast-xml-parser": "5.10.1"
+  },
   "devDependencies": {
     "tsdown": "catalog:",
     "typescript": "catalog:",

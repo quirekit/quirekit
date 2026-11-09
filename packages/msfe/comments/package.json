@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-comments",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Stand-off comments for MSFE: editor integration, exchange format and source re-anchoring.",
   "license": "MIT",
   "repository": {

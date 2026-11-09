@@ -5,6 +5,7 @@ import type { UserShortcuts } from "@unocss/core";
 export const tooltipRecipeCatalog = Object.freeze([
   "qk-tooltip__positioner",
   "qk-tooltip__content",
+  "qk-tooltip__shortcut",
   "qk-tooltip__arrow",
   "qk-tooltip__arrow-tip"
 ]);
@@ -46,6 +47,14 @@ export const tooltipShortcuts = [
         "transition-duration": tooltipVariableReferences.motionDuration,
         "transition-timing-function": tooltipVariableReferences.enterEasing
       }
+    ],
+    { layer: "qk-recipes" }
+  ],
+  [
+    "qk-tooltip__shortcut",
+    [
+      "whitespace-nowrap",
+      { "font-family": "inherit", "font-size": "inherit", "font-weight": "inherit", "letter-spacing": "0.12em", "margin-inline-start": "0.25em", opacity: "0.72" }
     ],
     { layer: "qk-recipes" }
   ],

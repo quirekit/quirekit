@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/cm-view",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "DOM view component for the CodeMirror code editor",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/cm/view"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/cm/view"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/cm/view#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

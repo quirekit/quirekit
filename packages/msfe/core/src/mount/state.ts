@@ -7,13 +7,16 @@ import { EditorView, drawSelection, dropCursor, highlightSpecialChars, keymap, r
 import { defaultKeymap } from "@quirekit/cm-commands";
 import { bracketMatching, codeFolding, defaultHighlightStyle, foldKeymap, syntaxHighlighting } from "@quirekit/cm-language";
 import { closeBrackets, closeBracketsKeymap } from "@quirekit/cm-autocomplete";
-import { highlightSelectionMatches, search, searchKeymap } from "@quirekit/cm-search";
+import { search, searchKeymap } from "@quirekit/cm-search";
 import type { MarkdownExtension } from "@quirekit/lezer-markdown";
 import { compositionField, revisionField } from "../state/fields";
 import { markdownParser } from "../source/parsing/parser";
 import { createMarkdownLanguage } from "../markdown/parsing/language";
 import type { LanguageDescription } from "@quirekit/cm-language";
 import type { Panel } from "@quirekit/cm-view";
+
+/** Extra pixels rendered ahead while scrolling fast; compositor scrolling outruns the main thread by about this much. */
+const SCROLL_RENDER_MARGIN = 4000;
 
 /**
  * Keeps Tab inside an editable document once no feature claims it; Escape then Tab still moves focus.
@@ -39,7 +42,7 @@ export function createDocumentState(text: string, extensions: Extension, revisio
   codeLanguages?: (name: string) => LanguageDescription | null, searchPanel?: (view: EditorView) => Panel): EditorState {
   return EditorState.create({ doc: text, extensions: [
     revisionField.init(() => revision), compositionField, markdownParser, EditorState.allowMultipleSelections.of(true),
-    EditorView.lineWrapping, drawSelection(), dropCursor(), rectangularSelection(),
+    EditorView.lineWrapping, EditorView.scrollViewportMargin.of(SCROLL_RENDER_MARGIN), drawSelection(), dropCursor(), rectangularSelection(),
     highlightSpecialChars(), bracketMatching(), closeBrackets(),
     codeFolding({ placeholderDOM(view, onclick) {
       const button = view.dom.ownerDocument.createElement("button"); button.type = "button";
@@ -47,7 +50,7 @@ export function createDocumentState(text: string, extensions: Extension, revisio
       button.append(icon("ellipsis", view.dom.ownerDocument)); button.addEventListener("click", onclick); return button;
     } }), search({ top: true, createPanel: searchPanel ?? (view => createSearchPanel(view, { icons: icon })),
       scrollToMatch: range => navigationEffect.of({ range, y: "nearest", search: true }),
-    }), highlightSelectionMatches(), syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+    }), syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
     createMarkdownLanguage(syntax, codeLanguages),
     keymap.of([...closeBracketsKeymap, ...defaultKeymap, ...searchKeymap, ...foldKeymap]),
     Prec.lowest(keymap.of([{ key: "Tab", run: holdTab, shift: holdTab }])),

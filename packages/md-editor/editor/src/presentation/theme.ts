@@ -7,6 +7,9 @@ import { themeVariableReferences as token } from "@quirekit/ui";
 const documentGlyph = `url("data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>')}")`;
 const activeBlockSurface = `color-mix(in srgb, ${token.color.text.primary} 4%, transparent)`;
 
+/** Text-like bars painted on unrendered ranges; a background needs no main thread when scrolling outruns rendering. */
+const unrenderedLines = `repeating-linear-gradient(to bottom, transparent 0 6px, ${activeBlockSurface} 6px 18px, transparent 18px 28px)`;
+
 /** Extra inner space for the heading disclosure rail and its focus outline. */
 const controlInset = `max(0px, calc(32px - ${token.spacing.surface}))`;
 
@@ -26,6 +29,7 @@ export const proseEditorGeometry = Prec.high(EditorView.theme({
   ".cm-content": { padding: token.spacing.surface, paddingLeft: `max(32px, ${token.spacing.surface})`, caretColor: token.color.text.primary },
   "&[data-msfe-mode=live] .cm-content, &[data-msfe-mode=locked] .cm-content": { fontFamily: "inherit", maxWidth: "none", margin: "0" },
   ".cm-line": { padding: "0", font: "inherit", letterSpacing: "inherit" },
+  ".cm-gap": { backgroundImage: unrenderedLines },
   ".cm-content:not(.qk-prose)": { ...token.typography.code },
   // Source gutters share the code font so numbers sit on the same line boxes as the text; no separate surface.
   ".cm-gutters": { ...token.typography.code, color: token.color.text.muted, background: "transparent", border: "none" },
@@ -83,6 +87,16 @@ export const proseEditorGeometry = Prec.high(EditorView.theme({
   // this geometry; native navigation excludes the structural separator interior.
   ".cm-line.md-separator-line": { height: "0", minHeight: "0", lineHeight: "0", padding: "0", position: "relative", float: "inline-start", width: "100%" },
   ".cm-line.md-separator-line > br": { position: "absolute" },
+  // An empty paragraph row keeps paragraph spacing, so its first typed character does not move it.
+  ".cm-line.md-empty-paragraph": { marginBlock: "var(--qk-prose-block-space, var(--qk-space-surface))" },
+  ".cm-line.md-empty-paragraph:first-child": { marginBlockStart: "0" },
+  ".cm-line.md-empty-paragraph:last-child": { marginBlockEnd: "0" },
+  // An empty row that typing joins to the paragraph above sits where that text will, so the
+  // block before it, and the last blocks nested in it, end without their gap.
+  ":is([data-qk-prose], ul, ol):has(+ .cm-line.md-continuation-row), :is([data-qk-prose], ul, ol):has(+ .cm-line.md-continuation-row) :is([data-qk-prose], li):last-child": { marginBottom: "0" },
+  // A row hint draws where its text would start; it takes no width, so the caret stays in place.
+  ".cm-line.md-line-placeholder::before": { content: "attr(data-placeholder)", position: "absolute", color: token.color.text.placeholder,
+    pointerEvents: "none", whiteSpace: "nowrap", fontWeight: "inherit" },
   ".msfe-heading": { padding: "0" },
   ".msfe-link": { color: token.color.text.accent },
   // A host document reference reads as a document glyph plus title; hovering highlights it as one chip.
@@ -114,18 +128,17 @@ export const proseEditorGeometry = Prec.high(EditorView.theme({
   ".qk-prose-container__header > .cm-line": { flex: "1", minWidth: "0", fontWeight: "inherit" },
   ".cm-line.md-container-end": { padding: `0 ${token.spacing.surface} ${token.spacing.surface}` },
   // The opening line stays in flow at zero height, like hidden fences, so CM's height map matches the
-  // rendered rows; its icon is painted into the highlight's start padding. Revealed source restores the line.
+  // rendered rows; its icon floats into the first body row. Revealed source restores the line.
   "[data-qk-prose-highlight] > .cm-line.md-container-end": { padding: "0" },
-  ".qk-prose-container[data-qk-prose-highlight] > .qk-prose-container__header": { position: "static", display: "block" },
+  ".qk-prose-container[data-qk-prose-highlight] > .qk-prose-container__header": { float: "none", display: "block", blockSize: "auto", marginInlineEnd: "0" },
   ".qk-prose-container[data-qk-prose-highlight] > .qk-prose-container__header > .cm-line:not(.md-highlight-source)": {
     display: "block", position: "relative", overflow: "visible", height: "0", minHeight: "0", lineHeight: "0", padding: "0",
   },
   ".qk-prose-container[data-qk-prose-highlight] > .qk-prose-container__header > .cm-line:not(.md-highlight-source) > br": { position: "absolute" },
   ".qk-prose-container[data-qk-prose-highlight] > .qk-prose-container__header > .cm-line:not(.md-highlight-source) > .msfe-component-view": {
-    position: "absolute", insetBlockStart: "0", insetInlineStart: `calc(-1 * (var(--qk-prose-highlight-icon-size) + ${token.spacing.inline}))`,
-    display: "flex", alignItems: "center", lineHeight: "var(--qk-type-body-line-height)", height: "1lh",
+    float: "inline-start", marginInlineEnd: token.spacing.inline,
+    display: "flex", alignItems: "center", lineHeight: "var(--qk-type-body-line-height)", height: "var(--qk-type-body-line-height)",
   },
-  ".qk-prose-container[data-qk-prose-highlight]:has(> .qk-prose-container__header > .md-highlight-source)": { paddingInlineStart: token.spacing.surface },
   ".md-task-item": { listStyleType: "none" },
   ".msfe-node-view[data-msfe-kind='TaskMarker']": { display: "inline-flex", width: "var(--qk-prose-list-indent)", height: "1lh", alignItems: "center", verticalAlign: "top" },
   ".md-source-task-marker": { display: "inline-block", width: "var(--qk-prose-list-indent)" },

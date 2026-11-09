@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/block-numbering",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/block-numbering"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/block-numbering"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/block-numbering#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Canonical Classic numbering adapted to continuous HTML documents.",
@@ -35,14 +39,21 @@
     "uuid": "14.0.3"
   },
   "peerDependencies": {
+    "@quirekit/collab-contract": "workspace:*",
     "vue": "^3.5.0"
   },
   "devDependencies": {
+    "@quirekit/collab-contract": "workspace:*",
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "unplugin-vue": "^7.2.0",
     "vitest": "catalog:",
     "vue": "^3.5.40",
     "vue-tsc": "^3.3.7"
+  },
+  "peerDependenciesMeta": {
+    "@quirekit/collab-contract": {
+      "optional": true
+    }
   }
 }

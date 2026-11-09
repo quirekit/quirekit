@@ -1,13 +1,14 @@
 import { resolveWordDocumentStyleRegistry } from "../model/theme/context";
 import type { Node } from "@quirekit/pm";
-import { projectWordParagraphLayoutFormatting, resolveWordParagraphFormatting } from "@quirekit/classic-paragraph-model";
+import { projectWordParagraphLayoutFormatting, resolveWordParagraphFormatting, resolveWordDefaultTabInterval } from "@quirekit/classic-paragraph-model";
 import { resolveWordStylesNodeTextStyle } from "../extension";
 import {
   resolveWordParagraphAppearance,
   resolveWordTableCellParagraphAppearance
 } from "../model";
 import type { WordParagraphStyleRegistry, WordTableStyleTextLayer } from "../model";
-import type { WordStylesParagraphModelSemantics } from "./types";
+import type { WordParagraphStyleContextToken, WordStylesParagraphModelSemantics } from "./types";
+import { containsParagraphTab } from "./tabs";
 import { wordStyleTextSignature } from "./text-signature";
 import { resolveWordFontSelection } from "./font-selection";
 
@@ -21,32 +22,41 @@ import { resolveWordFontSelection } from "./font-selection";
  * @returns Paragraph semantics resolving style inheritance for layout.
  */
 export function createWordStylesParagraphModelSemantics(): WordStylesParagraphModelSemantics {
+  const tabPresence = new WeakMap<Node, boolean>();
   return {
     fontSelection: resolveWordFontSelection,
     styleContext: (doc) => {
       const registry = readRegistry(doc);
+      const wordDocument = registry !== undefined || Object.prototype.hasOwnProperty.call(doc.attrs, "wordSettings");
+      const defaultTabInterval = resolveWordDefaultTabInterval(doc.attrs.wordSettings);
       return {
-        token: registry,
-        signature: registry === undefined ? null : `word-paragraph-styles:${JSON.stringify(registry)}`
+        token: wordDocument ? { registry, defaultTabInterval } satisfies WordParagraphStyleContextToken : undefined,
+        signature: wordDocument ? `word-paragraph-styles:${JSON.stringify(registry)}|default-tab:${defaultTabInterval}` : null
       };
     },
     resolveParagraph: (node, context, tableLayer) => {
-      const registry = context.token as WordParagraphStyleRegistry | undefined;
+      const authority = context.token as WordParagraphStyleContextToken | undefined;
+      const registry = authority?.registry;
       const layer = tableLayer as WordTableStyleTextLayer | undefined;
       const direct = resolveWordParagraphFormatting(node.attrs.wordParagraph);
       const formatting = registry === undefined
         ? layer === undefined ? direct : resolveWordTableCellParagraphAppearance(null, direct, layer).paragraph
         : resolveWordParagraphAppearance(registry, direct, layer).paragraph;
-      return projectWordParagraphLayoutFormatting(formatting, node.attrs.wordParagraph != null);
+      // PM node identity bounds rescans to changed paragraphs. Plain paragraphs
+      // keep undefined tab geometry and remain eligible for retained tail reuse.
+      let hasTab = authority === undefined ? false : tabPresence.get(node);
+      if (hasTab === undefined) { hasTab = containsParagraphTab(node); tabPresence.set(node, hasTab); }
+      return projectWordParagraphLayoutFormatting(formatting, node.attrs.wordParagraph != null,
+        hasTab ? authority?.defaultTabInterval : undefined);
     },
     styleTextSignature: (node, context, tableLayer) => {
-      const registry = context.token as WordParagraphStyleRegistry | undefined;
+      const registry = (context.token as WordParagraphStyleContextToken | undefined)?.registry;
       const layer = tableLayer as WordTableStyleTextLayer | undefined;
       if (registry === undefined) return `word-paragraph-style-text:none|${JSON.stringify(layer?.text ?? null)}`;
       return wordStyleTextSignature(node, registry, layer);
     },
     nodeTextStyle: (nodeStyle, node, context, tableLayer) => {
-      const registry = context.token as WordParagraphStyleRegistry | undefined;
+      const registry = (context.token as WordParagraphStyleContextToken | undefined)?.registry;
       const layer = tableLayer as WordTableStyleTextLayer | undefined;
       if (layer?.text == null) return nodeStyle;
       // Without named styles, the table layer is the base below every node style.

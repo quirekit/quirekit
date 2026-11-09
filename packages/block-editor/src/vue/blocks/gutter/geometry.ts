@@ -1,10 +1,11 @@
 import type { Editor } from "@quirekit/core";
 import type { EditorBlockOccurrence } from "@quirekit/editor-ui";
 import { editorUITableChromeOutset } from "@quirekit/editor-ui/vue";
+import { quireBlockHandleWidth } from "@quirekit/ui/vue";
 import type { BlockRailGeometry } from "./types";
 
 /** Shared public control dimensions, used for placement and pointer corridors. */
-export const blockRailMetrics = { handle: 40, control: 24, gap: 4 } as const;
+export const blockRailMetrics = { handle: quireBlockHandleWidth, control: 24, gap: 4 } as const;
 
 /**
  * Reads only the current block, after the mounted View has resolved its occurrence.

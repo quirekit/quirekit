@@ -63,6 +63,8 @@ export class InputState {
   compositionFirstChange: boolean | null = null
   // End time of the previous composition
   compositionEndedAt = 0
+  // Time of the latest compositionstart or compositionupdate
+  compositionActiveAt = 0
   // Used in a kludge to detect when an Enter keypress should be
   // considered part of the composition on Safari, which fires events
   // in the wrong order
@@ -325,8 +327,15 @@ class MouseSelection {
   scrollParents: {x: HTMLElement | null, y: HTMLElement | null}
   scrollSpeed = {x: 0, y: 0}
   scrolling = -1
+  scrollTime = 0
+  scrollRemainder = {x: 0, y: 0}
+  destroyed = false
   atoms: readonly RangeSet<any>[]
 
+  /** @param view - Canonical selection and physical scroll owner.
+   * @param startEvent - Initial client-space mouse coordinates.
+   * @param style - Native selection semantics for this gesture.
+   * @param mustSelect - Whether focus requires accepting the initial selection. */
   constructor(private view: EditorView,
               private startEvent: MouseEvent,
               private style: MouseSelectionStyle,
@@ -334,9 +343,14 @@ class MouseSelection {
     this.lastEvent = startEvent
     this.scrollParents = scrollableParents(view.contentDOM)
     this.atoms = view.state.facet(atomicRanges).map(f => f(view))
+    this.scroll = this.scroll.bind(this)
+    this.destroy = this.destroy.bind(this)
+    this.cancel = this.cancel.bind(this)
     let doc = view.contentDOM.ownerDocument!
     doc.addEventListener("mousemove", this.move = this.move.bind(this))
     doc.addEventListener("mouseup", this.up = this.up.bind(this))
+    doc.addEventListener("pointercancel", this.cancel)
+    view.win.addEventListener("blur", this.cancel)
 
     this.extend = startEvent.shiftKey
     this.multiple = view.state.facet(EditorState.allowMultipleSelections) && addsSelectionRange(view, startEvent)
@@ -371,32 +385,68 @@ class MouseSelection {
     this.setScrollSpeed(sx, sy)
   }
 
+  /** @param event - Actual release coordinates, including a final move the browser did not deliver. */
   up(event: MouseEvent) {
-    if (this.dragging == null) this.select(this.lastEvent)
+    if (this.destroyed) return
+    if (this.dragging !== true) this.select(this.lastEvent = event)
     if (!this.dragging) event.preventDefault()
     this.destroy()
   }
 
+  /** End this gesture before any delayed measurement or selection can reuse it. */
   destroy() {
+    if (this.destroyed) return
+    this.destroyed = true
     this.setScrollSpeed(0, 0)
     let doc = this.view.contentDOM.ownerDocument!
     doc.removeEventListener("mousemove", this.move)
     doc.removeEventListener("mouseup", this.up)
+    doc.removeEventListener("pointercancel", this.cancel)
+    this.view.win.removeEventListener("blur", this.cancel)
     this.view.inputState.mouseSelection = this.view.inputState.draggedContent = null
   }
 
+  /** Stop text selection work without stealing an active native drag's source. */
+  cancel() {
+    // Native dragstart may dispatch pointercancel. Drop and dragend still own
+    // draggedContent until their copy/move operation has finished.
+    if (this.dragging === true) this.setScrollSpeed(0, 0)
+    else this.destroy()
+  }
+
+  /** @param sx - Horizontal CSS pixels per legacy 50ms step.
+   * @param sy - Vertical CSS pixels per legacy 50ms step. */
   setScrollSpeed(sx: number, sy: number) {
+    if (this.destroyed && (sx || sy)) return
+    if (Math.sign(sx) != Math.sign(this.scrollSpeed.x)) this.scrollRemainder.x = 0
+    if (Math.sign(sy) != Math.sign(this.scrollSpeed.y)) this.scrollRemainder.y = 0
     this.scrollSpeed = {x: sx, y: sy}
     if (sx || sy) {
-      if (this.scrolling < 0) this.scrolling = setInterval(() => this.scroll(), 50)
+      if (this.scrolling < 0) {
+        this.scrollTime = this.view.win.performance.now()
+        this.scrolling = this.view.win.requestAnimationFrame(this.scroll)
+      }
     } else if (this.scrolling > -1) {
-      clearInterval(this.scrolling)
+      this.view.win.cancelAnimationFrame(this.scrolling)
       this.scrolling = -1
     }
   }
 
-  scroll() {
-    let {x, y} = this.scrollSpeed
+  /** @param time - RAF timestamp in the mounted View's window. */
+  scroll(time: number) {
+    if (this.destroyed || !(this.scrollSpeed.x || this.scrollSpeed.y)) return
+    // Integrate the existing velocity rather than multiplying it by refresh rate.
+    // Carry fractional pixels because physical scroll positions may round writes.
+    let elapsed = Math.min(50, Math.max(0, time - this.scrollTime))
+    this.scrollTime = time
+    let dx = this.scrollSpeed.x * elapsed / 50 + this.scrollRemainder.x
+    let dy = this.scrollSpeed.y * elapsed / 50 + this.scrollRemainder.y
+    let x = Math.trunc(dx), y = Math.trunc(dy), moved = x || y
+    this.scrollRemainder = {x: dx - x, y: dy - y}
+    this.scrolling = this.view.win.requestAnimationFrame(this.scroll)
+
+    // Scroll first, then resolve the current pointer against the new geometry.
+    // Scheduling before acceptance lets cancellation in a transaction stop the frame.
     if (x && this.scrollParents.x) {
       this.scrollParents.x.scrollLeft += x
       x = 0
@@ -406,10 +456,12 @@ class MouseSelection {
       y = 0
     }
     if (x || y) this.view.win.scrollBy(x, y)
-    if (this.dragging === false) this.select(this.lastEvent)
+    if (moved && this.dragging === false) this.select(this.lastEvent)
   }
 
+  /** @param event - Latest client-space pointer accepted by this live gesture. */
   select(event: MouseEvent) {
+    if (this.destroyed) return
     let {view} = this, selection = skipAtomsForSelection(this.atoms, this.style.get(event, this.extend, this.multiple), view)
     if (this.mustSelect || !selection.eq(view.state.selection, this.dragging === false))
       this.view.dispatch({
@@ -453,13 +505,14 @@ function isInPrimarySelection(view: EditorView, event: MouseEvent) {
   return false
 }
 
-// A composition cannot nest, a key outside composition is not process key 229,
+// A composition cannot nest or outlive focus, a key outside composition is not process key 229,
 // and a pointer press with no composed text left in the DOM cannot be preedit.
 function compositionEndWasLost(view: EditorView, event: Event): boolean {
   if (view.observer.editContext || (event as any).synthetic) return false
-  if (event.type == "compositionstart") return true
+  if (event.type == "compositionstart" || event.type == "blur") return true
   if (event.type == "keydown") return !(event as KeyboardEvent).isComposing && (event as KeyboardEvent).keyCode != 229
-  if (event.type == "mousedown") return !view.docView.hasComposition
+  // A lingering composition view no longer marks an active composition once its events stop.
+  if (event.type == "mousedown") return !view.docView.hasComposition || Date.now() - view.inputState.compositionActiveAt > 300
   return false
 }
 
@@ -738,6 +791,9 @@ handlers.drop = (view, event: DragEvent) => {
 
 handlers.paste = (view: EditorView, event: ClipboardEvent) => {
   if (view.state.readOnly) return true
+  // Scripted paste during composition is handled poorly by browsers, so it stays native,
+  // except on Android where the editor is almost always composing.
+  if (view.composing && !browser.android) return false
   view.observer.flush()
   let data = brokenClipboardAPI ? null : event.clipboardData
   if (data) {
@@ -859,6 +915,7 @@ observers.blur = view => {
 
 observers.compositionstart = observers.compositionupdate = view => {
   if (view.observer.editContext) return // Composition handled by edit context
+  view.inputState.compositionActiveAt = Date.now()
   if (view.inputState.compositionFirstChange == null)
     view.inputState.compositionFirstChange = true
   if (view.inputState.composing < 0) {

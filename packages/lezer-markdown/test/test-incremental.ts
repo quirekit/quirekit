@@ -263,3 +263,31 @@ function foo() {
     ist(p.to, 8)
   })
 })
+
+describe("Whole-group reuse", () => {
+  function longDoc(blocks: number) {
+    let doc = ""
+    for (let i = 0; i < blocks; i++)
+      doc += i % 7 == 3 ? `    code ${i}\n\n` : i % 5 == 2 ? `> quote ${i}\n\n` : i % 11 == 4 ? `- item ${i}\n- other\n\n` : `Paragraph ${i} with *em*.\n\n`
+    return doc
+  }
+
+  it("matches a full parse across edits at many positions", () => {
+    let state = State.start(longDoc(3000)), seed = 7
+    for (let i = 0; i < 200; i++) {
+      seed = (seed * 1103515245 + 12345) & 0x7fffffff
+      let at = seed % state.doc.length
+      state = state.update(i % 3 == 0 ? [{from: at, insert: "x"}] : i % 3 == 1 ? [{from: at, insert: "\n\n"}] : [{from: at, to: Math.min(state.doc.length, at + 3)}])
+      compareTree(state.tree, parser.parse(state.doc))
+    }
+  })
+
+  it("keeps unchanged balancing groups as the same objects", () => {
+    let groups = (tree: Tree) => tree.children.filter(child => child instanceof Tree && child.type.isAnonymous)
+    let state = State.start(longDoc(3000))
+    let before = new Set(groups(state.tree).flatMap(group => [group, ...(group as Tree).children]))
+    state = state.update([{from: state.doc.length - 2, insert: "z"}])
+    let after = groups(state.tree).flatMap(group => [group, ...(group as Tree).children])
+    ist(after.some(group => before.has(group)))
+  })
+})

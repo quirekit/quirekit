@@ -1,17 +1,33 @@
 {
   "name": "@quirekit/msfe-collaboration-hocuspocus",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Optional Hocuspocus transport for MSFE collaboration sessions.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/msfe/collaboration-hocuspocus"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/msfe/collaboration-hocuspocus"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/msfe/collaboration-hocuspocus#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",
   "sideEffects": false,
-  "files": ["LICENSE.md", "THIRD_PARTY_NOTICES.md", "licenses", "dist", "src"],
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "licenses",
+    "dist",
+    "src"
+  ],
   "exports": {
-    ".": { "types": "./dist/index.d.mts", "import": "./dist/index.mjs" },
-    "./server": { "types": "./dist/server/index.d.mts", "import": "./dist/server/index.mjs" }
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.mts",
+      "import": "./dist/server/index.mjs"
+    }
   },
   "types": "./dist/index.d.mts",
   "scripts": {

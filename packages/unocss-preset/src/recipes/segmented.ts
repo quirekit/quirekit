@@ -1,4 +1,4 @@
-import { segmentedVariableReferences } from "@quirekit/ui";
+import { segmentedCssVariableNames, segmentedVariableReferences, themeVariableReferences } from "@quirekit/ui";
 import type { UserShortcuts } from "@unocss/core";
 
 /** UnoCSS preset 发布的 Segmented Control recipe 类。 */
@@ -7,6 +7,8 @@ export const segmentedRecipeCatalog = Object.freeze([
   "qk-segmented--horizontal",
   "qk-segmented--vertical",
   "qk-segmented--equal",
+  "qk-segmented--square",
+  "qk-segmented--pill",
   "qk-segmented--xs",
   "qk-segmented--sm",
   "qk-segmented--md",
@@ -32,6 +34,22 @@ export const segmentedShortcuts = [
         "font-weight": segmentedVariableReferences.typography.fontWeight
       }
     ],
+    { layer: "qk-recipes" }
+  ],
+  [
+    "qk-segmented--square",
+    [{
+      [segmentedCssVariableNames.trackRadius]: "0px",
+      [segmentedCssVariableNames.indicatorRadius]: "0px"
+    }],
+    { layer: "qk-recipes" }
+  ],
+  [
+    "qk-segmented--pill",
+    [{
+      [segmentedCssVariableNames.trackRadius]: themeVariableReferences.radius.pill,
+      [segmentedCssVariableNames.indicatorRadius]: themeVariableReferences.radius.pill
+    }],
     { layer: "qk-recipes" }
   ],
   [

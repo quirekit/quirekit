@@ -4,12 +4,18 @@ import { CodeBlock, fencePairing } from "@quirekit/msfe-code-block";
 import { Link } from "@quirekit/msfe-link";
 import { Blockquote, ListMarkers, Emphasis, InlineCode, Strikethrough, Table, HorizontalRule } from "@quirekit/msfe-prose";
 import { CustomContainer, type ContainerStorage } from "@quirekit/msfe-markdown-extras";
-import { Decoration } from "@quirekit/cm-view";
+import { Decoration, keymap } from "@quirekit/cm-view";
+import { Prec } from "@quirekit/cm-state";
+import { commandKeyBinding } from "@quirekit/msfe-core";
 import { semanticProjection, prefixProjection, emphasisProjection, tableProjection } from "./marks";
 import { containerProjection, mdContainerTypes } from "./container";
 import { withHighlightIcons, nativeHighlightIcon } from "./highlight";
 import type { MdContainerOptions } from "../types";
 import { paragraphInput, markupInput, fenceInput, tableInput, lineBreakInput, exitInput } from "../input/behavior";
+import { deleteListMarkupBackward } from "../input/list";
+import { deleteForward } from "../input/edges/forward";
+import { tableCellInput } from "../input/table";
+import { unwrapQuoteLine } from "../input/quote";
 import { prefixBoundary, setextBoundary, containerBoundary } from "./boundaries/blocks";
 import { linkBoundary } from "./boundaries/inline";
 import { tableBoundary, tableRowBoundary } from "./boundaries/table";
@@ -57,6 +63,8 @@ export const ProseCodeBlock = CodeBlock.extend({
 });
 /** Quote structure is owned by native wrappers, never repeated row borders. */
 export const ProseBlockquote = Blockquote.extend({ addProjectionLayers: () => [],
+  /** @returns Backspace that moves a later quote line out as its own paragraph. */
+  addCodeMirrorExtensions: () => [Prec.highest(keymap.of([commandKeyBinding("Backspace", unwrapQuoteLine)]))],
   /** @returns Per-line quote prefixes; nested quote levels retain separate ownership. */
   addEditingBoundaries: () => [prefixBoundary(["QuoteMark"], null)],
   /** @returns Quote continuation and one-level exit determined by current source. */
@@ -65,6 +73,9 @@ export const ProseBlockquote = Blockquote.extend({ addProjectionLayers: () => []
 });
 /** Native list markers and indentation remain governed by the original list commands. */
 export const ProseListMarkers = ListMarkers.extend({ addProjections: () => [{ nodes: ["ListMark"], decorate: prefixProjection }],
+  /** @returns Backspace/Delete at item text edges, ahead of Markdown's own markup deletion. */
+  addCodeMirrorExtensions: () => [Prec.highest(keymap.of([commandKeyBinding("Backspace", deleteListMarkupBackward),
+    commandKeyBinding("Delete", deleteForward)]))],
   /** @returns List and task prefixes as complete structural units. */
   addEditingBoundaries: () => [prefixBoundary(["ListItem"], "ListMark"), prefixBoundary(["TaskMarker"], null)],
   /** @returns List/task continuation, empty-item outdent and explicit block exit. */
@@ -88,8 +99,10 @@ export const ProseStrikethrough = Strikethrough.extend({
 export const ProseTable = Table.extend({
   /** @returns Shared navigation and edit protection for table structure. */
   addEditingBoundaries: () => [tableBoundary, tableRowBoundary],
-  /** @returns Pure row insertion routed through the same atomic input boundary as other blocks. */
-  addBlockInput: () => [{ nodes: ["Table"], enter: tableInput, lineBreak: "native", exit: exitInput }],
+  /** @returns In-cell line breaks routed through the same atomic input boundary as other blocks. */
+  addBlockInput: () => [{ nodes: ["Table"], enter: tableInput, lineBreak: tableInput, exit: exitInput }],
+  /** @returns Cell edges and literal pipes that keep the row structure. */
+  addCodeMirrorExtensions() { return [this.parent!(), tableCellInput]; },
   /** @returns Source-owned table geometry using public cell roles. */
   addProjections() { return this.parent!().map(tableProjection); },
 });

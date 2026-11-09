@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/mind-map",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/mind-map"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/mind-map"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/mind-map#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Renderer-neutral mind map documents, validation and atomic draft contracts.",

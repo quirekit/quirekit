@@ -1,11 +1,15 @@
 /** Role of an explicit source cell inside the resolved table map. */
 export type WordTableCellRole =
   | "origin"
+  | "horizontalContinuation"
   | "verticalContinuation"
   | "malformedContinuation";
 
 /** Stable diagnostic codes emitted by `WordTableMap`. */
 export type WordTableMapDiagnosticCode =
+  | "hmerge-orphan-continue"
+  | "hmerge-continuation-content"
+  | "hmerge-vertical-role-mismatch"
   | "row-grid-overflow"
   | "row-grid-underflow"
   | "grid-span-colspan-mismatch"

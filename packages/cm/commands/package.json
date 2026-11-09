@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/cm-commands",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Collection of editing commands for the CodeMirror code editor",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/cm/commands"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/cm/commands"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/cm/commands#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

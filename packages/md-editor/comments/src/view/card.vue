@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { QuireCommentThread, type QuireKitCommentMention, type QuireKitCommentMentionSource, type QuireKitCommentPosition } from "@quirekit/ui/vue";
+import { QuireCommentAction, QuireCommentThread, type QuireKitCommentMention, type QuireKitCommentMentionSource, type QuireKitCommentPosition } from "@quirekit/ui/vue";
 import { CommentBody } from "./body";
 import type { CommentsController } from "@quirekit/msfe-comments";
 import type { MdCommentCardModel } from "../types";
@@ -32,6 +32,9 @@ function remove(messageId: string): void { props.controller.remove(props.card.id
     @reply="(body, mentions) => controller.reply(card.id, { body, mentions: people(mentions) })"
     @edit="(id, body, mentions) => controller.edit(card.id, id, { body, mentions: people(mentions) })" @delete="remove">
     <template #body="{ message }"><CommentBody class="md-comment-body" :body="message.body" /></template>
+    <template v-if="card.actions.length" #actions>
+      <QuireCommentAction v-for="action in card.actions" :key="action.id" :label="action.label" :icon="action.icon" @click="action.run()" />
+    </template>
   </QuireCommentThread>
 </template>
 

@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/extension-html-sandbox",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Tiptap-compatible node for embedding isolated, sandboxed HTML snippets in QuireKit documents.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/extensions/html-sandbox"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/extensions/html-sandbox"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/extensions/html-sandbox#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

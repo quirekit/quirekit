@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/suggestion",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Headless trigger-and-candidate suggestion controller for @-mentions, slash menus and other inline pickers.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/suggestion"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/suggestion"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/suggestion#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

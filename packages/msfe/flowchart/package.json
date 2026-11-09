@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/msfe-flowchart",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Editable flowchart blocks stored as Markdown fences in the MSFE source editor.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/msfe/flowchart"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/msfe/flowchart"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/msfe/flowchart#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

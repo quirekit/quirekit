@@ -34,15 +34,17 @@ export function sourceBlankLineAt(state: EditorState, position: number): SourceB
   return null;
 }
 
-/** @param line - Captured editable blank line. @param markdown - Complete canonical payload. @returns One guarded replacement preserving sibling separators and enclosing containers. */
+/** @param line - Captured editable blank line. @param markdown - Complete canonical payload; empty keeps the line as an empty paragraph. @returns One guarded replacement preserving sibling separators and enclosing containers. */
 export function insertAtSourceBlankLine(line: SourceBlankLine, markdown: string): MsfeCommand {
   return state => {
     const current = sourceBlankLineAt(state, line.from);
     if (!current || current.from !== line.from || current.to !== line.to || current.scope.from !== line.scope.from
-      || current.scope.to !== line.scope.to || !markdown.trim()) return null;
+      || current.scope.to !== line.scope.to || markdown && !markdown.trim()) return null;
+    // An empty payload opens the blank line itself as an empty paragraph.
+    if (!markdown) return { selection: EditorSelection.cursor(line.from), scrollIntoView: true };
     const value = sourceBlockInsertion(state, line, markdown, line.scope);
     const changes = state.changes({ from: line.from, to: line.to, insert: value.insert });
     if (!preservesSourceBlockScope(state, changes, line)) return null;
-    return { changes, selection: EditorSelection.cursor(line.from + value.offset + markdown.length), scrollIntoView: true };
+    return { changes, selection: EditorSelection.range(value.anchor, value.caret), scrollIntoView: true };
   };
 }

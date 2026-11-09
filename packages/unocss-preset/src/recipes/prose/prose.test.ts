@@ -15,11 +15,21 @@ describe("Prose content recipes", () => {
   });
 
   it("fills native tables by default, keeps editor table roles as blocks and scrolls wide tables in the frame", () => {
-    expect(proseStaticCss).toContain(':where(:scope:is(table), table) { display:table; inline-size:var(--qk-prose-table-width, 100%);');
-    expect(proseStaticCss).toContain('[data-qk-prose="table"])) { display:block;');
+    expect(proseStaticCss).toContain(':where(table:scope), :where(table) { display:table; inline-size:var(--qk-prose-table-width, 100%);');
+    expect(proseStaticCss).toContain(':where([data-qk-prose="table"]) { display:block;');
     expect(proseStaticCss).toContain('.qk-prose--table-content { --qk-prose-table-width:auto; }');
     expect(proseStaticCss).toMatch(/\.qk-prose-table \{[^}]*overflow-x:auto;/u);
     expect(proseStaticCss).toContain('.qk-prose-table :is(th, td) { min-inline-size:calc(5em + 2 * var(--qk-space-surface-compact)); }');
+  });
+
+  it("keys every scoped rule to a tag or role so unrelated elements skip it", () => {
+    const scoped = proseStaticCss.slice(proseStaticCss.indexOf("@scope"));
+    expect(scoped).not.toContain(":where(:scope");
+    expect(scoped).not.toMatch(/:where\([^()]*,/u);
+    expect(scoped).toContain(':where(blockquote)::before, :where([data-qk-prose="blockquote"]:scope)::before, :where([data-qk-prose="blockquote"])::before {');
+    expect(scoped).toContain(':where(code):is(:is(pre, [data-qk-prose="pre"]) :is(code, [data-qk-prose="code"])');
+    expect(scoped).toContain(':where([data-qk-prose="samp"]:scope):is(');
+    expect(scoped).toContain(':where([data-qk-prose="hr"]):last-child { margin-block-end:0; }');
   });
 
   it("ships identical structural rules to UnoCSS and standalone consumers", async () => {

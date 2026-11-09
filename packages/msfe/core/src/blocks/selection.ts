@@ -44,10 +44,10 @@ export function canInsertSourceBlock(state: EditorState): boolean {
 export function insertSourceBlockAtSelection(markdown: string): MsfeCommand {
   return state => {
     const { range } = querySourceBlockInsertion(state);
-    if (!range || !markdown.trim()) return null;
+    if (!range || markdown && !markdown.trim()) return null;
     const value = sourceBlockInsertion(state, range, markdown, range.scope);
     const changes = state.changes({ from: range.from, to: range.to, insert: value.insert });
     if (!preservesSourceBlockScope(state, changes, range)) return null;
-    return { changes, selection: EditorSelection.cursor(range.from + value.offset + markdown.length), scrollIntoView: true };
+    return { changes, selection: EditorSelection.range(value.anchor, value.caret), scrollIntoView: true };
   };
 }

@@ -1,6 +1,7 @@
 import type { QuireShapedVisualRun } from "@quirekit/renderer";
 import type { QuireTextCaretStop } from "../text";
 import type { QuireInlineTextRun } from "./types";
+import { resolveQuireInlineRunPosition } from "./run-slice";
 
 /**
  * Builds a fragment's caret stops from the visual run's cluster geometry.
@@ -47,7 +48,7 @@ export function buildVisualRunCaretStops(
   const logical = [...visualRun.clusters].sort((first, second) => first.from - second.from);
   const localXByPosition = new Map<number, number>();
   const setStop = (offset: number, localX: number): void => {
-    localXByPosition.set(Math.min(run.range.from + offset, run.range.to), localX);
+    localXByPosition.set(resolveQuireInlineRunPosition(run, offset), localX);
   };
 
   let index = 0;
@@ -106,7 +107,7 @@ function tryBuildSimpleLtrVisualRunCaretStops(
   const stops: QuireTextCaretStop[] = new Array(visualRun.clusters.length + 1);
   const firstCluster = visualRun.clusters[0]!;
   stops[0] = createVisualRunCaretStop(
-    run.range.from + firstCluster.from,
+    resolveQuireInlineRunPosition(run, firstCluster.from),
     firstCluster.x,
     rangeFrom,
     rangeTo
@@ -115,7 +116,7 @@ function tryBuildSimpleLtrVisualRunCaretStops(
   for (let index = 0; index < visualRun.clusters.length; index += 1) {
     const cluster = visualRun.clusters[index]!;
     stops[index + 1] = createVisualRunCaretStop(
-      run.range.from + cluster.to,
+      resolveQuireInlineRunPosition(run, cluster.to),
       cluster.x + cluster.advance,
       rangeFrom,
       rangeTo

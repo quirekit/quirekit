@@ -26,8 +26,8 @@ export function createTypographyElementCss(selector: (elements: string) => strin
     `${selector("h1,h2,h3,h4,h5,h6")}{text-wrap:balance;overflow-wrap:anywhere;}`,
     `${selector("a")}{text-decoration-line:underline;text-underline-offset:.2em;overflow-wrap:anywhere;}`,
     `${selector("a:focus-visible")}{outline:none;background-color:var(--qk-color-surface-hover);text-decoration-line:underline;}`,
-    // Hosts may pin a fixed highlight, such as highlighter yellow, through --qk-prose-mark-background.
-    `${selector("mark")}{background-color:var(--qk-prose-mark-background, color-mix(in srgb, var(--qk-color-action-primary) 22%, var(--qk-color-surface-page)));color:inherit;}`,
+    // Highlighter yellow in every theme, softened on dark pages so light text stays readable; hosts override it through --qk-prose-mark-background.
+    `${selector("mark")}{background-color:var(--qk-prose-mark-background, light-dark(rgba(255, 246, 122, 0.8), rgba(255, 214, 0, 0.32)));color:inherit;}`,
     `${selector("del,s")}{text-decoration-line:line-through;}`,
     `${selector("ins,u")}{text-decoration-line:underline;text-underline-offset:.2em;}`,
     `${selector("abbr[title],abbr[data-qk-abbr]")}{text-decoration-line:underline;text-decoration-style:dotted;text-underline-offset:.2em;}`,

@@ -11,7 +11,8 @@
   "licenseSha256": "54bd812a6d334e0c438b78a43cea74b67e882739fd3450115ddc7c52be5706c1",
   "localChanges": [
     "Package names, imports and build/test configuration use QuireKit workspace identities.",
-    "src/markdown.ts and src/reuse/: optional weakly held proof of committed root-level block reuse; grammar and native reuse decisions unchanged."
+    "src/markdown.ts and src/reuse/: optional weakly held proof of committed root-level block reuse; grammar and native reuse decisions unchanged.",
+    "src/markdown.ts FragmentCursor: unchanged anonymous balancing groups are taken whole, so per-edit work no longer grows with the number of blocks."
   ],
   "sourceEntry": "src/index.ts"
 }

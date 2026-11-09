@@ -4,6 +4,7 @@ import { ensureSyntaxTree, syntaxTree } from "@quirekit/cm-language";
 import { markdown } from "@quirekit/cm-lang-markdown";
 import { GFM } from "@quirekit/lezer-markdown";
 import { toggleSourceMark } from "./toggle";
+import { pendingMarkCleanup } from "./pending";
 import { querySourceInline } from "./context";
 
 const bold = { node: "StrongEmphasis", marker: "**", markerNode: "EmphasisMark" };
@@ -16,6 +17,18 @@ function selected(doc: string, text: string): EditorState {
 }
 
 describe("semantic inline formatting", () => {
+  it("stops a style at the end of its text for the text that follows, and removes it from inside", () => {
+    const at = (doc: string, offset: number) => {
+      const state = EditorState.create({ doc, selection: EditorSelection.cursor(offset), extensions: markdown({ extensions: GFM }) });
+      ensureSyntaxTree(state, doc.length, 1000); return state.update(toggleSourceMark(bold)(state)!).state;
+    };
+    const end = at("说 **手感**", 6);
+    expect([end.doc.toString(), end.selection.main.head]).toEqual(["说 **手感**", 8]);
+    const middle = at("说 **手感** 好", 6);
+    expect([middle.doc.toString(), middle.selection.main.head]).toEqual(["说 **手感** 好", 8]);
+    expect(at("说 **手感**", 5).doc.toString()).toBe("说 手感");
+  });
+
   it("keeps existing bold and italic when the surrounding punctuation admits the new format", () => {
     const state = selected("可以，***清晰***、继续。", "清晰"), spec = toggleSourceMark(strike)(state);
     expect(spec).not.toBeNull();
@@ -42,14 +55,15 @@ describe("semantic inline formatting", () => {
       expect(state.doc.toString()).toBe("可以，清晰、继续。");
     });
   }
-  it("allows a single table cell and rejects crossing cell boundaries", () => {
+  it("formats a single table cell, and each cell a selection crosses", () => {
     const source = "| A | B |\n| --- | --- |\n| left | right |";
     const state = selected(source, "left");
     expect(state.update(toggleSourceMark(bold)(state)!).state.doc.toString()).toContain("| **left** | right |");
-    expect(toggleSourceMark(bold)(selected(source, "left | right"))).toBeNull();
+    const crossing = selected(source, "left | right");
+    expect(crossing.update(toggleSourceMark(bold)(crossing)!).state.doc.toString()).toContain("| **left** | **right** |");
   });
-  it("rejects literal code, structural markers and selections crossing paragraphs", () => {
-    for (const [source, text] of [["`literal`", "literal"], ["```ts\ncode\n```", "code"], ["one\n\ntwo", "one\n\ntwo"], ["| a | b |\n| --- | --- |", "---"]]) {
+  it("rejects literal code and structural markers", () => {
+    for (const [source, text] of [["`literal`", "literal"], ["```ts\ncode\n```", "code"], ["| a | b |\n| --- | --- |", "---"]]) {
       const state = selected(source!, text!);
       expect(querySourceInline(state, state.selection.main).reason).not.toBeNull();
       expect(toggleSourceMark(bold)(state)).toBeNull();
@@ -70,12 +84,13 @@ describe("semantic inline formatting", () => {
     expect(next.selection.ranges.map(range => next.sliceDoc(range.from, range.to))).toEqual(["first", "second"]);
     expect(next.selection.ranges[0]!.anchor).toBeGreaterThan(next.selection.ranges[0]!.head);
   });
-  it("refuses a partial mark removal and does not serialize for availability", () => {
+  it("removes a mark from only the selected part and does not serialize for availability", () => {
     const state = selected("**complete** text", "plete");
     const serialize = vi.spyOn(state.doc, "toString");
     expect(querySourceInline(state, state.selection.main).reason).toBeNull();
     expect(serialize).not.toHaveBeenCalled();
-    expect(toggleSourceMark(bold)(state)).toBeNull();
+    serialize.mockRestore();
+    expect(state.update(toggleSourceMark(bold)(state)!).state.doc.toString()).toBe("**com**plete text");
   });
   it("keeps empty prose seeds editable, but refuses empty code and table syntax", () => {
     const empty = selected("", "");
@@ -99,4 +114,53 @@ describe("semantic inline formatting", () => {
       expect(querySourceInline(state, state.selection.main).reason, source).toBeNull();
     }
   });
+});
+
+describe("pending empty marker pairs", () => {
+  /** @param doc - Source with one ¦ caret. @returns State after one collapsed bold toggle. */
+  const toggled = (doc: string) => {
+    const state = EditorState.create({ doc: doc.replace("¦", ""), selection: EditorSelection.cursor(doc.indexOf("¦")), extensions: [markdown({ extensions: GFM }), pendingMarkCleanup] });
+    ensureSyntaxTree(state, state.doc.length, 1000);
+    return state.update(toggleSourceMark(bold)(state)!).state;
+  };
+  /** @param state - Result. @returns Source with the caret marked. */
+  const marked = (state: EditorState) => state.doc.sliceString(0, state.selection.main.head) + "¦" + state.doc.sliceString(state.selection.main.head);
+
+  it("removes the pair when the caret leaves it, a second toggle cancels it, and Enter drops it", () => {
+    const state = toggled("前中¦间后");
+    expect(marked(state)).toBe("前中**¦**间后");
+    expect(marked(state.update({ selection: EditorSelection.cursor(7), userEvent: "select" }).state)).toBe("前中间¦后");
+    expect(marked(state.update(toggleSourceMark(bold)(state)!).state)).toBe("前中¦间后");
+    expect(marked(state.update({ changes: { from: 4, insert: "\n\n" }, selection: EditorSelection.cursor(6), userEvent: "input" }).state)).toBe("前中\n\n¦间后");
+  });
+
+  it("keeps the pair once text is typed into it", () => {
+    const typed = toggled("前¦后").update({ changes: { from: 3, insert: "粗" }, selection: EditorSelection.cursor(4), userEvent: "input.type" }).state;
+    expect(marked(typed.update({ selection: EditorSelection.cursor(6), userEvent: "select" }).state)).toBe("前**粗**¦后");
+  });
+});
+
+describe("formatting selections that partly overlap a style or cross blocks", () => {
+  /** @param doc - Source. @param from - Selection start. @param to - Selection end. @returns Source after one bold toggle, or null on refusal. */
+  const toggle = (doc: string, from: number, to: number) => {
+    const state = EditorState.create({ doc, selection: EditorSelection.single(from, to), extensions: markdown({ extensions: GFM }) });
+    ensureSyntaxTree(state, doc.length, 1000);
+    const spec = toggleSourceMark(bold)(state);
+    return spec ? state.update(spec).state.doc.toString() : null;
+  };
+
+  it.each([
+    ["前**粗体**后尾", 4, 8, "前**粗体后**尾"],
+    ["前**粗体**后", 0, 4, "**前粗体**后"],
+    ["**甲**中**乙**", 0, 11, "**甲中乙**"],
+    ["**甲乙丙**", 3, 4, "**甲**乙**丙**"],
+    ["**甲乙丙**", 2, 3, "甲**乙丙**"],
+    ["**甲乙丙**", 4, 5, "**甲乙**丙"],
+    ["前**粗**后", 1, 6, "前粗后"],
+    ["甲\n\n乙", 0, 4, "**甲**\n\n**乙**"],
+    ["**甲**\n\n**乙**", 0, 12, "甲\n\n乙"],
+    ["**甲**\n\n乙", 0, 8, "**甲**\n\n**乙**"],
+    ["# 标题\n\n正文", 2, 8, "# **标题**\n\n**正文**"],
+    ["- 甲\n- 乙", 2, 7, "- **甲**\n- **乙**"],
+  ])("%s [%i, %i]", (doc, from, to, expected) => expect(toggle(doc, from, to)).toBe(expected));
 });

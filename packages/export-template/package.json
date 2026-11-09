@@ -1,19 +1,37 @@
 {
   "name": "@quirekit/export-template",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Format-neutral, validated export styles and host-owned template contracts.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/export-template"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/export-template"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/export-template#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",
   "sideEffects": false,
-  "files": ["LICENSE.md", "THIRD_PARTY_NOTICES.md", "dist", "src"],
-  "exports": { ".": { "types": "./dist/index.d.mts", "import": "./dist/index.mjs" } },
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
   "scripts": {
     "build": "tsdown src/index.ts --format esm --dts --clean",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run"
   },
-  "devDependencies": { "tsdown": "catalog:", "typescript": "catalog:", "vitest": "catalog:" }
+  "devDependencies": {
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
 }

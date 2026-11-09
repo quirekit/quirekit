@@ -41,8 +41,26 @@ export interface MdEditorProps extends Omit<MdEditorExtensionOptions, "view"> {
   /** Heading outline beside the document in the document layout, following the reading position; defaults to false. */ readonly outline?: boolean;
   /** Outline side: `start` before the document (left in left-to-right text) or `end` after it; defaults to `start`, leaving the end side to comments. */ readonly outlinePosition?: MdOutlinePosition;
   /** Lazy code languages shared with the canonical editor. */ readonly codeLanguages?: readonly CodeLanguage[];
-  /** Current view of the same source: document (default), live preview, source or reading; switching keeps selection and history. */ readonly view?: MdEditorView;
+  /** Current view of the same source: document (default), live preview, source or reading; switching keeps selection and history and focuses the document. Bind with `v-model:view` so Mod-Alt-V can step through the views. */ readonly view?: MdEditorView;
+  /** Host commands appended to the desktop selection toolbar; also offered on a readonly source. */ readonly selectionActions?: readonly MdSelectionAction[];
   /** Host side panels, such as an assistant, each with a toolbar toggle; docked at the document's end. Read once on mount. */ readonly panels?: readonly MdEditorPanel[];
+}
+
+/** The selected Markdown source handed to a host selection action. */
+export interface MdSelectionContext {
+  /** Selected Markdown source. */ readonly text: string;
+  /** Source offset where the selection starts. */ readonly from: number;
+  /** Source offset where the selection ends. */ readonly to: number;
+  /** One-based source line of the selection start. */ readonly startLine: number;
+  /** One-based source line of the selection end. */ readonly endLine: number;
+}
+
+/** Host command on the desktop selection toolbar, such as sending the text to an assistant. */
+export interface MdSelectionAction {
+  /** Stable identity within this editor. */ readonly id: string;
+  /** Visible and accessible name. */ readonly label: string;
+  /** Icon name resolved by the current QuireIconProvider. */ readonly icon?: string;
+  /** @param selection - Selection when the action was chosen. */ readonly run: (selection: MdSelectionContext) => void;
 }
 
 /** Public component instance for persistence, snapshots and advanced source commands. */
@@ -55,6 +73,12 @@ export interface MdEditorInstance {
    * @param exporter - Installed exporter id, required for `formatExport`.
    */
   openFile(mode: MdFileMode, exporter?: string): void;
+  /** Opens the list of every comment; does nothing when comments are off. */ showComments(): void;
+  /**
+   * Shows or hides the side rail of anchored comments; the document re-centers while it is hidden. Starting a new comment shows it again.
+   * @param visible - Whether the rail is shown.
+   */
+  setCommentRailVisible(visible: boolean): void;
 }
 
 /** Discardable reading view of either a parsed snapshot or host-owned Markdown text. */

@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import type {
   WordAbstractNumbering,
   WordNumberingLevel,
@@ -74,20 +75,17 @@ export function materializeWordNumberingSingleLevelPreset(
 }
 
 /**
- * Allocates one collision-safe document abstract definition id.
+ * Allocates one document abstract definition id, a uuid so definitions
+ * created concurrently by collaborators never share one.
  *
  * @param registry - Current canonical document registry.
- * @returns First unused QuireKit preset-definition id.
+ * @returns Unused QuireKit preset-definition id.
  */
 export function allocateWordNumberingPresetAbstractId(
   registry: WordNumberingRegistry
 ): string {
-  let next = 1;
-  let id = `${presetAbstractIdPrefix}${next}`;
-  while (registry.abstractNums[id] !== undefined) {
-    next += 1;
-    id = `${presetAbstractIdPrefix}${next}`;
-  }
+  let id = `${presetAbstractIdPrefix}${v4()}`;
+  while (registry.abstractNums[id] !== undefined) id = `${presetAbstractIdPrefix}${v4()}`;
   return id;
 }
 

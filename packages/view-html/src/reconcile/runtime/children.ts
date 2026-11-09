@@ -10,6 +10,7 @@ import type { HtmlContainerTarget } from "../matching/types";
 import type { HtmlTargetDescriptor } from "../types";
 import type { HtmlReconcileContext } from "./types";
 import { resolveHtmlNodeViewDecorations } from "../../node-view/decorations";
+import { walkHtmlDescriptors } from "../ownership/descriptor-tree";
 
 /**
  * Reconciles one dirty parent's direct children and changed descendants.
@@ -58,6 +59,9 @@ export function reconcileHtmlContainer(
     nextChildren.push(child);
     context.patchHost.placeChild(parent, child, index);
   }
+  if (parent.children.length !== nextChildren.length || parent.children.some((child, index) => child !== nextChildren[index])) {
+    context.ownershipChanged = true;
+  }
   parent.adoptChildren(nextChildren);
   updateContainerProduct(parent, target);
 }
@@ -77,6 +81,16 @@ function updateMatchedDescriptor(
   target: HtmlTargetDescriptor,
   context: HtmlReconcileContext
 ): HtmlDescriptor {
+  // Equivalent siblings can be reused at a different mapped position. Their
+  // descendants must then be reconciled in the new parent's coordinate range.
+  const rangeChanged = descriptor.range.from !== target.range.from || descriptor.range.to !== target.range.to;
+  if (rangeChanged && (descriptor.kind === "node" || descriptor.kind === "node-view")
+    && descriptor.node.content.eq(target.node.content)) {
+    // A retained parent with identical content proves its child identities still
+    // belong together, even when a delete/insert move invalidated their ranges.
+    // Child reconciliation below restores their exact target coordinates.
+    walkHtmlDescriptors(descriptor, child => child.setDirtyState("mapped"));
+  }
   if (descriptor.kind === "widget") {
     if (!target.widgetDecoration) {
       throw new RangeError("Retained widget targets require a decoration.");
@@ -90,6 +104,8 @@ function updateMatchedDescriptor(
     context.patchHost.patchText(descriptor, target.node.text ?? "");
     descriptor.updateText(target.node, target.range, false);
   } else if (descriptor.kind === "node-view") {
+    // A custom update can change mounted content holes and child attachment.
+    context.ownershipChanged = true;
     const contentChanged = !descriptor.node.content.eq(target.node.content);
     const decorationState = resolveHtmlNodeViewDecorations(
       context.nodeViewEnvironment,
@@ -110,7 +126,7 @@ function updateMatchedDescriptor(
       return createHtmlTargetDescriptor(parent, target, context);
     }
     descriptor.updateNode(target.node, target.range);
-    if ((contentChanged || context.decorationsChanged) && descriptor.host?.contentDOM) {
+    if ((contentChanged || rangeChanged || context.decorationsChanged) && descriptor.host?.contentDOM) {
       reconcileHtmlContainer(descriptor, { node: target.node }, context);
     }
   } else if (descriptor.kind === "node") {
@@ -118,13 +134,13 @@ function updateMatchedDescriptor(
 
     patchHtmlNodeMarkup(descriptor, target, context);
     descriptor.updateNode(target.node, target.range);
-    if (contentChanged || context.decorationsChanged) {
+    if (contentChanged || rangeChanged || context.decorationsChanged) {
       reconcileHtmlContainer(descriptor, { node: target.node }, context);
     }
   } else if (descriptor.kind === "inline-decoration") {
     const changed = !descriptor.node.eq(target.node);
     descriptor.node = target.node; descriptor.range = target.range;
-    if (changed) reconcileHtmlContainer(descriptor, { node: target.node }, context);
+    if (changed || rangeChanged) reconcileHtmlContainer(descriptor, { node: target.node }, context);
   } else if (descriptor.kind === "mark" && target.mark) {
     const contentChanged = !descriptor.children.every((child) => (
       child.kind === "text" && child.node.eq(target.node)
@@ -132,7 +148,7 @@ function updateMatchedDescriptor(
 
     patchHtmlMarkMarkup(descriptor, target, context);
     descriptor.updateMark(target.mark, target.range);
-    if (contentChanged) {
+    if (contentChanged || rangeChanged) {
       reconcileHtmlContainer(descriptor, {
         node: target.node,
         markIndex: target.markIndex

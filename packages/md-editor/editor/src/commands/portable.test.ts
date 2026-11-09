@@ -13,7 +13,7 @@ describe("portable inline insertions", () => {
   it("replaces only the trigger with an escaped safe Markdown link", () => {
     const state = EditorState.create({ doc: "Hi @!", selection: { anchor: 3, head: 4 } });
     const next = state.update(insertMdMention({ id: "1", label: "[Lin]", url: "/people/1" })(state)!).state;
-    expect(next.doc.toString()).toBe("Hi [@\\[Lin\\]](</people/1>)!");
+    expect(next.doc.toString()).toBe("Hi [@\\[Lin\\]](/people/1)!");
     expect(insertMdMention({ id: "1", label: "Lin", url: "javascript:alert(1)" })(state)).toBeNull();
   });
   it("preserves a composed emoji sequence and places the caret after it", () => {

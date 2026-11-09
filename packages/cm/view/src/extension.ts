@@ -101,6 +101,8 @@ export function logException(state: EditorState, exception: any, context?: strin
 
 export const editable = Facet.define<boolean, boolean>({combine: values => values.length ? values[0] : true })
 
+export const scrollViewportMargin = Facet.define<number, number>({combine: values => values.length ? Math.max(...values) : 0})
+
 /// This is the interface plugin objects conform to.
 export interface PluginValue extends Object {
   /// Notifies the plugin of an update that happened in the view. This

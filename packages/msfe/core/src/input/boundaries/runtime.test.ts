@@ -41,7 +41,7 @@ it('uses the same owner for direct placement, navigation and both delete directi
 it('keeps the unselected block shell during a cross-boundary replacement', () => {
   const state = fixture().update({ selection: EditorSelection.single(2, contentFrom + 2) }).state;
   const edited = state.update({ ...state.replaceSelection('X'), userEvent: 'input.paste' }).state;
-  expect(edited.doc.toString()).toBe('prX\nHEADER\ndy\nFOOTER\n\nnext');
+  expect(edited.doc.toString()).toBe('prX\n\nHEADER\ndy\nFOOTER\n\nnext');
 });
 
 it.each(['A', '中文', '😀'])('places the caret after replacement %s before accepting the next typed character', text => {
@@ -118,11 +118,11 @@ it('repairs bypassed selections before paint and discards stale or disposed repa
   await Promise.resolve();
 });
 
-it('unwraps paired styles at an edge and never leaves half a delimiter after body deletion', () => {
+it('deletes the character before a paired style at its edge and never leaves half a delimiter after body deletion', () => {
   const state = EditorState.create({ doc: 'x **body** y', extensions: [markdown(), modeFacet.of('live'),
     sourceRevealSetting.extension(() => 'hidden'), inlineBoundaryNavigation([{ nodes: ['StrongEmphasis'], marker: 'EmphasisMark', behavior: 'content' }])] });
   const start = state.update({ selection: { anchor: 4 } }).state;
-  expect(start.update({ changes: { from: 2, to: 4 }, userEvent: 'delete.backward' }).state.doc.toString()).toBe('x body y');
+  expect(start.update({ changes: { from: 2, to: 4 }, userEvent: 'delete.backward' }).state.doc.toString()).toBe('x**body** y');
   const end = state.update({ selection: EditorSelection.single(4, 8) }).state;
   expect(end.update({ ...end.replaceSelection(''), userEvent: 'delete.selection' }).state.doc.toString()).toBe('x  y');
 });
@@ -167,6 +167,6 @@ it('plans multiple caret deletions in one transaction without losing ranges', ()
       inlineBoundaryNavigation([{ nodes: ['StrongEmphasis'], marker: 'EmphasisMark', behavior: 'content' },
         { nodes: ['InlineCode'], marker: 'CodeMark', behavior: 'split' }])] });
   const edited = state.update({ changes: [{ from: 2, to: 4 }, { from: 10, to: 11 }], userEvent: 'delete.backward' }).state;
-  expect(edited.doc.toString()).toBe('L one two R');
-  expect(edited.selection.ranges.map(range => range.head)).toEqual([2, 6]);
+  expect(edited.doc.toString()).toBe('L**one**`two` R');
+  expect(edited.selection.ranges.map(range => range.head)).toEqual([3, 9]);
 });

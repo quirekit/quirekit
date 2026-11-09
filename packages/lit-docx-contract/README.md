@@ -21,6 +21,8 @@ const paragraph = docx.blocks.paragraph({ children: [docx.inline.text('Hello Wor
 console.log(paragraph)
 ```
 
+Numbering levels can declare `start: 0`. An instance override uses `start` for the outer `w:startOverride` and optional `levelStart` for an explicit `w:start` in the replacement level. Retaining both roles lets consumers apply their Word compatibility rules without losing source values through field merging.
+
 ## Related documentation
 
 - [Read and generate DOCX files](../lit-docx/README.md)

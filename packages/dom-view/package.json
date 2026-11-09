@@ -1,15 +1,29 @@
 {
   "name": "@quirekit/dom-view",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/dom-view"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/dom-view"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/dom-view#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Native ProseMirror DOM view adapter for lightweight QuireKit editors.",
   "type": "module",
   "sideEffects": false,
-  "files": ["LICENSE.md", "THIRD_PARTY_NOTICES.md", "dist", "src"],
-  "exports": {".": {"types": "./dist/index.d.mts", "import": "./dist/index.mjs"}},
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
   "types": "./dist/index.d.mts",
   "scripts": {
     "build": "tsdown src/index.ts --format esm --dts --clean --out-dir dist",

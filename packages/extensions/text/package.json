@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/extension-text",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/extensions/text"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/extensions/text"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/extensions/text#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit text node extension.",

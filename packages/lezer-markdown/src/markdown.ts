@@ -1,4 +1,4 @@
-import {Tree, TreeBuffer, NodeType, NodeProp, NodePropSource, TreeFragment, NodeSet, TreeCursor,
+import {Tree, TreeBuffer, NodeType, NodeProp, NodePropSource, TreeFragment, NodeSet, TreeCursor, IterMode,
         Input, Parser, PartialParse, SyntaxNode, ParseWrapper} from "@lezer/common"
 import {styleTags, tags as t, Tag} from "@lezer/highlight"
 import {getBlockReuse, retainBlockReuse} from "./reuse/observations"
@@ -1843,6 +1843,16 @@ function injectMarks(elements: readonly (Element | TreeElement)[], marks: Elemen
 // reused if their next sibling is also being reused.
 const NotLast = [Type.CodeBlock, Type.ListItem, Type.OrderedList, Type.BulletList]
 
+/// The type of a group's last named node, or null when that node lives in a buffer.
+function lastNamedChild(tree: Tree): NodeType | null {
+  for (let current: Tree | TreeBuffer = tree;;) {
+    if (!(current instanceof Tree)) return null
+    if (!current.type.isAnonymous) return current.type
+    if (!current.children.length) return null
+    current = current.children[current.children.length - 1]
+  }
+}
+
 class FragmentCursor {
   // Index into fragment array
   i = 0
@@ -1874,7 +1884,8 @@ class FragmentCursor {
 
     let c = this.cursor
     if (!c) {
-      c = this.cursor = this.fragment.tree.cursor()
+      // Anonymous balancing groups stay visible so unchanged ones can be taken whole.
+      c = this.cursor = this.fragment.tree.cursor(IterMode.IncludeAnonymous)
       c.firstChild()
     }
 
@@ -1900,6 +1911,13 @@ class FragmentCursor {
         if (cur.type.isAnonymous && cur.firstChild()) continue
         break
       }
+      let lastBlock = cur.type.isAnonymous ? lastNamedChild(cur.tree!) : cur.type
+      // A group is taken whole only when it can end the taken range and needs no gap placeholder.
+      if (cur.type.isAnonymous && (!lastBlock || !lastBlock.is("Block") || NotLast.indexOf(lastBlock.id) > -1 ||
+                                   cur.to - off > cx.ranges[cx.rangeI].to)) {
+        if (cur.firstChild()) continue
+        break
+      }
       let pos = toRelative(cur.from - off, cx.ranges)
       if (cur.to - off <= cx.ranges[cx.rangeI].to) { // Fits in current range
         cx.addNode(cur.tree!, pos)
@@ -1912,8 +1930,8 @@ class FragmentCursor {
       // parsing happens on block boundaries. Never stop directly
       // after an indented code block, since those can continue after
       // any number of blank lines.
-      if (cur.type.is("Block")) {
-        if (NotLast.indexOf(cur.type.id) < 0) {
+      if (lastBlock!.is("Block")) {
+        if (NotLast.indexOf(lastBlock!.id) < 0) {
           end = cur.to - off
           blockI = cx.block.children.length
         } else {
@@ -1923,7 +1941,13 @@ class FragmentCursor {
         prevEnd = cur.to - off
         prevI = cx.block.children.length
       }
-      if (!cur.nextSibling()) break
+      // Leaving the last child of a group continues after that group.
+      let advanced = cur.nextSibling()
+      while (!advanced) {
+        if (!cur.parent() || !cur.type.isAnonymous) break
+        advanced = cur.nextSibling()
+      }
+      if (!advanced) break
     }
     while (cx.block.children.length > blockI) {
       cx.block.children.pop()

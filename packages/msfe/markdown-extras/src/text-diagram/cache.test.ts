@@ -20,6 +20,16 @@ describe("source-font diagram preview cache", () => {
     cache.set(mermaid, owner, "<svg>host-font</svg>"); expect(cache.get(mermaid, owner)).toBeUndefined();
   });
 
+  it("keys Mermaid by the host font role it was laid out with", () => {
+    const owner = document.implementation.createHTMLDocument(), mermaid: PreviewProps = { ...props("graph TD\nA-->B"), kind: "mermaid", language: "mermaid" };
+    const font = { fontFamily: "Inter, sans-serif", fontSize: 16 };
+    cache.set(mermaid, owner, "<svg>mermaid</svg>", font);
+    expect(cache.get(mermaid, owner, { ...font })).toBe("<svg>mermaid</svg>");
+    expect(cache.get(mermaid, owner, { ...font, fontSize: 18 })).toBeUndefined();
+    expect(cache.get(mermaid, owner, { ...font, fontFamily: "serif" })).toBeUndefined();
+    expect(cache.get(mermaid, owner)).toBeUndefined();
+  });
+
   it("evicts the oldest entry while promoting actual reads", () => {
     const owner = document.implementation.createHTMLDocument();
     for (let index = 0; index < 32; index++) cache.set(props(String(index)), owner, "<svg/>");

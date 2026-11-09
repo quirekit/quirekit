@@ -153,6 +153,10 @@ editor.destroy()
 
 在页面或组件的清理阶段执行。创建编辑器可能因无效配置抛错，应用仍应处理初始化异常；`onError` 用于运行中的错误报告。
 
+## 性能
+
+MSFE 增量解析文档，只绘制可见部分，输入开销随文档长度增长缓慢。基于 MSFE 构建的完整产品 [MD Editor](../../md-editor/editor/README.zh-CN.md) 在 100 万字符、以长段落为主的文档中，从按键到编辑器接受新文档的耗时为 P50 5.5 ms、P90 6.0 ms、P95 6.8 ms、P99 7.9 ms（文档视图，Apple M3 Max，Chromium 149，不含操作系统、输入法和显示器的耗时）。测试方法和完整数据见其 README，在 QuireKit 仓库中可以用 `pnpm --filter @quirekit/msfe-docs performance:latency` 复现。
+
 ## 和其他包的关系
 
 | 包 | 分工 |

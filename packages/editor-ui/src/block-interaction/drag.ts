@@ -1,4 +1,5 @@
 import type { QuireEditor } from "@quirekit/core";
+import { holdQuireDragCursor } from "@quirekit/ui";
 import { DragSession } from "../drag";
 import { NodeRangeSelection } from "../node-range-selection";
 import { readBlockCatalog, resolveBlockRange, type BlockRangeRef, type BlockSlotRef } from "@quirekit/extensions";
@@ -30,6 +31,9 @@ export function startEditorBlockDrag(editor: QuireEditor, root: HTMLElement, eve
   let line: EditorBlockDragPreview["line"] = null;
   let version = initial.fragment.geometryVersion;
   const admission = new Map<string, boolean>();
+  let releaseCursor: (() => void) | null = null;
+  /** Restores hover cursors once the block is no longer being carried. */
+  const endCursor = (): void => { releaseCursor?.(); releaseCursor = null; };
   const session = new DragSession<BlockRangeRef, BlockSlotRef>({
     threshold: 5,
     resolveTarget: ({ update }) => {
@@ -66,18 +70,21 @@ export function startEditorBlockDrag(editor: QuireEditor, root: HTMLElement, eve
       const nextVersion = latest[0]?.fragment.geometryVersion ?? version;
       if (nextVersion !== version) { version = nextVersion; session.remapSource(selectionAt(version)); }
       const result = session.update({ pointerId: event.pointerId, clientPoint: { x: point.clientX, y: point.clientY }, snapshotVersion: version, insideDropZone: inside, autoScroll: { kind: "idle" } });
-      if (result.status === "targeting") preview({ pointer: { x: point.clientX, y: point.clientY }, x: point.clientX + 14, y: point.clientY + 12, count: blocks.length, text, line });
-      else preview(null);
+      if (result.status === "targeting") {
+        releaseCursor ??= holdQuireDragCursor(root.ownerDocument);
+        preview({ pointer: { x: point.clientX, y: point.clientY }, x: point.clientX + 14, y: point.clientY + 12, count: blocks.length, text, line });
+      } else { endCursor(); preview(null); }
       return result.status === "cancelled" || result.status === "ignored" ? null : result.status === "targeting";
     },
     finish() {
+      endCursor();
       const wasClick = session.state.phase === "armed";
       const result = session.drop({ pointerId: event.pointerId, snapshotVersion: version });
       preview(null);
       if (wasClick) clicked();
       else if (result.status === "committed") editor.commands.moveBlockRange({ source: result.intent.source.payload, destination: result.intent.target.payload });
     },
-    cancel() { session.cancel("pointer-cancel"); preview(null); }
+    cancel() { endCursor(); session.cancel("pointer-cancel"); preview(null); }
   });
   return cancel ?? null;
 }

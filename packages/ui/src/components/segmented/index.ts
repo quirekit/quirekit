@@ -2,6 +2,7 @@ export { createSegmentedTokens } from "./create";
 export type {
   QuireKitSegmentedItem,
   QuireKitSegmentedOrientation,
+  QuireKitSegmentedShape,
   QuireKitSegmentedSize,
   QuireKitSegmentedSizeTokens,
   QuireKitSegmentedTokens

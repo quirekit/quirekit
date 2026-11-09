@@ -5,6 +5,7 @@ import { guardRadioReadOnlyKey } from "../radio-group/keyboard";
 import type {
   QuireKitSegmentedItem,
   QuireKitSegmentedOrientation,
+  QuireKitSegmentedShape,
   QuireKitSegmentedSize
 } from "../../components/segmented";
 
@@ -22,6 +23,8 @@ interface Props {
   readonly form?: string;
   /** 同步约束高度、排版、间距和图标盒的公开尺寸。 */
   readonly size?: QuireKitSegmentedSize;
+  /** rounded 使用主题控件圆角；pill 使轨道与选中片两端呈半圆；square 为直角。 */
+  readonly shape?: QuireKitSegmentedShape;
   /** 选项排列和可访问方向；方向键遵循原生 radio 行为。 */
   readonly orientation?: QuireKitSegmentedOrientation;
   /** 是否让每个选项占据相同比例的可用空间。 */
@@ -53,6 +56,7 @@ const {
   name,
   form,
   size = "sm",
+  shape = "rounded",
   orientation = "horizontal",
   equal = false,
   disabled = false,
@@ -83,6 +87,7 @@ defineSlots<Slots>();
       'qk-segmented',
       `qk-segmented--${size}`,
       `qk-segmented--${orientation}`,
+      shape !== 'rounded' && `qk-segmented--${shape}`,
       equal && 'qk-segmented--equal'
     ]"
     @update:model-value="selectedValue = $event"

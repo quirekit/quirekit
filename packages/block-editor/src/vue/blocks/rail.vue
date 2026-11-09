@@ -3,7 +3,7 @@ import { useBlockLocale } from "../localization/use-locale";
 import { EditorUIAnchoredOverlay } from "@quirekit/editor-ui/vue";
 import { computed, ref } from "vue";
 import type { Editor } from "@quirekit/core";
-import { QuireButton, QuireIconButton, QuireIcon, QuireMenu, QuireTooltipRoot, QuireTooltipTrigger, QuireTooltipContent } from "@quirekit/ui/vue";
+import { QuireBlockHandle, QuireIconButton, QuireIcon, QuireMenu, QuireTooltipRoot, QuireTooltipTrigger, QuireTooltipContent } from "@quirekit/ui/vue";
 import { copyBlockLink } from "../../sections/links";
 import { sectionTarget } from "../../sections/query";
 import { copyBlockRange } from "../../ui/blocks/clipboard";
@@ -63,13 +63,11 @@ async function execute(value: string): Promise<void> {
 </script>
 <template>
   <EditorUIAnchoredOverlay :show="!!hover && !preview" :anchor="railAnchor" unconstrained layer="chrome">
-    <div v-if="presentation" ref="gutter" class="qk-block-gutter" data-block-rail :style="{ '--qk-block-handle-width': `${handleWidth}px`, '--qk-block-handle-size': `${controlSize}px`, gap: `${controlGap}px` }">
+    <div v-if="presentation" ref="gutter" class="qk-block-gutter" data-block-rail :style="{ '--qk-block-handle-size': `${controlSize}px`, gap: `${controlGap}px` }">
       <QuireIconButton v-if="presentation.empty" class="qk-block-gutter__insert" :label="t('插入块')" variant="ghost" size="xs" @pointerdown.prevent @click="open('insert')"><QuireIcon name="plus" /></QuireIconButton>
       <QuireTooltipRoot :disabled="!!menu || !!preview">
         <QuireTooltipTrigger as-child>
-          <QuireButton :aria-label="t('拖动或打开块菜单')" variant="outline" size="xs" class="qk-block-gutter__handle" :data-block-type="presentation.id" :aria-description="t(presentation.label)" :aria-expanded="menu === 'block'" aria-haspopup="menu" @pointerdown="press" @keydown.enter.prevent="open()" @keydown.space.prevent="open()">
-            <span class="qk-block-gutter__type"><QuireIcon :name="presentation.icon" /><QuireIcon name="gripVertical" class="qk-block-gutter__grip" /></span>
-          </QuireButton>
+          <QuireBlockHandle :label="t('拖动或打开块菜单')" :badge="presentation.badge" :icon="presentation.icon" :tone="presentation.tone" class="qk-block-gutter__handle" :data-block-type="presentation.id" :aria-description="t(presentation.label)" :aria-expanded="menu === 'block'" aria-haspopup="menu" @pointerdown="press" @keydown.enter.prevent="open()" @keydown.space.prevent="open()" />
         </QuireTooltipTrigger>
         <QuireTooltipContent :content="t('{label} · 点击打开菜单，拖动调整顺序', { label: t(presentation.label) })" />
       </QuireTooltipRoot>

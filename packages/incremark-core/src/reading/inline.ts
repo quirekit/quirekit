@@ -30,6 +30,8 @@ export function inlineChildren<Output>(context: ReadingContext<Output>, node: Sy
 export function renderInline<Output>(context: ReadingContext<Output>, node: SyntaxNode): Output | undefined {
   const { state } = context;
   if (/^(?:EmphasisMark|StrikethroughMark|CodeMark|HeaderMark|ListMark|QuoteMark|SubscriptMark|SuperscriptMark|InsertedTextMark|HighlightMark|DefinitionMark)$/u.test(node.name)) return context.adapter.fragment([]);
+  // A line break is safe without the HTML opt-in; it is the only break a GFM table cell can hold.
+  if (node.name === "HTMLTag" && /^<br\s*\/?>$/iu.test(state.sliceDoc(node.from, node.to))) return context.element(node, "br", {}, context.adapter.fragment([]));
   if (node.name === "InlineMath") return renderMath(context, node);
   if (node.name === "FootnoteReference") return renderFootnoteNumber(context, node);
   if (node.name === "InlineFootnote") return context.element(node, "span", { role: "note" }, context.adapter.fragment([

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "created": "2026-11-06",
+  "producer": {
+    "name": "Microsoft Word for Mac",
+    "version": "16.109.2",
+    "build": "16.109.26052523"
+  },
+  "authoring": [
+    "Create a blank document in Word.",
+    "Toggle bold on, type the first paragraph, then toggle bold off before its paragraph mark.",
+    "Type the second paragraph and an empty final paragraph.",
+    "Save as Word 97-2004 DOC; save a separate native DOCX comparison."
+  ],
+  "expected": {
+    "text": "QuireKit 旧版 Word 中文样本\r正文：保留中文 English 123。\r\r",
+    "paragraphEnds": [
+      22,
+      43,
+      44
+    ],
+    "bold": [
+      [
+        0,
+        21,
+        true
+      ],
+      [
+        21,
+        44,
+        false
+      ]
+    ],
+    "tables": []
+  },
+  "files": [
+    {
+      "name": "chinese-basic.doc",
+      "bytes": 24576,
+      "sha256": "05531973eced647ffd6296f33e564554c5f0592df4e7edef2fe762fa002d1b1b"
+    },
+    {
+      "name": "chinese-basic.docx",
+      "bytes": 13851,
+      "sha256": "f383b890c2047936429685018c7ec9abe166e08d9296a10cefb09a86a6c7f4ce"
+    }
+  ],
+  "license": "MIT; text and files authored for this repository, not copied from an upstream corpus.",
+  "comparisonScope": "The DOCX was saved from the authored DOC by the same Word installation. It is an application conversion reference, not an independent producer.",
+  "split": "development"
+}

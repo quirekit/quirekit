@@ -159,6 +159,8 @@ describe("@quirekit/editor-ui public surface", () => {
     expect(Object.keys(await import("./index"))).toEqual([
       "projectEditorUIAnchorGeometry",
       "resolveEditorUIAnchorGeometry",
+      "resolveEditorUIStructuredRangeRects",
+      "resolveEditorUITextRangeRects",
       "createEditorUIBlockDropIndicator",
       "DragSession",
       "defaultEditorUIDragThreshold",

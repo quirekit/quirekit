@@ -1,4 +1,5 @@
 import { declareQuireLayoutDependency } from "@quirekit/core";
+import type {} from "@quirekit/collab-contract";
 import {
   Extension,
   type QuireNodeCanvasTextStyleMap
@@ -38,6 +39,13 @@ export const WordParagraph = Extension.create<WordParagraphOptions>({
 
   /** @returns Independent run-level page- and column-break schemas and lifecycles. */
   addExtensions() { return [WordPageBreak, WordColumnBreak]; },
+  /** @returns Collaboration rules: the compatibility switches are independent fields. */
+  addCollabRules() {
+    return [
+      { kind: "version", version: "1" },
+      { kind: "root", attribute: "wordParagraphCompatibility", strategy: "merge" }
+    ];
+  },
 
   addGlobalAttributes() {
     return [{

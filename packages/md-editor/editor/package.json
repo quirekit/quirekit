@@ -1,10 +1,14 @@
 {
   "name": "@quirekit/md-editor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "QuireKit Markdown document editor with shared Prose presentation.",
   "type": "module",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/md-editor/editor"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/md-editor/editor"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/md-editor/editor#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "sideEffects": [

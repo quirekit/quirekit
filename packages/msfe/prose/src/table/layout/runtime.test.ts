@@ -17,7 +17,6 @@ afterEach(() => { presentation.selecting = false; });
 function fixture(wrapped = false) {
   const events: string[] = [], positions = [40, 40];
   const state = EditorState.create({ doc: "| A | B |\n| --- | --- |\n| one | two |", extensions: markdown({ extensions: GFM }) });
-  const key = "0";
   let pending: Parameters<EditorView["requestMeasure"]>[0], listener: ((event: Event) => void) | undefined;
   /** @param index - Physical scroll owner. @returns An instrumented native scroll position. */
   function scrollPosition(index: number) {
@@ -33,7 +32,7 @@ function fixture(wrapped = false) {
   const wrapper = Object.defineProperty({ hasAttribute: () => true, style: columnStyle("shared") }, "scrollLeft",
     Object.getOwnPropertyDescriptor(scrollPosition(0), "scrollLeft")!);
   const rows = [0, 1].map(index => {
-    return Object.defineProperty({ dataset: { msfeTable: key }, parentElement: wrapped ? wrapper : null,
+    return Object.defineProperty({ parentElement: wrapped ? wrapper : null,
       classList: { contains: (name: string) => name === "msfe-table-row" }, clientWidth: 500,
       querySelector: () => ({}), style: columnStyle(String(index)),
     }, "scrollLeft", Object.getOwnPropertyDescriptor(scrollPosition(index), "scrollLeft")!) as unknown as HTMLElement;
@@ -46,7 +45,7 @@ function fixture(wrapped = false) {
       disconnect() {}
     }, getComputedStyle: () => ({ fontStyle: "normal", fontSize: "16px", fontFamily: "sans-serif",
       letterSpacing: "normal", paddingLeft: "4", paddingRight: "4", borderLeftWidth: "1", borderRightWidth: "1" }) } };
-  const view = { state, dom: { ownerDocument }, contentDOM: { querySelectorAll: () => rows,
+  const view = { state, posAtDOM: () => 0, dom: { ownerDocument }, contentDOM: { querySelectorAll: () => rows,
     addEventListener: (_name: string, callback: (event: Event) => void) => { listener = callback; }, removeEventListener: () => {} },
     requestMeasure: (request?: Parameters<EditorView["requestMeasure"]>[0]) => { if (request) pending = request; },
   } as unknown as EditorView;

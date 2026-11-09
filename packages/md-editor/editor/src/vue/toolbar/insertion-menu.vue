@@ -23,7 +23,7 @@ const props = defineProps<{
 }>();
 const context = computed(() => props.scope.context as MdToolbarContext);
 const text = computed(() => mdEditorMessages[context.value.locale]);
-const items = computed(() => props.scope.expanded ? insertionItems(context.value.editor, context.value.locale, toolbarInsertions) : []);
+const items = computed(() => { if (!props.scope.expanded) return []; void context.value.state; return insertionItems(context.value.editor, context.value.locale, toolbarInsertions); });
 const adjacent = shallowRef<MdAdjacentInsertion | null>(null), handoff = ref(false);
 const targets = computed(() => { void context.value.state; return { before: adjacent.value?.target("before"), after: adjacent.value?.target("after") }; });
 const labels = computed(() => adjacentInsertionLabels(adjacent.value?.name ?? "", context.value.locale));
@@ -40,7 +40,7 @@ function insertAdjacent(side: SourceBlockSide, value: string): void {
   const target = adjacent.value?.target(side);
   if (!target) { error.value = text.value.conflict; return; }
   const source = blockInsertionSource(context.value.editor, context.value.locale, value);
-  if (source) {
+  if (source !== null) {
     const writer = createBlockInsertionWriter({ ...target, value });
     const accepted = writer?.commit(source); writer?.release();
     if (accepted) done(); else error.value = text.value.conflict;

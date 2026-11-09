@@ -11,9 +11,53 @@ export interface MdCommentsOptions extends Pick<CommentsOptions, "user" | "canCo
   readonly avatar?: (person: CommentPerson) => string | undefined;
   /** CriticMarkup at the file boundary, off unless set; `true` enables both directions with defaults. */
   readonly criticMarkup?: boolean | MdCriticMarkupOptions;
+  /** Editor width in pixels from which comments sit beside the document instead of in the list. Defaults to 1040, for hosts with a narrower editor area. */
+  readonly sideMinWidth?: number;
   /** Where comments on the whole document appear besides the comment list: `end` adds a section after the document. Defaults to the list only. */
   readonly documentComments?: "end" | false;
+  /** Host buttons on each comment card, before resolve; shown while the card is hovered, focused or active. */
+  readonly actions?: readonly MdCommentAction[];
 }
+
+/** A host command offered on comment cards. */
+export interface MdCommentAction {
+  /** Stable identity among the actions. */
+  readonly id: string;
+  /** Accessible name and tooltip. */
+  readonly label: string;
+  /** Registered QuireKit icon name. */
+  readonly icon: string;
+  /**
+   * @param view - Thread and its current placement.
+   * @returns Whether this thread offers the action; omitted means every thread.
+   */
+  readonly visible?: (view: CommentThreadView) => boolean;
+  /** @param context - Thread the action was chosen on. */
+  readonly run: (context: MdCommentActionContext) => void;
+}
+
+/** The thread handed to a comment action, with its current source lines. */
+export interface MdCommentActionContext extends CommentThreadView {
+  /** One-based source line where the commented text starts; absent without a source range. */
+  readonly startLine?: number | undefined;
+  /** One-based source line where the commented text ends; absent without a source range. */
+  readonly endLine?: number | undefined;
+}
+
+/** A comment action bound to one card. */
+export interface MdCommentCardAction {
+  /** Stable identity among the actions. */
+  readonly id: string;
+  /** Accessible name and tooltip. */
+  readonly label: string;
+  /** Registered QuireKit icon name. */
+  readonly icon: string;
+  /** Runs the action on this card's thread. */
+  readonly run: () => void;
+}
+
+/** How the list of every comment appears: in the rail column, as a side drawer, or as a mobile bottom sheet. */
+export type MdCommentListPresentation = "dock" | "drawer" | "sheet";
 
 /** CriticMarkup file actions. Comments stay stand-off in the editor; marks exist only in exported or imported files. */
 export interface MdCriticMarkupOptions {
@@ -45,12 +89,14 @@ export interface MdCommentCardModel {
   readonly resolvable: boolean;
   /** Whether a reply field is offered. */
   readonly replyable: boolean;
+  /** Host buttons this thread offers. */
+  readonly actions: readonly MdCommentCardAction[];
   /** Source view. */
   readonly view: CommentThreadView;
 }
 
 /** Comment options that shape how cards present authors and rights. */
-export type MdCommentCardOptions = Pick<MdCommentsOptions, "user" | "canComment" | "canDelete" | "avatar">;
+export type MdCommentCardOptions = Pick<MdCommentsOptions, "user" | "canComment" | "canDelete" | "avatar" | "actions">;
 
 /** Draft author shown before the first message exists. */
 export type MdCommentAuthor = QuireKitCommentAuthor;

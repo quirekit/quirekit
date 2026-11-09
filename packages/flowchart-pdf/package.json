@@ -1,11 +1,55 @@
 {
-  "name": "@quirekit/flowchart-pdf", "version": "0.0.1", "license": "MIT", "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/flowchart-pdf"}, "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/flowchart-pdf#readme", "bugs": "https://github.com/quirekit/quirekit/issues",
+  "name": "@quirekit/flowchart-pdf",
+  "version": "0.0.2",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/flowchart-pdf"
+  },
+  "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/flowchart-pdf#readme",
+  "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Vector PDF output for neutral QuireKit diagram snapshots.",
-  "type": "module", "sideEffects": false,
-  "files": ["LICENSE.md", "THIRD_PARTY_NOTICES.md", "dist", "src"],
-  "exports": { ".": { "types": "./dist/index.d.mts", "import": "./dist/index.mjs" }, "./fonts": { "types": "./dist/fonts.d.mts", "import": "./dist/fonts.mjs" } },
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./fonts": {
+      "types": "./dist/fonts.d.mts",
+      "import": "./dist/fonts.mjs"
+    }
+  },
   "types": "./dist/index.d.mts",
-  "scripts": { "build": "tsdown --config tsdown.config.ts", "typecheck": "tsc --noEmit -p tsconfig.json", "test": "vitest run src" },
-  "dependencies": { "@quirekit/flowchart": "workspace:*", "pdf-lib": "1.17.1", "pdfkit": "0.20.2", "svg-to-pdfkit": "0.1.8", "fontkit": "2.0.4", "uuid": "14.0.3" },
-  "devDependencies": { "@types/pdfkit": "0.17.6", "@types/fontkit": "2.0.9", "@types/svg-to-pdfkit": "0.1.4", "@quirekit/font-pack": "workspace:*", "happy-dom": "20.10.6", "tsdown": "catalog:", "typescript": "catalog:", "vitest": "catalog:" }
+  "scripts": {
+    "build": "tsdown --config tsdown.config.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@quirekit/flowchart": "workspace:*",
+    "pdf-lib": "1.17.1",
+    "pdfkit": "0.20.2",
+    "svg-to-pdfkit": "0.1.8",
+    "fontkit": "2.0.4",
+    "uuid": "14.0.3"
+  },
+  "devDependencies": {
+    "@types/pdfkit": "0.17.6",
+    "@types/fontkit": "2.0.9",
+    "@types/svg-to-pdfkit": "0.1.4",
+    "@quirekit/font-pack": "workspace:*",
+    "happy-dom": "20.10.6",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
 }

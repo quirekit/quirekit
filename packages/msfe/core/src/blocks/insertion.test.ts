@@ -1,6 +1,7 @@
 import { expect, it } from "vitest";
 import { createDocumentState } from "../mount/state";
 import { sourceBlankLineAt, insertAtSourceBlankLine } from "./insertion";
+import { SOURCE_CARET } from "./separators";
 
 it("finds a blank physical line without borrowing a neighboring block", () => {
   const state = createDocumentState("## Title\n\nbody", []);
@@ -41,7 +42,19 @@ it.each([
   expect(transaction.state.doc.toString()).toBe(expected);
   expect(transaction.state.selection.main.head).toBe(expected.indexOf("## New") + 6);
   expect(transaction.changes.invert(state.doc).apply(transaction.state.doc).toString()).toBe(doc);
-  expect(insertAtSourceBlankLine(line, "")(state)).toBeNull();
+  // An empty payload keeps the blank line as an empty paragraph; whitespace is still refused.
+  expect(insertAtSourceBlankLine(line, "")(state)).toMatchObject({ selection: { anchor: line.from, head: line.from } });
+  expect(insertAtSourceBlankLine(line, "  ")(state)).toBeNull();
   const changed = state.update({ changes: { from: line.from, insert: "typed" } }).state;
   expect(insertAtSourceBlankLine(line, "## New")(changed)).toBeNull();
+});
+
+it("places the caret at one SOURCE_CARET and selects between two, never writing the markers", () => {
+  const state = createDocumentState("before\n\nafter", []), line = sourceBlankLineAt(state, 7)!;
+  const caret = state.update(insertAtSourceBlankLine(line, `\`\`\`\n${SOURCE_CARET}\n\`\`\``)(state)!).state;
+  expect(caret.doc.toString()).toBe("before\n\n```\n\n```\n\nafter");
+  expect(caret.selection.main.head).toBe(12);
+  const range = state.update(insertAtSourceBlankLine(line, `${SOURCE_CARET}Term${SOURCE_CARET}\n: `)(state)!).state;
+  expect(range.doc.toString()).toBe("before\n\nTerm\n: \n\nafter");
+  expect([range.selection.main.from, range.selection.main.to]).toEqual([8, 12]);
 });

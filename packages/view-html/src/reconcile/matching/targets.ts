@@ -33,12 +33,17 @@ export function resolveHtmlContainerTarget(
   if (container.kind === "node-view") {
     return !node.isText && container.host?.canRepresent(node) ? { node } : null;
   }
-  if (container.kind === "mark" && node.isText) {
-    const markIndex = node.marks.findIndex((mark) => mark.eq(container.mark));
-
-    return markIndex < 0 ? null : { node: node.cut(0, container.range.to - container.range.from), markIndex };
+  if (container.kind === "mark" || container.kind === "inline-decoration") {
+    // A wrapper may start inside a text run. A split can also map it across
+    // block tokens; those scopes must be reconciled by a valid ancestor.
+    const text = documentNode.resolve(container.range.from).nodeAfter;
+    const length = container.range.to - container.range.from;
+    if (!text?.isText || length <= 0 || length > text.nodeSize) return null;
+    const target = text.cut(0, length);
+    if (container.kind === "inline-decoration") return { node: target };
+    const markIndex = target.marks.findIndex(mark => mark.eq(container.mark));
+    return markIndex < 0 ? null : { node: target, markIndex };
   }
-  if (container.kind === "inline-decoration" && node.isText) return { node: node.cut(0, container.range.to - container.range.from) };
   return null;
 }
 

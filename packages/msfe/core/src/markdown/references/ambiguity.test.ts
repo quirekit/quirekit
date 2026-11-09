@@ -44,7 +44,7 @@ describe("reference labels participate in the accepted grammar", () => {
     expect(links(state)[0]).toMatchObject({ from: 5, to: 15, text: "bar" });
     const node = syntaxTree(state).topNode.firstChild!.getChild("Link")!;
     const changes = patchSourceDestination(sourceDocument(state), sourceNode(node), { url: "/new" })!;
-    expect(state.update({ changes }).state.doc.toString()).toBe("[foo][bar](</new>)\n\n[baz]: /z");
+    expect(state.update({ changes }).state.doc.toString()).toBe("[foo][bar](/new)\n\n[baz]: /z");
     state = complete(state.update({ changes: { from: state.doc.length, insert: "\n[bar]: /b" } }).state);
     expect(links(state).map(value => value.text)).toEqual(["foo", "baz"]);
     state = complete(state.update({ changes: { from: text.length, to: state.doc.length } }).state);

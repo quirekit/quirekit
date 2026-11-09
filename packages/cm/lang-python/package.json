@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/cm-lang-python",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Python language support for the CodeMirror code editor",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/cm/lang-python"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/cm/lang-python"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/cm/lang-python#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

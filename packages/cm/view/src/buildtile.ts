@@ -41,6 +41,8 @@ class TileBuilder {
   curLine: LineTile | null = null
   lastBlock: LineTile | WidgetTile | null = null
   afterWidget: WidgetTile | null = null
+  // Set while emitting up to a composition, whose buffer is the one walked last.
+  newestBuffer = false
   pos = 0
   wrappers: OpenWrapper[] = []
   wrapperPos = 0
@@ -246,7 +248,8 @@ class TileBuilder {
 
   getBuffer(side: -1 | 1) {
     let flags = TileFlag.Synced | (side < 0 ? TileFlag.Before : TileFlag.After)
-    let found = this.cache.findNewest(WidgetBufferTile, Reused.Full)
+    let found = this.newestBuffer ? this.cache.findNewest(WidgetBufferTile, Reused.Full)
+      : this.cache.find(WidgetBufferTile, undefined, Reused.Full)
     if (found) found.flags = flags
     return found || new WidgetBufferTile(flags)
   }
@@ -336,8 +339,9 @@ class TileCache {
     return null
   }
 
-  // Widget buffers are interchangeable, so take the one walked last: it sits at
-  // the current position, and reusing it in place leaves the DOM there untouched.
+  // Take the buffer walked last: at a composition it sits at the current position,
+  // and reusing it in place leaves the DOM there untouched. Elsewhere buffers are
+  // reused first-in, first-out so consecutive ones keep their order.
   findNewest<Cls extends Tile>(cls: new (...args: any) => Cls, type: Reused): Cls | null {
     let i: number = (cls as any).bucket, bucket = this.buckets[i]
     let start = bucket.length < C.Bucket ? bucket.length - 1 : this.index[i]
@@ -454,10 +458,17 @@ export class TileUpdate {
       if (composition && next.fromA <= composition.range.fromA && next.toA >= composition.range.toA) {
         LOG_builder && console.log("Emit composition", posB, "to", next.toB, "over", posA, "to", next.toA)
         // Walk zero-length tiles at an inserted composition too, so the widget
-        // buffer the composed text follows is cached and reused in place.
-        this.forward(next.fromA, composition.range.fromA, 1)
+        // buffer the composed text follows is cached and reused in place. Chromium
+        // writes the text before a trailing buffer instead; walking that buffer
+        // would move it in front of the composed text and break the composition.
+        let after = composition.text.nextSibling
+        let side: -1 | 1 = composition.range.fromA == composition.range.toA &&
+          after && Tile.get(after) instanceof WidgetBufferTile ? -1 : 1
+        this.builder.newestBuffer = true
+        this.forward(next.fromA, composition.range.fromA, side)
         this.emit(posB, composition.range.fromB)
         this.builder.flushBuffer()
+        this.builder.newestBuffer = false
         this.cache.clear() // Must not reuse DOM across composition
         this.builder.addComposition(composition, compositionContext!)
         this.text.skip(composition.range.toB - composition.range.fromB)

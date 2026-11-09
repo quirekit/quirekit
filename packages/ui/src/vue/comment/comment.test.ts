@@ -30,6 +30,11 @@ describe("comment components", () => {
     expect(active).toContain('aria-label="回复"');
   });
 
+  it("places host actions in the card header", async () => {
+    const html = await renderToString(createSSRApp({ render: () => h(QuireLocaleProvider, { locale: "zh-CN" }, () => h(QuireCommentThread, { messages: [root], quote: "x" }, { actions: () => h("button", { "data-host-action": "" }) })) }));
+    expect(html.indexOf("data-host-action")).toBeGreaterThan(html.indexOf("qk-comment-thread__actions"));
+  });
+
   it("offers previous and next with the position only on the active card of a longer sequence", async () => {
     const active = await render(QuireCommentThread, { messages: [root], quote: "x", active: true, position: { index: 2, total: 5 } });
     expect(active).toContain('aria-label="上一条"');

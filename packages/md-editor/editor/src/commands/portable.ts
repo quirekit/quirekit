@@ -1,5 +1,5 @@
 import { EditorSelection } from "@quirekit/cm-state";
-import { encodeMarkdownField, isSafeDestination, type MsfeCommand } from "@quirekit/msfe-core";
+import { encodeMarkdownDestination, encodeMarkdownField, isSafeDestination, type MsfeCommand } from "@quirekit/msfe-core";
 import type { MdDocumentLink, MdMention } from "./types";
 
 /** @param text - Literal Unicode text chosen by a user. @returns One selection-local source transaction. */
@@ -30,14 +30,14 @@ export function mdMentionSource(mention: MdMention): string | null {
   if (!mention.id.trim() || !mention.label.trim() || /[\r\n]/u.test(mention.label + mention.url)
     || !mention.url.trim() || !isSafeDestination(mention.url, false)) return null;
   const label = encodeMarkdownField(mention.label.replace(/^@/u, ""), "[]*_`<>");
-  return `[@${label}](<${encodeMarkdownField(mention.url, "<>")}>)`;
+  return `[@${label}](${encodeMarkdownDestination(mention.url)})`;
 }
 
 /** @param link - A validated host document. @returns Its portable Markdown link, or null for unsafe/incomplete values. */
 export function mdDocumentLinkSource(link: MdDocumentLink): string | null {
   if (!link.id.trim() || !link.label.trim() || /[\r\n]/u.test(link.label + link.url)
     || !link.url.trim() || !isSafeDestination(link.url, false)) return null;
-  return `[${encodeMarkdownField(link.label, "[]*_`<>")}](<${encodeMarkdownField(link.url, "<>")}>)`;
+  return `[${encodeMarkdownField(link.label, "[]*_`<>")}](${encodeMarkdownDestination(link.url)})`;
 }
 
 /** @param link - A validated host document. @returns A command replacing the target range with the document link. */

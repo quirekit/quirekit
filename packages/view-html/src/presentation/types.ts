@@ -30,6 +30,8 @@ export interface HtmlContinuousFlowRenderOptions {
   readonly editor: QuireMountedEditorViewUpdateOptions["editor"];
   /** Semantic reason for the render. */
   readonly reason: HtmlContinuousFlowRenderReason;
+  /** True only for element ResizeObserver notifications, never viewport or manual resize requests. */
+  readonly passiveResize?: boolean | undefined;
   /** Active IME preedit, when composition owns transient text. */
   readonly imePreedit?: QuireImePreedit | undefined;
   /** Applied transactions represented by this update. */

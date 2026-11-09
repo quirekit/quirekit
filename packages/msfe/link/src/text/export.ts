@@ -1,6 +1,6 @@
 import type { EditorState } from "@quirekit/cm-state";
 import { ensureSyntaxTree, syntaxTree } from "@quirekit/cm-language";
-import { isSafeDestination } from "@quirekit/msfe-core";
+import { encodeMarkdownDestination, isSafeDestination } from "@quirekit/msfe-core";
 import { scanTextLinks, type TextLinkMatch } from "./scan";
 import { textLinkRules } from "./rules";
 import { exportedDestinations, linkExportHrefs, type ExportEdit } from "../destinations";
@@ -52,8 +52,7 @@ export async function linkifyTextLinks(state: EditorState, signal?: AbortSignal)
     if (match.rule.options.verify && match.rule.known.get(match.text) !== true) continue;
     const url = match.rule.options.href(match.text);
     if (!url || !isSafeDestination(url)) continue;
-    const destination = /^[^\s()<>]+$/u.test(url) ? url : `<${url.replace(/[<>]/gu, encodeURIComponent)}>`;
-    edits.push({ from: match.from, to: match.to, insert: `[${match.text}](${destination})` });
+    edits.push({ from: match.from, to: match.to, insert: `[${match.text}](${encodeMarkdownDestination(url)})` });
   }
 
   // Phase 4: apply from the end so earlier offsets stay valid.

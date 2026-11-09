@@ -36,6 +36,7 @@ export type WordParagraphTabAlignment =
   | "end"
   | "decimal"
   | "bar"
+  | "num"
   | "clear";
 
 /** One explicit paragraph tab stop retained for the later ruler context. */

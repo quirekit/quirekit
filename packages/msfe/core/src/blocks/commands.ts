@@ -21,25 +21,25 @@ export function removeSourceBlock(block: SourceBlock): MsfeCommand {
   };
 }
 
-/** @param block - Explicit adjacent block. @param side - Source boundary. @param markdown - New complete Markdown. @returns One atomic source insertion; delimiters in the payload remain unchanged. */
+/** @param block - Explicit adjacent block. @param side - Source boundary. @param markdown - New complete Markdown; empty opens an empty paragraph. @returns One atomic source insertion; delimiters in the payload remain unchanged. */
 export function insertSourceBlock(block: SourceBlock, side: SourceBlockSide, markdown: string): MsfeCommand {
   return state => {
-    if (!currentSourceBlock(state, block) || !markdown.trim()) return null;
+    if (!currentSourceBlock(state, block) || markdown && !markdown.trim()) return null;
     const from = side === "before" ? block.from : block.to, value = sourceBlockInsertion(state, { from, to: from }, markdown, block.scope);
     const changes = state.changes({ from, insert: value.insert });
     if (!preservesSourceBlockScope(state, changes, block)) return null;
-    return { changes, selection: EditorSelection.cursor(from + value.offset + markdown.length), scrollIntoView: true };
+    return { changes, selection: EditorSelection.range(value.anchor, value.caret), scrollIntoView: true };
   };
 }
 
-/** @param block - Complete captured source block. @param markdown - Canonical replacement. @returns One guarded replacement preserving sibling and container boundaries. */
+/** @param block - Complete captured source block. @param markdown - Canonical replacement; empty leaves an empty paragraph. @returns One guarded replacement preserving sibling and container boundaries. */
 export function replaceSourceBlock(block: SourceBlock, markdown: string): MsfeCommand {
   return state => {
-    if (!currentSourceBlock(state, block) || !markdown.trim()) return null;
+    if (!currentSourceBlock(state, block) || markdown && !markdown.trim()) return null;
     const value = sourceBlockInsertion(state, block, markdown, block.scope);
     const changes = state.changes({ from: block.from, to: block.to, insert: value.insert });
     if (!preservesSourceBlockScope(state, changes, block)) return null;
-    return { changes, selection: EditorSelection.cursor(block.from + value.offset + markdown.length), scrollIntoView: true };
+    return { changes, selection: EditorSelection.range(value.anchor, value.caret), scrollIntoView: true };
   };
 }
 

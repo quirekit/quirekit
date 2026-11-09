@@ -5,6 +5,10 @@ import QuireAvatar from "../avatar/avatar.vue";
 import QuireTag from "../tag/tag.vue";
 import QuireButton from "../button/button.vue";
 import QuireIconButton from "../button/icon-button.vue";
+import QuireCommentAction from "./action.vue";
+import QuireTooltipContent from "../tooltip/content.vue";
+import QuireTooltipRoot from "../tooltip/root.vue";
+import QuireTooltipTrigger from "../tooltip/trigger.vue";
 import QuireIcon from "../icon/icon.vue";
 import QuireMenu from "../menu/menu.vue";
 import { useQuireKitLocale, useQuireKitMessages } from "../locale-provider/context";
@@ -64,13 +68,20 @@ function save(): void { if (!props.busy && props.draft.trim()) emit("save", fiel
       <strong class="qk-comment-message__author">{{ message.author.name }}</strong>
       <QuireTag v-if="message.author.badge" size="xs" color="primary">{{ message.author.badge }}</QuireTag>
       <time class="qk-comment-thread__time" :datetime="message.time" :title="message.time">{{ formatCommentTime(message.time, locale) }}</time>
-      <QuireIconButton v-if="actions.length === 1 && !editing" class="qk-comment-message__more" size="xs" :disabled="busy" :label="actions[0]!.label"
-        :title="actions[0]!.label" @click="select(actions[0]!.value)"><QuireIcon :name="actions[0]!.icon!" /></QuireIconButton>
-      <QuireMenu v-else-if="actions.length && !editing" :aria-label="text.moreActions" :items="actions" placement="bottom-end" @select="select">
-        <template #trigger>
-          <QuireIconButton class="qk-comment-message__more" size="xs" :label="text.moreActions" :title="text.moreActions"><QuireIcon name="moreHorizontal" /></QuireIconButton>
-        </template>
-      </QuireMenu>
+      <QuireCommentAction v-if="actions.length === 1 && !editing" class="qk-comment-message__more" :disabled="busy" :label="actions[0]!.label" :icon="actions[0]!.icon!"
+        @click="select(actions[0]!.value)" />
+      <QuireTooltipRoot v-else-if="actions.length && !editing" placement="top">
+        <QuireTooltipTrigger as-child>
+          <span class="qk-comment-message__menu">
+            <QuireMenu :aria-label="text.moreActions" :items="actions" placement="bottom-end" @select="select">
+              <template #trigger>
+                <QuireIconButton class="qk-comment-message__more" size="xs" :label="text.moreActions"><QuireIcon name="moreHorizontal" /></QuireIconButton>
+              </template>
+            </QuireMenu>
+          </span>
+        </QuireTooltipTrigger>
+        <QuireTooltipContent :content="text.moreActions" />
+      </QuireTooltipRoot>
     </div>
     <div v-if="editing && $slots.editor" class="qk-comment-message__editor"><slot name="editor" :message="message" /></div>
     <div v-else-if="editing" class="qk-comment-message__editor">

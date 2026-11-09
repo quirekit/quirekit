@@ -45,7 +45,7 @@ describe("reference-aware native parser lifecycle", () => {
     const local = getReferenceParseWork(updated)!;
     expect(local.checkedBlocks).toBeLessThan(10);
     expect(local.visitedChunks).toBeLessThan(initial.visitedChunks / 2);
-    expect(local.reusedChunks).toBeGreaterThan(0);
+    expect(local.refinements).toBe(0);
     expect(updated.toString()).toBe(grammar.parse(updatedSource).toString());
     const end = source.length, urlChange = [{ fromA: end - 3, toA: end, fromB: end - 3, toB: end }];
     const destination = grammar.parse(source.slice(0, -3) + "two", TreeFragment.applyChanges(TreeFragment.addTree(original), urlChange));
@@ -71,5 +71,28 @@ describe("reference-aware native parser lifecycle", () => {
       '[x](url\n\t"title")', '[x]( "title")', '[x](a\\)b)', '[x]()']) {
       expect(grammar.parse(source).toString()).toBe(parser.parse(source).toString());
     }
+  });
+
+  it("resolves references elsewhere when an edit adds, removes or renames their definition", () => {
+    const grammar = new ReferenceMarkdownParser(parser);
+    const edit = (source: string, tree: ReturnType<typeof grammar.parse>, from: number, to: number, insert: string) => {
+      const next = source.slice(0, from) + insert + source.slice(to);
+      const updated = grammar.parse(next, TreeFragment.applyChanges(TreeFragment.addTree(tree), [{ fromA: from, toA: to, fromB: from, toB: from + insert.length }]));
+      expect(updated.toString()).toBe(new ReferenceMarkdownParser(parser).parse(next).toString());
+      return { source: next, tree: updated };
+    };
+    let source = "See [target] here.\n\n" + "plain paragraph\n\n".repeat(200) + "end\n";
+    let state = { source, tree: grammar.parse(source) };
+    state = edit(state.source, state.tree, state.source.length, state.source.length, "\n[target]: /url\n");
+    expect(state.tree.toString()).toContain("Link");
+    const label = state.source.lastIndexOf("target");
+    state = edit(state.source, state.tree, label, label + 6, "renamed");
+    expect(state.tree.topNode.firstChild!.toString()).not.toContain("Link");
+    const renamed = state.source.lastIndexOf("renamed");
+    state = edit(state.source, state.tree, renamed, renamed + 7, "target");
+    expect(state.tree.topNode.firstChild!.toString()).toContain("Link");
+    state = edit(state.source, state.tree, 5, 5, "x");
+    state = edit(state.source, state.tree, 5, 6, "");
+    expect(state.tree.topNode.firstChild!.toString()).toContain("Link");
   });
 });

@@ -17,8 +17,9 @@ it.each(["**word**", "*word*", "~~word~~", "==word==", "++word++", "~word~", "^w
   const value = editor(`L ${source} R`), from = value.getMarkdown().indexOf("word"), to = from + 4;
   value.setSelection(EditorSelection.single(from));
   const state = value.state;
-  const unwrapped = state.update({ changes: { from: 2, to: from }, userEvent: "delete.backward" }).state;
-  expect(unwrapped.doc.toString()).toBe("L word R");
+  // Backspace at the style's text start deletes the character before the style, which stays intact.
+  const deleted = state.update({ changes: { from: 2, to: from }, userEvent: "delete.backward" }).state;
+  expect(deleted.doc.toString()).toBe(`L${source} R`);
   const selected = state.update({ selection: EditorSelection.single(from, to) }).state;
   expect(selected.update({ ...selected.replaceSelection(""), userEvent: "delete.selection" }).state.doc.toString()).toBe("L  R");
   expect(selected.update({ ...selected.replaceSelection("new"), userEvent: "input.paste" }).state.doc.toString()).toBe(`L ${source.replace("word", "new")} R`);
@@ -92,7 +93,7 @@ it("preserves a partial code/container shell across native replacements", () => 
   for (const [open, close] of [["```typescript", "```"], ["::: highlight {color=green}", ":::"]]) {
     const source = `before\n\n${open}\nbody\n${close}\n\nafter`, value = editor(source);
     const state = value.state.update({ selection: EditorSelection.single(2, source.indexOf("body") + 2) }).state;
-    expect(state.update({ ...state.replaceSelection("X"), userEvent: "input.paste" }).state.doc.toString()).toBe(`beX\n${open}\ndy\n${close}\n\nafter`);
+    expect(state.update({ ...state.replaceSelection("X"), userEvent: "input.paste" }).state.doc.toString()).toBe(`beX\n\n${open}\ndy\n${close}\n\nafter`);
   }
 });
 
@@ -120,4 +121,15 @@ it("selects a thematic break as an object and leaves default frontmatter literal
   const yaml = editor("---\ntitle: value\n---\n\nbody");
   yaml.setSelection(EditorSelection.single(9));
   expect(yaml.state.selection.main.head).toBe(9);
+});
+
+it("selects the text of a heading or list item when a selection covers only its line", () => {
+  for (const [source, from] of [["# 标题", 2], ["- 甲\n- 列表", 6], ["> 引用", 2]] as const) {
+    const value = editor(source);
+    value.setSelection(EditorSelection.single(source.length, source.lastIndexOf("\n") + 1));
+    expect([value.state.selection.main.from, value.state.selection.main.to]).toEqual([from, source.length]);
+  }
+  const all = editor("# 标题\n\n段落");
+  all.setSelection(EditorSelection.single(0, all.state.doc.length));
+  expect(all.state.selection.main.from).toBe(0);
 });

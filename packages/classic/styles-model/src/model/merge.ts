@@ -5,6 +5,7 @@ import {
   type WordParagraphFormattingPatch
 } from "@quirekit/classic-paragraph-model";
 import { mergeWordParagraphBorders } from "./decorations";
+import { mergeWordParagraphTabs } from "./tabs/merge";
 
 /**
  * Merges one paragraph property delta over inherited effective formatting.
@@ -42,7 +43,7 @@ export function mergeWordParagraphFormatting(
         inherited.indentation.firstLine
       )
     },
-    tabs: readScalar(normalized.tabs, inherited.tabs),
+    tabs: mergeWordParagraphTabs(inherited.tabs, normalized.tabs),
     spacing: {
       before: readNested(normalized.spacing?.before, inherited.spacing.before),
       beforeLines: readNested(

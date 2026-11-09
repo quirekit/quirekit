@@ -21,7 +21,8 @@ describe("document selection measurement bounds", () => {
     const box = () => new DOMRect(20, 30, 500, 300);
     content.getBoundingClientRect = box;
     const readRects = vi.fn(() => [new DOMRect(35, 45, 100, 20)]);
-    const range = { setStart() {}, setEnd() {}, getClientRects: readRects, cloneRange: () => ({ setStart() {}, setEnd() {}, getClientRects: readRects }) };
+    const range = { setStart() {}, setEnd() {}, getClientRects: readRects, intersectsNode: () => true, compareBoundaryPoints: () => 0,
+      cloneRange: () => ({ setStart() {}, setEnd() {}, getClientRects: readRects }) };
     vi.spyOn(document, "createRange").mockReturnValue(range as unknown as Range);
     vi.spyOn(state.doc, "toString").mockImplementation(() => { throw new Error("selection must not materialize source"); });
     const domAtPos = vi.fn((position: number) => ({ node: lines > 1 && position >= 500 ? lastText : text, offset: 0 }));
@@ -31,7 +32,7 @@ describe("document selection measurement bounds", () => {
   }
 
   it("measures only the mounted intersection of a million-character selection", () => {
-    const { view, domAtPos, readRects } = fixture(EditorSelection.single(0, 999_999));
+    const { view, domAtPos, readRects } = fixture(EditorSelection.single(0, 999_999), "live", 1);
     expect(measureDocumentSelection(view)).toHaveLength(1);
     expect(domAtPos.mock.calls).toEqual([[400, 1], [600, -1]]);
     expect(readRects).toHaveBeenCalledTimes(1);
@@ -40,17 +41,17 @@ describe("document selection measurement bounds", () => {
   it("uses one browser range per visible selection and omits offscreen ranges", () => {
     const { view, domAtPos, readRects } = fixture(EditorSelection.create([
       EditorSelection.range(10, 20), EditorSelection.range(420, 430), EditorSelection.range(520, 530), EditorSelection.range(900, 950),
-    ]));
+    ]), "live", 1);
     expect(measureDocumentSelection(view)).toHaveLength(1);
     expect(domAtPos.mock.calls).toEqual([[420, 1], [430, -1], [520, 1], [530, -1]]);
     expect(readRects).toHaveBeenCalledTimes(2);
   });
 
-  it.each([1, 2])("measures at most two endpoint owners for %s text lines", lines => {
+  it.each([1, 2])("measures each mounted text line the range crosses, not block boxes, for %s lines", lines => {
     const { view, domAtPos, readRects } = fixture(EditorSelection.single(0, 999_999), "live", lines);
     expect(measureDocumentSelection(view)).toHaveLength(1);
     expect(domAtPos.mock.calls).toEqual([[400, 1], [600, -1]]);
-    expect(readRects).toHaveBeenCalledTimes(lines === 1 ? 1 : 3);
+    expect(readRects).toHaveBeenCalledTimes(lines);
   });
 
   it.each(["source", "empty", "offscreen"] as const)("does no DOM work for %s", kind => {

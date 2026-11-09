@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, ref, toRef, watch } from "vue";
-import { QuireIconButton, QuireIcon, QuireMenu, QuireMenuItem, QuireMenuSeparator, QuireTooltipRoot, QuireTooltipTrigger, QuireTooltipContent } from "@quirekit/ui/vue";
+import { QuireBlockHandle, QuireIconButton, QuireIcon, QuireMenu, QuireMenuItem, QuireMenuSeparator, QuireTooltipRoot, QuireTooltipTrigger, QuireTooltipContent } from "@quirekit/ui/vue";
 import { ClassicEditorAnchoredOverlay, projectClassicEditorAnchoredOverlayAnchor, resolveClassicEditorDocumentOverlayHost } from "@classic/ui/anchored-overlay";
 import type { ClassicEditorShellModel } from "../../types";
 import { useBlockRail } from "./use-block-rail";
 import { useBlockTypes } from "./use-block-types";
+import { railHeight, railInset, railInsertWidth, railWidth, useBlockPresentation } from "./presentation";
 import BlockFormatting from "./menu/formatting.vue";
 import InsertPanel from "./insert/panel.vue";
 import InsertSubmenu from "./menu/insert-submenu.vue";
@@ -22,16 +23,26 @@ const props = defineProps<Props>();
 const { hover, menu, preview, editor, press, open, openInsert, move, insertionTarget } = useBlockRail(toRef(props, "model"), toRef(props, "root"));
 const { types, typeItems, convert } = useBlockTypes(toRef(props, "model"), menu);
 const english = computed(() => props.model.locale.startsWith("en"));
+const presentation = useBlockPresentation(toRef(props, "model"), computed(() => hover.value?.block.node));
 const anchor = computed(() => {
   if (!hover.value) return null;
   const rect = hover.value.fragment.rect;
+  const corridor = railWidth + (presentation.value?.empty ? railInsertWidth : 0);
   // Anchor to the launcher corridor so the menu never covers its own handle.
-  return { x: rect.x - 60, y: rect.y, rects: [{ x: rect.x - 60, y: rect.y, width: 60, height: rect.height }] };
+  return { x: rect.x - corridor, y: rect.y, rects: [{ x: rect.x - corridor, y: rect.y, width: corridor, height: rect.height }] };
 });
+/** @returns Rail top centered on the block's first line, or null when that line is not in the hovered fragment. */
+function railTop(): number | null {
+  const current = hover.value, view = editor()?.view;
+  if (!current || !view || !current.block.node.isTextblock) return null;
+  const line = view.coordsAtPos(current.block.from + 1), { y, height } = current.fragment.rect;
+  return line.top >= y && line.bottom <= y + height ? (line.top + line.bottom - railHeight) / 2 : null;
+}
 const railPlacement = computed(() => {
   const host = props.root && resolveClassicEditorDocumentOverlayHost(props.root);
   if (!host || !hover.value) return null;
-  const point = projectClassicEditorAnchoredOverlayAnchor({ x: hover.value.fragment.rect.x - 60, y: hover.value.fragment.rect.y }, host);
+  // Anchored by its right edge: the optional insert button grows away from the text.
+  const point = projectClassicEditorAnchoredOverlayAnchor({ x: hover.value.fragment.rect.x - railInset, y: railTop() ?? hover.value.fragment.rect.y }, host);
   return { host, style: { left: `${point.x}px`, top: `${point.y}px` } };
 });
 const clipboardError = ref(false);
@@ -70,16 +81,16 @@ watch(menu, () => { clipboardError.value = false; });
 
 <template>
   <Teleport v-if="railPlacement" :to="railPlacement.host">
-    <div v-if="hover && !preview" class="qk-block-rail" :style="railPlacement.style" data-block-rail>
-      <QuireTooltipRoot :disabled="menu !== null" placement="top">
+    <div v-if="hover && !preview && presentation" class="qk-block-rail" :style="railPlacement.style" data-block-rail>
+      <QuireTooltipRoot v-if="presentation.empty" :disabled="menu !== null" placement="top">
         <QuireTooltipTrigger as-child>
-          <QuireIconButton size="xs" :label="text('插入块', 'Insert block')" data-block-add @pointerdown.stop.prevent="focusHandle" @click="openInsert('before')"><QuireIcon name="plus" /></QuireIconButton>
+          <QuireIconButton size="xs" variant="ghost" :label="text('插入块', 'Insert block')" data-block-add @pointerdown.stop.prevent="focusHandle" @click="openInsert('before')"><QuireIcon name="plus" /></QuireIconButton>
         </QuireTooltipTrigger>
         <QuireTooltipContent :content="text('插入块', 'Insert block')" />
       </QuireTooltipRoot>
       <QuireTooltipRoot :disabled="menu !== null" placement="top">
         <QuireTooltipTrigger as-child>
-          <QuireIconButton size="xs" class="qk-block-rail__handle" :label="text('拖动或打开块菜单', 'Drag or open block menu')" :aria-expanded="menu === 'block'" aria-haspopup="menu" data-block-handle @pointerdown="focusHandle($event); press($event)" @keydown.enter.prevent="open" @keydown.space.prevent="open"><QuireIcon name="gripVertical" /></QuireIconButton>
+          <QuireBlockHandle :label="text('拖动或打开块菜单', 'Drag or open block menu')" :badge="presentation.badge" :icon="presentation.icon" :tone="presentation.tone" :aria-expanded="menu === 'block'" aria-haspopup="menu" data-block-handle @pointerdown="focusHandle($event); press($event)" @keydown.enter.prevent="open" @keydown.space.prevent="open" />
         </QuireTooltipTrigger>
         <QuireTooltipContent :content="text('拖动排序 · 点击打开菜单', 'Drag to reorder · Click for menu')" />
       </QuireTooltipRoot>
@@ -118,8 +129,7 @@ watch(menu, () => { clipboardError.value = false; });
 </template>
 
 <style>
-.qk-block-rail { position: absolute; z-index: 20; pointer-events: auto; display: flex; align-items: center; gap: 2px; padding-inline: 4px; height: 26px; }
-.qk-block-rail__handle { cursor: grab; touch-action: none; }
+.qk-block-rail { position: absolute; z-index: 20; pointer-events: auto; display: flex; align-items: center; gap: 2px; height: 26px; transform: translateX(-100%); }
 .qk-block-ghost { position: fixed; z-index: 100; pointer-events: none; display: flex; align-items: center; gap: var(--qk-space-inline); max-width: 280px; padding: var(--qk-space-inline-tight) var(--qk-space-inline); border-radius: var(--qk-radius-control); background: var(--qk-color-surface-raised); color: var(--qk-color-text-primary); box-shadow: var(--qk-elevation-overlay); font: var(--qk-type-helper-font-size)/var(--qk-type-helper-line-height) var(--qk-type-helper-font-family); }
 .qk-block-ghost__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .qk-block-ghost__count { color: var(--qk-color-text-secondary); font-variant-numeric: tabular-nums; }

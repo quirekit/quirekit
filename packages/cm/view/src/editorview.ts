@@ -16,7 +16,7 @@ import {ViewUpdate, styleModule,
         viewPlugin, ViewPlugin, PluginValue, PluginInstance, decorations, outerDecorations, blockWrappers,
         atomicRanges, scrollMargins, MeasureRequest, editable, inputHandler, focusChangeEffect, perLineTextDirection,
         scrollIntoView, UpdateFlag, ScrollTarget, bidiIsolatedRanges, getIsolatedRanges, scrollHandler,
-        clipboardInputFilter, clipboardOutputFilter} from "./extension"
+        clipboardInputFilter, clipboardOutputFilter, scrollViewportMargin} from "./extension"
 import {theme, darkTheme, buildTheme, baseThemeID, baseLightID, baseDarkID, lightDarkIDs, baseTheme} from "./theme"
 import {DOMObserver} from "./domobserver"
 import {Attrs, updateAttrs, combineAttrs} from "./attributes"
@@ -1061,6 +1061,12 @@ export class EditorView {
   /// when those are bound to keys or buttons. See the
   /// [`readOnly`](#state.EditorState.readOnly) facet for that.)
   static editable = editable
+
+  /// Facet that sets how many additional pixels may be rendered
+  /// beyond the visible area while scrolling, in proportion to the
+  /// scroll speed. Defaults to 0. The extra content is released on
+  /// the next update that isn't caused by scrolling.
+  static scrollViewportMargin = scrollViewportMargin
 
   /// Allows you to influence the way mouse selection happens. The
   /// functions in this facet will be called for a `mousedown` event

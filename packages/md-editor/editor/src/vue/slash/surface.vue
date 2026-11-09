@@ -6,6 +6,7 @@ import type { MdSlashSession } from "./types";
 import { useMdOverlayTarget } from "../overlays/context";
 import { blockInsertionItems, blockInsertionSource } from "../blocks/insertion/catalog";
 import { blockInsertionCommand } from "../blocks/insertion/command";
+import { blockToneStyle } from "../blocks/tones";
 import { searchBlockInsertions } from "../blocks/insertion/search";
 import type { MdBlockInsertionRequest, MdBlockInsertionTarget } from "../blocks/insertion/types";
 const props = defineProps<{
@@ -30,7 +31,7 @@ function insert(value: string): void {
   if (!items.value.some(item => item.key === value)) return;
   const source = blockInsertionSource(editor.value, props.locale, value);
   const request = { ...target.value, value };
-  if (source) {
+  if (source !== null) {
     if (editor.value.run(blockInsertionCommand(target.value, source), props.session.controls.target).ok) emit("close");
   } else {
     // Source stays intact until the shared parameter writer confirms its draft.
@@ -45,7 +46,7 @@ defineExpose({ handleKeydown });
     <QuirePopoverContent :portal-target="portal ?? 'body'" :show-arrow="false" padding="none" border="subtle" width="256px" :aria-label="label" data-md-slash-menu data-qk-not-prose>
       <QuireScrollArea scrollbar-visibility="always" viewport-class="md-slash-viewport">
         <QuireCommandList ref="list" :label="label" :items="items" :focus-owner="session.input" @select="insert">
-          <template #leading="{ index }"><QuireIcon v-if="items[index]?.icon" :name="items[index]!.icon!" /></template>
+          <template #leading="{ index }"><QuireIcon v-if="items[index]?.icon" :name="items[index]!.icon!" :style="blockToneStyle(items[index]!.key)" /></template>
         </QuireCommandList>
         <p v-if="!items.length" role="status" class="m-0 p-qk-surface text-qk-helper text-qk-text-secondary">{{ locale === 'en' ? 'No matching blocks' : '没有匹配的内容' }}</p>
       </QuireScrollArea>

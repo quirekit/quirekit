@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/media",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/media"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/media"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/media#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Editor-neutral media references, portable asset contracts, and host composition primitives for QuireKit.",

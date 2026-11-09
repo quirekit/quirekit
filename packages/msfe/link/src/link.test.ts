@@ -28,8 +28,8 @@ describe("export destinations", () => {
       extensions: [link({ exportHref: url => url.startsWith("/d/") ? `https://docs.example${url}` : null }),
         textLinks({ id: "issues", pattern: /CLOUD-\d+/u, href: text => `https://issues.example/${text}`, exportLinks: true })] });
     editors.push(editor);
-    expect(await linkifyTextLinks(editor.state)).toBe("见 [设计](<https://docs.example/d/abc>) 与 [方案][ref]、[官网](https://example.com)，[CLOUD-1](https://issues.example/CLOUD-1) 修复。"
-      + "\n\n![图](/d/img.png) `[x](/d/code)`\n\n[ref]: <https://docs.example/d/xyz> \"标题\"");
+    expect(await linkifyTextLinks(editor.state)).toBe("见 [设计](https://docs.example/d/abc) 与 [方案][ref]、[官网](https://example.com)，[CLOUD-1](https://issues.example/CLOUD-1) 修复。"
+      + "\n\n![图](/d/img.png) `[x](/d/code)`\n\n[ref]: https://docs.example/d/xyz \"标题\"");
     expect(editor.getMarkdown()).toBe(markdown);
   });
 });

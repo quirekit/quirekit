@@ -237,6 +237,18 @@ describe("QuireMountedInputEventRouter command routing", () => {
     expect(copy.prevented).toBe(true);
     expect(copy.clipboardData.getData("text/plain")).toBe("ab");
 
+    const backspace = createKeyboardEvent("Backspace");
+    const tab = createKeyboardEvent("Tab");
+    const arrow = createKeyboardEvent("ArrowLeft");
+    router.handleKeyDown(backspace);
+    router.handleKeyDown(tab);
+    router.handleKeyDown(arrow);
+    expect(backspace.prevented).toBe(true);
+    expect(tab.prevented).toBe(false);
+    expect(arrow.prevented).toBe(false);
+    expect(editor.state.doc.textContent).toBe("abc");
+    expect(updates).toEqual([]);
+
     editable = true;
     router.handleBeforeInput(createBeforeInputEvent("insertText", "Y"));
 

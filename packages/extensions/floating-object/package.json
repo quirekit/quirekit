@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/extension-floating-object",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/extensions/floating-object"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/extensions/floating-object"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/extensions/floating-object#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit floating object and nested text-box extension.",

@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/pm-model",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "QuireKit vendored ProseMirror model boundary.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/pm/model"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/pm/model"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/pm/model#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

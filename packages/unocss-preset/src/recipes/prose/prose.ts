@@ -3,7 +3,8 @@ import { themeVariableReferences } from "@quirekit/ui";
 import { inlineCodeDeclarations, typographyDeclarations } from "../../typography/declarations";
 import { proseCompositionShortcuts } from "./compositions";
 import { createTypographyElementCss } from "../../typography/elements";
-import { proseElements } from "./selectors";
+import { scopedElementSelector, selectorAlternatives } from "../../typography/selectors";
+import { proseElementAlternatives, proseElements, proseSubjectAlternatives } from "./selectors";
 import { proseContainerCss } from "./container";
 import { proseHighlightCss } from "./highlight";
 
@@ -17,25 +18,29 @@ export const proseRecipeCatalog = Object.freeze(["qk-prose", "qk-prose--compact"
   "qk-prose-container", "qk-prose-container__header", "qk-prose-container__body", "qk-prose-highlight-icon", "qk-prose-highlight-swatch",
   ...proseCompositionShortcuts.map(shortcut => shortcut[0] as string)]);
 
-/** @param elements - Native tags or states. @returns Defaults for both a scope root and its descendants. */
-function nodeSelector(elements: string): string {
-  const roles = proseElements(elements);
-  return `:where(:scope:is(${roles}), ${roles})`;
+/**
+ * @param elements - Native tags or states.
+ * @param suffix - Pseudo-class or pseudo-element shared by every element.
+ * @returns Defaults for both a scope root and its descendants.
+ */
+function nodeSelector(elements: string, suffix?: string): string {
+  return scopedElementSelector(proseElementAlternatives(elements), suffix);
 }
 
 /** @param elements - Native tags only, excluding editor blocks that borrow a role through data-qk-prose. @returns Scope-root and descendant selectors. */
 function nativeSelector(elements: string): string {
-  return `:where(:scope:is(${elements}), ${elements})`;
+  return scopedElementSelector(selectorAlternatives(elements));
 }
 
 /**
  * Native relationships outrank a nested node's defaults while remaining below utility classes.
+ * The zero-specificity subject only lets browsers skip elements that cannot match.
  * @param elements - Contextual native selectors, such as pre code or ol ol.
  * @returns Selectors preserving document context across nested component scopes.
  */
 function contextSelector(elements: string): string {
   const roles = proseElements(elements);
-  return `:where(:scope):is(${roles}), :is(${roles})`;
+  return proseSubjectAlternatives(elements).flatMap(subject => [`:where(${subject}:scope):is(${roles})`, `:where(${subject}):is(${roles})`]).join(", ");
 }
 
 /**
@@ -99,7 +104,7 @@ ${createTypographyElementCss(nodeSelector, contextSelector)}
   ${nodeSelector("dd")} { margin-block-start:var(--qk-space-inline); margin-inline-start:var(--qk-space-surface); }
   ${nodeSelector("blockquote, figure")} { margin-inline:0; }
   ${nodeSelector("blockquote")} { position:relative; border-inline-start:0; padding-inline-start:calc(var(--qk-space-surface) + var(--qk-border-width-focus)); color:var(--qk-color-text-secondary); }
-  ${nodeSelector("blockquote")}::before { content:""; position:absolute; inset-block:0; inset-inline-start:0; inline-size:var(--qk-border-width-focus); border-radius:var(--qk-radius-pill); background-color:var(--qk-color-border-default); pointer-events:none; }
+  ${nodeSelector("blockquote", "::before")} { content:""; position:absolute; inset-block:0; inset-inline-start:0; inline-size:var(--qk-border-width-focus); border-radius:var(--qk-radius-pill); background-color:var(--qk-color-border-default); pointer-events:none; }
   ${nodeSelector("code, kbd, samp")} { ${Object.entries(inlineCodeDeclarations).map(([property, value]) => `${property}:${value};`).join("")} }
   ${nodeSelector("pre")} { padding:var(--qk-space-surface); border-radius:var(--qk-radius-group); background:var(--qk-color-surface-subtle); }
   ${contextSelector("pre code, pre samp")} { padding:0; border:0; background:transparent; white-space:pre; overflow-wrap:normal; }
@@ -113,7 +118,7 @@ ${createTypographyElementCss(nodeSelector, contextSelector)}
   ${nodeSelector("img, video, svg")} { max-width:100%; height:auto; }
   ${nodeSelector("audio")} { max-width:100%; }
   ${nodeSelector("hr")} { border:0; border-block-start:var(--qk-border-width-default) solid var(--qk-color-border-subtle); margin-block:var(--qk-space-group); }
-  ${nodeSelector("p, h1, h2, h3, h4, h5, h6, ul, ol, dl, blockquote, pre, table, figure, hr")}:first-child { margin-block-start:0; }
-  ${nodeSelector("p, h1, h2, h3, h4, h5, h6, ul, ol, dl, blockquote, pre, table, figure, hr")}:last-child { margin-block-end:0; }
+  ${nodeSelector("p, h1, h2, h3, h4, h5, h6, ul, ol, dl, blockquote, pre, table, figure, hr", ":first-child")} { margin-block-start:0; }
+  ${nodeSelector("p, h1, h2, h3, h4, h5, h6, ul, ol, dl, blockquote, pre, table, figure, hr", ":last-child")} { margin-block-end:0; }
 }
 `;

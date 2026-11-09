@@ -1,6 +1,7 @@
 import type { QuireTextLineBox } from "@quirekit/renderer";
 import type { QuireTextFragment } from "../text";
 import type { QuireInlineLayoutOptions, QuireInlineTextRun } from "./types";
+import { resolveQuireInlineRunPosition } from "./run-slice";
 
 /**
  * Restores zero-width page- and column-break source topology after renderer line breaking.
@@ -22,7 +23,7 @@ export function appendInlinePageBreakFragments(
   for (const [index, line] of lines.entries()) {
     const endRun = runs[line.end.run];
     if (!endRun) continue;
-    const position = Math.min(endRun.range.from + line.end.offset, endRun.range.to);
+    const position = resolveQuireInlineRunPosition(endRun, line.end.offset);
     const run = breaks.get(position);
     if (!run) continue;
     breaks.delete(position);

@@ -6,12 +6,9 @@ import { commentsState, getComments, type CommentMention, type CommentsControlle
 import { projectQuireCommentAnchor } from "@quirekit/ui";
 import type { QuireKitCommentPosition } from "@quirekit/ui/vue";
 import { anchorsChanged } from "./anchors";
-import { commentCardModel } from "./model";
+import { commentCardModel, commentListPresentation, commentRailFits } from "./model";
 import type { MdCommentsLayout } from "@quirekit/md-editor/vue";
 import type { MdCommentCardModel, MdCommentsOptions } from "../types";
-
-/** Editor width that keeps a readable column beside the comment rail. */
-const sideMinWidth = 1040;
 
 /** Reactive inputs of the comment workspace. */
 export interface MdCommentsInput {
@@ -20,6 +17,8 @@ export interface MdCommentsInput {
   /** Host configuration, or undefined when comments are off. */ readonly options: () => MdCommentsOptions | undefined;
   /** Editor root, whose width decides the presentation. */ readonly root: Ref<HTMLElement | null>;
   /** Whether the product uses the centered document layout on a wide screen. */ readonly wide: () => boolean;
+  /** Whether the narrow (mobile) presentation is active. */ readonly narrow?: () => boolean;
+  /** Whether the read-only reading view is showing, which has no rail column. */ readonly reading?: () => boolean;
   /** Quote label of comments on the whole document. */ readonly documentLabel?: () => string;
   /** Whether a document comment section is shown after the document, so its draft opens there instead of in the list. */ readonly documentSection?: () => boolean;
 }
@@ -53,7 +52,7 @@ export function useMdComments(input: MdCommentsInput) {
   }, { immediate: true });
 
   const options = computed(() => input.options());
-  const cards = computed<readonly MdCommentCardModel[]>(() => options.value ? views.value.map(view => commentCardModel(view, options.value!, input.documentLabel?.())) : []);
+  const cards = computed<readonly MdCommentCardModel[]>(() => options.value ? views.value.map(view => commentCardModel(view, options.value!, input.documentLabel?.(), position => input.editor()!.state.doc.lineAt(position).number)) : []);
   /** Comments on the whole document, in creation order. */
   const documentCards = computed(() => cards.value.filter(card => card.view.status === "document"));
   /** Whether a draft for a comment on the whole document is open. */
@@ -67,8 +66,14 @@ export function useMdComments(input: MdCommentsInput) {
     const range = draft.value?.getRange(), editor = input.editor();
     return range && editor ? editor.state.sliceDoc(range.from, Math.min(range.to, range.from + 200)) : undefined;
   });
+  /** Set by the host or reader; the column is released so the document re-centers. */
+  const railHidden = shallowRef(false);
+  const railAvailable = computed(() => input.wide() && commentRailFits(width.value, input.options()?.sideMinWidth));
+  const listPresentation = computed(() => commentListPresentation({ railAvailable: railAvailable.value, narrow: !!input.narrow?.(), reading: !!input.reading?.() }));
+  /** The open list takes the rail column, replacing the anchored cards until it closes. */
+  const listDocked = computed(() => panelOpen.value && listPresentation.value === "dock");
   const layout = computed<MdCommentsLayout>(() => !controller.value ? "none"
-    : input.wide() && width.value >= sideMinWidth && (railCards.value.length > 0 || !!draft.value) ? "side" : "panel");
+    : railAvailable.value && (listDocked.value || !railHidden.value && (railCards.value.length > 0 || !!draft.value)) ? "side" : "panel");
   /** Cards and the draft that belong in the rail, in source order; positions are measured separately. */
   const railSlots = computed(() => [
     ...railCards.value.map(card => ({ id: card.id, from: card.view.range!.from })),
@@ -93,7 +98,7 @@ export function useMdComments(input: MdCommentsInput) {
   function measure(): void {
     frame = 0;
     const editor = input.editor(), element = rail.value, view = editor && EditorView.findFromDOM(editor.element);
-    if (layout.value !== "side" || !view) return;
+    if (layout.value !== "side" || listDocked.value || !view) return;
     // The rail mounts with the side layout; measure again once it exists.
     if (!element) { schedule(); return; }
     const railTop = element.getBoundingClientRect().top, length = view.state.doc.length, next = new Map<string, number>();
@@ -109,7 +114,7 @@ export function useMdComments(input: MdCommentsInput) {
   /** Coalesces state and resize changes into one measurement per frame. */
   function schedule(): void {
     const win = input.editor()?.element.ownerDocument.defaultView;
-    if (!frame && win && layout.value === "side") frame = win.requestAnimationFrame(measure);
+    if (!frame && win && layout.value === "side" && !listDocked.value) frame = win.requestAnimationFrame(measure);
   }
 
   /** @param owner - Controller. Focuses the first unresolved thread at the caret, or clears focus outside threads. */
@@ -125,8 +130,11 @@ export function useMdComments(input: MdCommentsInput) {
     const editor = input.editor(), owner = controller.value, user = input.options()?.user;
     if (!editor || !owner || !user || input.options()?.canComment === false) return false;
     draft.value?.release();
+    // A new comment is written on the rail, so a hidden rail comes back for it.
+    railHidden.value = false;
     draft.value = editor.captureAnchor(editor.state.selection.main);
-    if (layout.value !== "side") panelOpen.value = true;
+    // A draft on the rail needs the column back from a docked list.
+    panelOpen.value = layout.value !== "side";
     schedule();
     return true;
   }
@@ -159,7 +167,7 @@ export function useMdComments(input: MdCommentsInput) {
     owner.activate(id);
     if (!range) return;
     editor.setSelection(EditorSelection.single(range.from));
-    if (scroll || layout.value !== "side") editor.scrollTo(range.from);
+    if (scroll || layout.value !== "side" || listDocked.value) editor.scrollTo(range.from);
   }
 
   /**
@@ -228,6 +236,6 @@ export function useMdComments(input: MdCommentsInput) {
   });
 
   onBeforeUnmount(() => { cancelDraft(); if (frame) input.editor()?.element.ownerDocument.defaultView?.cancelAnimationFrame(frame); });
-  return { controller, cards, railCards, railItems, active, layout, draft, draftQuote, panelOpen, rail, openDraft, cancelDraft, submitDraft, activate, step, positionOf, resolve,
+  return { controller, cards, railCards, railItems, active, layout, listPresentation, listDocked, railHidden, draft, draftQuote, panelOpen, rail, openDraft, cancelDraft, submitDraft, activate, step, positionOf, resolve,
     documentCards, documentDraft, openDocumentDraft, cancelDocumentDraft, submitDocumentDraft };
 }

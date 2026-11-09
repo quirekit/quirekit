@@ -1,7 +1,7 @@
 import type { QuireLayoutMeasuredPhase, QuireLayoutTraceSink } from "@quirekit/layout/inline";
 import type { QuireLayoutProductCounters } from "../editor-layout/snapshot/reuse/types";
 import type { QuireEditor, QuireEditorState } from "@quirekit/core";
-import type { Node, Step } from "@quirekit/pm";
+import type { Mapping, Node, Step } from "@quirekit/pm";
 import type {
   QuirePaginationCheckpointStoreCounters,
   QuireRetainedPaginationCheckpointStore
@@ -209,6 +209,12 @@ export interface QuireViewEngineFrame {
   readonly layoutSnapshot: QuireRetainedLayoutSnapshot;
   /** Snapshot extended with render-time retained interaction targets. */
   readonly interactionSnapshot: QuireRetainedLayoutSnapshot;
+  /**
+   * Maps canonical document positions to frame document positions when a
+   * presentation overlay or IME preedit changed the frame document; absent
+   * when both documents share positions.
+   */
+  readonly canonicalPositionMapping?: Mapping | undefined;
   /** Retained selection context used for repeated visual instances. */
   readonly selectionContext?: QuireSelectionGeometryContext | undefined;
   /** Layout dirty range that triggered this frame. */

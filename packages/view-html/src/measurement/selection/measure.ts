@@ -40,8 +40,8 @@ export function measureHtmlTextSelectionRects(
           .map(rect => ({ left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom,
             descriptorId: descriptor.id, source: descriptor.source, rootId: options.rootId, regionId: options.regionId })) : [];
       } else {
-        const start = resolveHtmlMeasuredDomPoint(options.documentView, options.rootId, options.regionId, segment.from, 1);
-        const end = resolveHtmlMeasuredDomPoint(options.documentView, options.rootId, options.regionId, segment.to, -1);
+        const start = resolveHtmlMeasuredDomPoint(options.documentView, options.rootId, options.regionId, segment.from, 1, options.projectDomPoint);
+        const end = resolveHtmlMeasuredDomPoint(options.documentView, options.rootId, options.regionId, segment.to, -1, options.projectDomPoint);
         rects = measureHtmlDomRange(options.ownerDocument, start, end, false);
         recordRangeRead();
       }

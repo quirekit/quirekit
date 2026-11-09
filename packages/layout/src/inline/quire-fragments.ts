@@ -13,6 +13,7 @@ import type { QuireInlineLayoutOptions, QuireInlineTextRun } from "./types";
 import { buildVisualRunFragment } from "./visual-run-fragment";
 import { parseQuireFontPixelSize } from "../shaping/font-size";
 import { measureInlineNaturalLineMetrics } from "./line-metrics";
+import { resolveQuireInlineRunPosition } from "./run-slice";
 
 const longNativeMetricTextThreshold = 2048;
 const complexShapingPattern = /[\u0300-\u036f\u0590-\u08ff\u0900-\u0dff\u0e00-\u0e7f\u0f00-\u109f\u1100-\u11ff\u1780-\u17ff\u200d\u2e80-\u9fff\uac00-\ud7af\uf900-\ufaff\ufe00-\ufefc]/u;
@@ -588,8 +589,8 @@ function appendRunSlice(
     ...run,
     text: run.text.slice(from, to),
     range: {
-      from: Math.min(run.range.from + from, run.range.to),
-      to: Math.min(run.range.from + to, run.range.to)
+      from: resolveQuireInlineRunPosition(run, from),
+      to: resolveQuireInlineRunPosition(run, to)
     }
   });
 }
@@ -920,7 +921,7 @@ function appendEmptyLineFragment(
     return;
   }
 
-  const position = Math.min(run.range.from + line.start.offset, run.range.to);
+  const position = resolveQuireInlineRunPosition(run, line.start.offset);
   const fragment = {
     id: `${options.id}:text-${(options.fragmentStartIndex ?? 0) + fragments.length}`,
     text: "",

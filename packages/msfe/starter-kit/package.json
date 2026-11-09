@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/msfe-starter-kit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Default extension bundle for the MSFE Markdown source editor.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/msfe/starter-kit"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/msfe/starter-kit"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/msfe/starter-kit#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

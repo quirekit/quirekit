@@ -89,6 +89,18 @@ export interface HtmlAttachedComposition {
   readonly snapshots: readonly HtmlCompositionTextSnapshot[];
   /** Transient suffix preserving unselected text after the preedit. */
   readonly suffixDOM: Text | undefined;
+  /** Text node split by the preedit and its boundaries in canonical text offsets, when a text node hosts it. */
+  readonly anchor: HtmlCompositionAnchor | undefined;
+}
+
+/** Canonical text node that a preedit splits into a prefix and a suffix. */
+export interface HtmlCompositionAnchor {
+  /** Node reduced to the prefix while the preedit is attached. */
+  readonly node: Node;
+  /** Canonical text offset where the preedit starts. */
+  readonly start: number;
+  /** Canonical text offset where the suffix resumes. */
+  readonly end: number;
 }
 
 /** Inputs used to realize one transient descriptor in retained DOM flow. */
@@ -163,6 +175,13 @@ export interface HtmlDocumentCompositionRuntime {
    * @returns Candidate-window anchor with complete provenance, when active.
    */
   inputAnchor(): HtmlMeasuredClientRect | undefined;
+  /**
+   * Carries a canonical DOM point to where its character currently sits around the preedit.
+   *
+   * @param point - DOM point resolved from retained ownership.
+   * @returns Point valid in the DOM holding the preedit.
+   */
+  projectDomPoint<T extends HtmlDomPoint>(point: T): T;
   /**
    * Reads current composition-gap diagnostics.
    *

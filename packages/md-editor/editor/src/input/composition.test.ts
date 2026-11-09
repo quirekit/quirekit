@@ -4,12 +4,15 @@ import { EditorView } from "@quirekit/cm-view";
 import { createMdEditor } from "../editor";
 
 const doc = "- 对于 classic-editor，我们有 `@quirekit/classic-ai`（目前\n- \n- 用";
+// The fold control at the heading start is labelled with the heading text.
+const heading = "## 故事的开始：\n\n做编辑器以来，一直有一个问题。";
 
 it.each([
-  ["inside the text", doc.indexOf("我们") + 2],
-  ["right before hidden code delimiters", doc.indexOf("`")],
-  ["in an empty list item", doc.indexOf("\n- \n") + 3],
-])("keeps the composing line's DOM in place (%s)", async (_name, anchor) => {
+  ["inside the text", doc, doc.indexOf("我们") + 2],
+  ["right before hidden code delimiters", doc, doc.indexOf("`")],
+  ["in an empty list item", doc, doc.indexOf("\n- \n") + 3],
+  ["at the end of a heading with a fold control", heading, heading.indexOf("：") + 1],
+])("keeps the composing line's DOM in place (%s)", async (_name, doc, anchor) => {
   const parent = document.createElement("div"); document.body.append(parent);
   const editor = createMdEditor({ parent, markdown: doc });
   const view = EditorView.findFromDOM(editor.element)!;

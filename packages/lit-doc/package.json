@@ -1,0 +1,67 @@
+{
+  "name": "@quirekit/lit-doc",
+  "version": "0.0.2",
+  "private": true,
+  "license": "MIT",
+  "description": "Bounded legacy Word inspection and typed OOXML conversion for browsers and Node.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/lit-doc"
+  },
+  "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/lit-doc#readme",
+  "bugs": "https://github.com/quirekit/quirekit/issues",
+  "type": "module",
+  "sideEffects": [
+    "./dist/worker.mjs",
+    "./dist/conversion-worker.mjs"
+  ],
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "README.md",
+    "README.zh-CN.md",
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./browser": {
+      "types": "./dist/browser.d.mts",
+      "import": "./dist/browser.mjs"
+    },
+    "./worker": "./dist/worker.mjs",
+    "./conversion": {
+      "types": "./dist/conversion.d.mts",
+      "import": "./dist/conversion.mjs"
+    },
+    "./conversion/browser": {
+      "types": "./dist/conversion-browser.d.mts",
+      "import": "./dist/conversion-browser.mjs"
+    },
+    "./conversion/worker": "./dist/conversion-worker.mjs",
+    "./conversion/worker-runtime": {
+      "types": "./dist/conversion-worker-runtime.d.mts",
+      "import": "./dist/conversion-worker-runtime.mjs"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "build": "tsdown --config tsdown.config.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@quirekit/lit-docx-contract": "workspace:*",
+    "fflate": "0.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

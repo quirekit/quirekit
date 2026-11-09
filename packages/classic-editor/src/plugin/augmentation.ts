@@ -1,6 +1,7 @@
 import type { QuireExtensionThisContext } from "@quirekit/core";
 import type {
   ClassicEditorInsertItemContribution,
+  ClassicEditorBlockPresentationContribution,
   ClassicEditorBlockTypeContribution,
   ClassicEditorActionContextMenuItemContribution,
   ClassicEditorContextMenuItemContribution,
@@ -35,6 +36,8 @@ declare module "@quirekit/core" {
     readonly addInsertItems?: ClassicEditorContributionFactory<Options, Storage, ClassicEditorInsertItemContribution>;
     /** Creates feature-owned block conversion and insertion presets. */
     readonly addBlockTypes?: ClassicEditorContributionFactory<Options, Storage, ClassicEditorBlockTypeContribution>;
+    /** Creates feature-owned block handle identity. */
+    readonly addBlockPresentations?: ClassicEditorContributionFactory<Options, Storage, ClassicEditorBlockPresentationContribution>;
     /** Creates compact-toolbar items owned by this extension. */
     readonly addToolbarItems?: ClassicEditorContributionFactory<Options, Storage, ClassicEditorToolbarControlContribution | ClassicEditorActionToolbarControlContribution>;
     /** Creates ribbon tabs owned by this extension. */
@@ -69,6 +72,8 @@ declare module "@quirekit/core" {
     readonly addInsertItems?: ClassicEditorContributionFactory<Options, Storage, ClassicEditorInsertItemContribution>;
     /** Creates feature-owned block conversion and insertion presets. */
     readonly addBlockTypes?: ClassicEditorContributionFactory<Options, Storage, ClassicEditorBlockTypeContribution>;
+    /** Creates feature-owned block handle identity. */
+    readonly addBlockPresentations?: ClassicEditorContributionFactory<Options, Storage, ClassicEditorBlockPresentationContribution>;
     /** Creates compact-toolbar items owned by this extension. */
     readonly addToolbarItems?: ClassicEditorContributionFactory<Options, Storage, ClassicEditorToolbarControlContribution | ClassicEditorActionToolbarControlContribution>;
     /** Creates ribbon tabs owned by this extension. */
@@ -103,6 +108,8 @@ declare module "@quirekit/core" {
     readonly addInsertItems?: ClassicEditorContributionFactory<Options, Storage, ClassicEditorInsertItemContribution>;
     /** Creates feature-owned block conversion and insertion presets. */
     readonly addBlockTypes?: ClassicEditorContributionFactory<Options, Storage, ClassicEditorBlockTypeContribution>;
+    /** Creates feature-owned block handle identity. */
+    readonly addBlockPresentations?: ClassicEditorContributionFactory<Options, Storage, ClassicEditorBlockPresentationContribution>;
     /** Creates compact-toolbar items owned by this extension. */
     readonly addToolbarItems?: ClassicEditorContributionFactory<Options, Storage, ClassicEditorToolbarControlContribution | ClassicEditorActionToolbarControlContribution>;
     /** Creates ribbon tabs owned by this extension. */

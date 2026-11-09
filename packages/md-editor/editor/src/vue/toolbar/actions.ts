@@ -7,7 +7,6 @@ import { toggleMdInlineCode } from "../../commands/inline";
 import { toggleMdList } from "../../commands/list";
 import { insertionBlocks } from "./blocks";
 import { getMdCommentsBridge } from "../comments/bridge";
-import { mdEditorMessages } from "../messages";
 import type { MdEditorLocale } from "../types";
 import { mdExportFileName } from "../files/name";
 
@@ -38,7 +37,7 @@ export function runToolbarAction(editor: MsfeEditor, value: string, locale: MdEd
   else if (value === "column-before") chain.insertTableColumn("before").run();
   else if (value === "delete-row") chain.deleteTableRow().run();
   else if (value === "delete-column") chain.deleteTableColumn().run();
-  else if (value === "footnote") editor.run(insertMdFootnote(mdEditorMessages[locale].footnoteBody), target);
+  else if (value === "footnote") editor.run(insertMdFootnote(""), target);
   else if (value === "export" || value === "exportReview") {
     // Full serialization happens only on this explicit file action, never on input; opted-in text links become real links.
     void linkifyTextLinks(editor.state).catch(() => editor.getMarkdown())

@@ -1,12 +1,21 @@
 import type { QuireFontSelectionResolver, QuireNodeCanvasTextStyle } from "@quirekit/core";
 import type { Node } from "@quirekit/pm";
 import type { WordParagraphModelFormatting } from "@quirekit/classic-paragraph-model";
+import type { WordParagraphStyleRegistry } from "../model";
+
+/** Headless document authority retained inside the profile's opaque token. */
+export interface WordParagraphStyleContextToken {
+  /** Active named styles, absent when only document settings are declared. */
+  readonly registry: WordParagraphStyleRegistry | undefined;
+  /** Effective positive Word interval before unit projection. */
+  readonly defaultTabInterval: number;
+}
 
 /** Document-wide named-style authority shaped for a layout engine. */
 export interface WordStylesParagraphStyleContext {
-  /** Active paragraph style registry, or undefined when the document has no Word Styles. */
+  /** Compiled Word styles and document layout defaults, or undefined without Word attributes. */
   readonly token: unknown;
-  /** Stable registry identity, or null when the document has no Word Styles. */
+  /** Stable document authority identity, or null without Word attributes. */
   readonly signature: string | null;
 }
 

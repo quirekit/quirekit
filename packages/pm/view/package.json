@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/pm-view",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "QuireKit vendored ProseMirror DOM view boundary.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/pm/view"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/pm/view"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/pm/view#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

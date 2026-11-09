@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/chart",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/chart"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/chart"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/chart#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Versioned renderer-neutral chart data, validation and draft contracts.",

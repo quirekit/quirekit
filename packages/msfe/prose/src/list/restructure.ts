@@ -86,11 +86,17 @@ export function separateUnwrapped(state: EditorState, context: ListContext): Cha
     if (line.number === 1) continue;
     const before = doc.line(line.number - 1);
     if (before.from >= from && !blank(before)) changes.push({ from: before.to, insert: "\n" + prefix(line) });
+    // The item's nested list moves up to become a list of its own below the new paragraph.
+    const nested = item.getChild("BulletList") ?? item.getChild("OrderedList");
+    const above = nested ? doc.line(doc.lineAt(nested.from).number - 1) : null;
+    if (above && !blank(above)) changes.push({ from: above.to, insert: "\n" + prefix(line) });
   }
-  const last = doc.lineAt(context.items.at(-1)!.to);
+  const final = context.items.at(-1)!, last = doc.lineAt(final.to);
+  const promoted = (final.getChild("BulletList") ?? final.getChild("OrderedList"))?.name === context.list.name;
   if (last.number < doc.lines) {
     const after = doc.line(last.number + 1);
-    if (after.to <= to && !blank(after)) changes.push({ from: last.to, insert: "\n" + prefix(last) });
+    // Promoted children of the same list kind join the following sibling items in one list.
+    if (after.to <= to && !blank(after) && !(promoted && after.from < context.list.to)) changes.push({ from: last.to, insert: "\n" + prefix(last) });
   }
   return changes;
 }

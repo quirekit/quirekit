@@ -49,6 +49,8 @@ export interface HtmlMountedMutationDiagnostics {
 export interface HtmlMountedRenderDiagnostics {
   /** Whether this render rebuilt the DOM block-geometry snapshot. */
   readonly flowGeometryRebuilt: boolean;
+  /** Native geometry measurements and retained spatial-index work in this presentation. */
+  readonly geometry: import("./geometry/retained").HtmlFlowGeometryDiagnostics;
   /** Confirms that the shared-cadence HTML scheduler produced this event. */
   readonly schedulerEvidence: "available";
   /** Shared mounted scheduler counters sampled after this render. */

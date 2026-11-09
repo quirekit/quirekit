@@ -1,7 +1,6 @@
 import type {
   HtmlContainerDesc,
-  HtmlDescriptor,
-  HtmlTextDesc
+  HtmlDescriptor
 } from "../../descriptors";
 import { htmlDescriptorContentRange, isHtmlContainerDescriptor } from "./descriptor-tree";
 import { resolveHtmlChildBoundaryOwners } from "./child-boundary";
@@ -33,29 +32,6 @@ export function findHtmlUnrepresentedDescriptor(
       ? descriptor.range.to === pos
       : descriptor.range.from === pos;
   });
-}
-
-/**
- * Finds the direct text owner for a canonical position and boundary side.
- *
- * @param descriptors - Ordered retained position index.
- * @param pos - Canonical document position.
- * @param side - Preferred side at text boundaries.
- * @returns Matching direct text owner, or undefined.
- */
-export function findHtmlTextDescriptor(
-  descriptors: readonly HtmlDescriptor[],
-  pos: number,
-  side: number
-): HtmlTextDesc | undefined {
-  const texts = descriptors.filter((descriptor): descriptor is HtmlTextDesc => (
-    descriptor.kind === "text"
-  ));
-
-  return side < 0
-    ? [...texts].reverse().find((text) => text.range.from < pos && pos <= text.range.to)
-    : texts.find((text) => text.range.from <= pos && pos < text.range.to) ??
-      texts.find((text) => text.range.from <= pos && pos <= text.range.to);
 }
 
 /**

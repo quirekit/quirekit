@@ -1,7 +1,6 @@
 import {
   createQuireLayoutInteractionQueryIndex,
   createQuireLayoutSnapshotViewGraph,
-  createQuireSelectionStructureIntervalIndex,
   resolveQuireDocumentProfile,
   quireViewGraphRequiredInvalidationScopeKinds,
   quireViewGraphRequiredPerformanceInvariants,
@@ -10,6 +9,8 @@ import {
 } from "@quirekit/view-engine";
 import type { HtmlDescriptor } from "../descriptors";
 import type { HtmlFlowGeometryOptions } from "./types";
+import { createHtmlSelectionStructureIndex } from "./structure-index";
+import { refitHtmlFlowQueryIndex } from "./retained/query-index";
 
 let nextGeometryVersion = 1;
 
@@ -48,6 +49,7 @@ export function measureHtmlFlowSnapshot(options: HtmlFlowGeometryOptions): Quire
     const dom = descriptor.mount?.dom;
     if (!dom || !("getBoundingClientRect" in dom)) return children;
     const rect = (dom as Element).getBoundingClientRect();
+    options.onBlockRead?.();
     return [{
       id: descriptor.id,
       kind: "block",
@@ -69,7 +71,7 @@ export function measureHtmlFlowSnapshot(options: HtmlFlowGeometryOptions): Quire
     viewRegion: region,
     viewCapabilities: capabilities,
     layoutOwner: owner,
-    children: blocks(documentView.root)
+    children: options.retainedBlocks ?? blocks(documentView.root)
   };
   const snapshot = {
     state: editor.state,
@@ -79,11 +81,15 @@ export function measureHtmlFlowSnapshot(options: HtmlFlowGeometryOptions): Quire
     viewportRect: surfaceState.viewportRect,
     domOverlays: [],
     hitTargets: [],
-    interactionQueryIndex: createQuireLayoutInteractionQueryIndex({ root, viewportRect: surfaceState.viewportRect }),
-    selectionStructureIndex: createQuireSelectionStructureIntervalIndex({ doc: editor.state.doc, extensionManager: editor.extensionManager })
+    interactionQueryIndex: options.retainedBlocks && options.previousSnapshot?.interactionQueryIndex
+      ? refitHtmlFlowQueryIndex(options.previousSnapshot.interactionQueryIndex, options.retainedBlocks, surfaceState.viewportRect)
+      : createQuireLayoutInteractionQueryIndex({ root, viewportRect: surfaceState.viewportRect }),
+    selectionStructureIndex: createHtmlSelectionStructureIndex({ doc: editor.state.doc, extensionManager: editor.extensionManager })
   };
   const graph = createQuireLayoutSnapshotViewGraph({
-    snapshot,
+    // Only the body declares a view root/region. Native block boxes carry no
+    // additional region declarations, so graph compilation need not visit them.
+    snapshot: { ...snapshot, root: { ...root, children: [] } },
     regionProducts: { roots: [], regions: [], hitTargets: [], layerContributions: [], selectionPolicies: [], gaps: [] },
     version: nextGeometryVersion++,
     performance: {

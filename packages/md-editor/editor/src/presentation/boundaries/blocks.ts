@@ -1,15 +1,23 @@
-import type { EditingBoundaryRule } from "@quirekit/msfe-core";
+import { readSourcePresentation, type EditingBoundaryRule } from "@quirekit/msfe-core";
 import { highlightContainerName } from "../../highlight/attributes";
+import { bareMarker } from "../marks";
 
 /** @param nodes - Confirmed prefix owners. @param marker - Direct syntax token, or null when the node is the token. @returns A prefix removed as one semantic unit at Backspace. */
 export function prefixBoundary(nodes: readonly string[], marker: string | null): EditingBoundaryRule {
-  return { nodes,
-    /** @param context - Current syntax and source. @returns Visible content after its hidden structural prefix. */
+  return { nodes, when: "prose",
+    /** @param context - Current syntax and source. @returns Visible content after its hidden structural prefix; in live preview only the indentation, which is never revealed. */
     resolve({ state, node }) {
       const mark = marker ? node.getChild(marker) : node;
-      if (!mark) return null;
+      if (!mark || marker && bareMarker(state, node, marker)) return null;
+      if (readSourcePresentation(state).reveal !== "hidden") {
+        const line = state.doc.lineAt(mark.from);
+        return line.from < mark.from && /^\s*$/u.test(state.sliceDoc(line.from, mark.from))
+          ? { from: line.from, to: mark.from, contentFrom: mark.from, contentTo: mark.from, kind: "prefix", deletion: "native" } : null;
+      }
       const contentFrom = mark.to + Number(state.sliceDoc(mark.to, mark.to + 1) === " ");
-      return { from: mark.from, to: Math.max(contentFrom, marker ? node.to : state.doc.lineAt(mark.to).to),
+      // The fence starts where the hidden prefix does: at the line start when only indentation precedes the marker.
+      const line = state.doc.lineAt(mark.from), from = /^\s*$/u.test(state.sliceDoc(line.from, mark.from)) ? line.from : mark.from;
+      return { from, to: Math.max(contentFrom, marker ? node.to : state.doc.lineAt(mark.to).to),
         contentFrom, contentTo: Math.max(contentFrom, marker ? node.to : state.doc.lineAt(mark.to).to), kind: "prefix", deletion: "unwrap" };
     },
   };

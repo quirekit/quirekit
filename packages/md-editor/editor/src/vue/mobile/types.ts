@@ -12,4 +12,5 @@ export interface MdChromeIntents {
   /** Show the comment list. */ comments?(): void;
   /** Open a draft for a comment on the whole document. */ documentComment?(): void;
   /** Focus the next (1) or previous (-1) comment. */ commentStep?(direction: 1 | -1): void;
+  /** Show the keyboard shortcut reference. */ shortcuts?(): void;
 }

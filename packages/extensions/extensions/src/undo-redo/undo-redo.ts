@@ -3,7 +3,7 @@ import {
   setQuireTransactionOrigin,
   type CommandProps
 } from "@quirekit/core";
-import { closeHistory as closePMHistory, history, redo, undo, type Command } from "@quirekit/pm";
+import { closeHistory as closePMHistory, history, redo, undo, type Command, type Plugin } from "@quirekit/pm";
 
 /** Options used by the undo-redo history extension. */
 export interface UndoRedoOptions {
@@ -13,8 +13,14 @@ export interface UndoRedoOptions {
   readonly newGroupDelay: number;
 }
 
+/** Per-editor state of the undo-redo extension. */
+export interface UndoRedoStorage {
+  /** The history plugin this extension installed in the editor, once installed. */
+  plugin: Plugin | null;
+}
+
 /** Extension that provides document history plus undo and redo commands. */
-export const UndoRedo = Extension.create<UndoRedoOptions>({
+export const UndoRedo = Extension.create<UndoRedoOptions, UndoRedoStorage>({
   name: "undoRedo",
   priority: 800,
   /**
@@ -29,6 +35,14 @@ export const UndoRedo = Extension.create<UndoRedoOptions>({
     };
   },
   /**
+   * Creates the per-editor storage.
+   *
+   * @returns Storage without a plugin yet.
+   */
+  addStorage() {
+    return { plugin: null };
+  },
+  /**
    * Creates undo-redo command handlers.
    *
    * @returns Undo and redo command map.
@@ -37,7 +51,8 @@ export const UndoRedo = Extension.create<UndoRedoOptions>({
     return {
       undo: () => undoCommand,
       redo: () => redoCommand,
-      closeHistory: () => closeHistoryCommand
+      closeHistory: () => closeHistoryCommand,
+      clearHistory: () => (context: CommandProps) => clearHistoryCommand(context, this.storage.plugin)
     };
   },
   /**
@@ -60,7 +75,9 @@ export const UndoRedo = Extension.create<UndoRedoOptions>({
    * @returns ProseMirror history plugin list.
    */
   addProseMirrorPlugins() {
-    return [history(this.options)];
+    const plugin = history(this.options);
+    this.storage.plugin = plugin;
+    return [plugin];
   }
 });
 
@@ -70,6 +87,8 @@ type UndoRedoCommandMethods<ReturnType> = {
   redo: () => ReturnType;
   /** Ends the previous history group without changing document content. */
   closeHistory: () => ReturnType;
+  /** Forgets every undo and redo step without changing document content. */
+  clearHistory: () => ReturnType;
 };
 
 declare module "@quirekit/core" {
@@ -123,5 +142,21 @@ function runUndoRedoCommand(command: Command, context: CommandProps): boolean {
  */
 function closeHistoryCommand(context: CommandProps): boolean {
   if (context.dispatch) closePMHistory(context.tr);
+  return true;
+}
+
+/**
+ * Replaces the history with an empty one. The history plugin takes a history
+ * state handed to it under its own key, as undo and redo do (ADR 0009); its
+ * own initializer gives the empty state.
+ *
+ * @param context - Canonical command execution context.
+ * @param plugin - History plugin of this editor.
+ * @returns False when the editor has no history plugin.
+ */
+function clearHistoryCommand(context: CommandProps, plugin: Plugin | null): boolean {
+  const init = plugin?.spec.state?.init;
+  if (plugin === null || init === undefined) return false;
+  if (context.dispatch) context.tr.setMeta(plugin, { redo: false, historyState: init({}, context.state) }).setMeta("addToHistory", false);
   return true;
 }

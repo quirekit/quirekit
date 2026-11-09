@@ -11,11 +11,13 @@ import type {
   HtmlAttachedComposition,
   HtmlCompositionSyncResult,
   HtmlDocumentCompositionDiagnostics,
-  HtmlDocumentCompositionRuntime
+  HtmlDocumentCompositionRuntime,
+  HtmlDomPoint
 } from "./types";
 import {
   attachHtmlCompositionDom,
-  detachHtmlCompositionDom
+  detachHtmlCompositionDom,
+  projectHtmlCompositionDomPoint
 } from "./composition-dom";
 
 /**
@@ -128,6 +130,11 @@ class HtmlDocumentCompositionRuntimeImpl
       range: { from: mappedFrom.pos, to: mappedTo.pos },
       text: preedit.text
     };
+  }
+
+  /** @inheritdoc */
+  projectDomPoint<T extends HtmlDomPoint>(point: T): T {
+    return this.attached === undefined ? point : projectHtmlCompositionDomPoint(this.attached, point);
   }
 
   /** @inheritdoc */

@@ -225,7 +225,7 @@ export interface WordNumberingRegistry {
   readonly abstractNums: Readonly<Record<string, WordAbstractNumbering>>;
   /** Concrete list instances keyed by stable id. */
   readonly nums: Readonly<Record<string, WordNumberingInstance>>;
-  /** Monotonic id source used when commands create independent lists. */
+  /** Persisted counter kept for documents that carry it; list ids are uuids and do not read it. */
   readonly nextInstanceId: number;
 }
 
@@ -398,7 +398,7 @@ export interface WordNumberingAtPositionOptions {
 /** Options for restarting numbering at one marker-owned paragraph. */
 export interface RestartWordNumberingAtPositionOptions
   extends WordNumberingAtPositionOptions {
-  /** Positive counter value written as the paragraph-local restart value. */
+  /** Non-negative counter value written as the paragraph-local restart value. */
   readonly start: number;
 }
 

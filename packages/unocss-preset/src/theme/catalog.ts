@@ -96,5 +96,9 @@ export const quireKitUnoUtilityCatalog = Object.freeze([
   "opacity-qk-transparent", "opacity-qk-disabled", "opacity-qk-muted", "opacity-qk-drag", "opacity-qk-opaque",
   "z-qk-base", "z-qk-chrome", "z-qk-overlay", "z-qk-modal", "z-qk-toast", "z-qk-tooltip",
   "duration-qk-feedback", "duration-qk-control", "duration-qk-overlay",
-  "ease-qk-standard", "ease-qk-enter", "ease-qk-exit"
+  "ease-qk-standard", "ease-qk-enter", "ease-qk-exit",
+  // Layout utilities in published component templates; hosts on the precompiled stylesheet have no generator to add them.
+  "hidden", "flex", "inline-flex", "grid", "flex-1", "flex-col", "flex-wrap", "shrink-0", "items-center", "items-start", "justify-between", "justify-self-start",
+  "gap-1", "gap-x-10", "gap-y-6", "gap-qk-surface-compact", "m-0", "mb-3", "mb-qk-inline", "mt-qk-group", "mt-qk-inline-tight", "pl-5", "px-qk-surface", "py-1.5", "py-qk-surface",
+  "w-full", "w-[320px]", "max-w-full", "min-w-0", "max-h-48", "overflow-auto", "truncate", "outline-none", "md:grid-cols-3", "[&_p]:m-0"
 ]);

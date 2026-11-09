@@ -23,7 +23,7 @@ export function blockLabels(locale: MdEditorLocale) {
 /** @param block - Accepted source block. @param prefix - Bounded source prefix for task identification. @returns Compact type label or a shared semantic icon. */
 export function blockBadge(block: SourceBlock, prefix = ""): { text?: string; icon?: string } {
   if (/^(ATXHeading[1-6]|SetextHeading[12])$/u.test(block.name)) return { text: `H${block.name.slice(-1)}` };
-  if (block.name === "BulletList" && /^\s*[-+*]\s+\[[ xX]\]/u.test(prefix)) return { icon: "checkbox" };
+  if (block.name === "BulletList" && /^\s*[-+*]\s+\[[ xX]\]/u.test(prefix)) return { icon: "listTodo" };
   const icons: Record<string, string> = { Paragraph: "type", BulletList: "listBullet", OrderedList: "listNumbered", Blockquote: "textQuote",
     FencedCode: "codeXml", CodeBlock: "codeXml", Table: "table", HorizontalRule: "horizontalRule", CustomContainer: "layers", DisplayMath: "sigma",
     DefinitionList: "bookOpen", Frontmatter: "fileCode" };

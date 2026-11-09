@@ -11,7 +11,7 @@ describe("Markdown product commands", () => {
     const doc = "[**kept**][shared] and [second][shared]\n\n[shared]: /old \"title\"";
     const state = EditorState.create({ doc, selection: { anchor: 5 }, extensions: markdown() });
     const next = state.update(editMdDestination(false, { url: "/new" })(state)!).state;
-    expect(next.doc.toString()).toBe("[**kept**](</new> \"title\") and [second][shared]\n\n[shared]: /old \"title\"");
+    expect(next.doc.toString()).toBe("[**kept**](/new \"title\") and [second][shared]\n\n[shared]: /old \"title\"");
     expect(editMdDestination(false, { url: "javascript:alert(1)" })(state)).toBeNull();
   });
   it("escapes explicitly changed labels and image destinations", () => {
@@ -21,16 +21,16 @@ describe("Markdown product commands", () => {
   });
   it("uses the destination as a new link's visible label while allowing decorative image alt text", () => {
     const state = EditorState.create({ extensions: markdown() });
-    expect(state.update(editMdDestination(false, { url: "/guide", label: "" })(state)!).state.doc.toString()).toBe("[/guide](</guide>)");
-    expect(state.update(editMdDestination(true, { url: "/logo.svg", label: "" })(state)!).state.doc.toString()).toBe("![](</logo.svg>)");
+    expect(state.update(editMdDestination(false, { url: "/guide", label: "" })(state)!).state.doc.toString()).toBe("[/guide](/guide)");
+    expect(state.update(editMdDestination(true, { url: "/logo.svg", label: "" })(state)!).state.doc.toString()).toBe("![](/logo.svg)");
   });
   it("converts real paragraphs and preserves nested quote/list structure", () => {
     const doc = "> - [x] first\n>   - nested\n> - third";
     const state = EditorState.create({ doc, selection: { anchor: 8 }, extensions: markdown() });
     const next = state.update(toggleMdList("ordered")(state)!).state;
-    expect(next.doc.toString()).toBe("> 1. first\n>    - nested\n> - third");
+    expect(next.doc.toString()).toBe("> 1. first\n>    - nested\n> 2. third");
     expect(syntaxTree(next).toString()).toContain("ListItem(ListMark,Paragraph,QuoteMark,BulletList");
-    expect(next.update(toggleMdList("ordered")(next)!).state.doc.toString()).toBe("> first\n> - nested\n> - third");
+    expect(next.update(toggleMdList("ordered")(next)!).state.doc.toString()).toBe("> first\n> - nested\n>\n> 1. third");
     const code = EditorState.create({ doc: "```\nsource\n```", selection: { anchor: 5 }, extensions: markdown() });
     expect(toggleMdList("bullet")(code)).toBeNull();
   });
@@ -49,7 +49,7 @@ it("refuses nested links, code, split formatting and selections across blocks", 
 
 it("retains inline formatting when linking selected content", () => {
   const state = EditorState.create({ doc: "**formatted**", selection: { anchor: 0, head: 13 }, extensions: markdown() });
-  expect(state.update(editMdDestination(false, { url: "#chapter" })(state)!).state.doc.toString()).toBe("[**formatted**](<#chapter>)");
+  expect(state.update(editMdDestination(false, { url: "#chapter" })(state)!).state.doc.toString()).toBe("[**formatted**](#chapter)");
 });
 
 it("unlinks one usage while preserving label formatting and shared references", () => {
@@ -73,5 +73,5 @@ it("unlinks addresses without immediately creating the same GFM link again", () 
 
 it("edits the owning automatic link when the caret is inside its URL token", () => {
   const state = EditorState.create({ doc: "<https://example.com>", selection: { anchor: 5 }, extensions: markdown() });
-  expect(state.update(editMdDestination(false, { url: "/new" })(state)!).state.doc.toString()).toBe("[https://example.com](</new>)");
+  expect(state.update(editMdDestination(false, { url: "/new" })(state)!).state.doc.toString()).toBe("[https://example.com](/new)");
 });

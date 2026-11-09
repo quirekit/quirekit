@@ -1,6 +1,6 @@
 import { createWordTableMapDiagnostic } from "../diagnostics";
 import { getRangeEndColumn } from "../range";
-import type { MutableExplicitCellRef, RowSlotMap } from "./internal";
+import type { MutableExplicitCellRef, MutableSemanticCellRef, RowSlotMap } from "./internal";
 import type {
   WordTableCellGridSlot,
   WordTableGridSlot,
@@ -12,13 +12,13 @@ import type {
  *
  * @param rowSlots - Mutable row slot map.
  * @param explicitCell - Explicit cell ref.
- * @param semanticCellId - Owning semantic cell id.
+ * @param semanticCell - Owning semantic rectangle, independent of physical cell intervals.
  * @param diagnostics - Mutable diagnostics output.
  */
 export function fillCellSlots(
   rowSlots: RowSlotMap,
   explicitCell: MutableExplicitCellRef,
-  semanticCellId: string,
+  semanticCell: MutableSemanticCellRef,
   diagnostics: WordTableMapDiagnostic[]
 ): void {
   for (
@@ -30,9 +30,9 @@ export function fillCellSlots(
       kind: "cell",
       rowIndex: explicitCell.rowIndex,
       columnIndex: column,
-      semanticCellId,
+      semanticCellId: semanticCell.id,
       explicitCellId: explicitCell.id,
-      role: getSlotRole(explicitCell, column)
+      role: getSlotRole(explicitCell, semanticCell, column)
     }, diagnostics);
   }
 }
@@ -123,18 +123,20 @@ function setSlot(
  * Gets the slot role for a cell-owned grid slot.
  *
  * @param explicitCell - Explicit cell that owns the slot.
+ * @param semanticCell - Complete owner rectangle across all physical members.
  * @param column - Column index for the slot.
  * @returns Slot role.
  */
 function getSlotRole(
   explicitCell: MutableExplicitCellRef,
+  semanticCell: MutableSemanticCellRef,
   column: number
 ): WordTableCellGridSlot["role"] {
-  if (explicitCell.role === "verticalContinuation") {
-    return column === explicitCell.range.startColumn
+  if (explicitCell.rowIndex > semanticCell.rect.startRow) {
+    return column === semanticCell.rect.startColumn
       ? "verticalContinuation"
       : "covered";
   }
 
-  return column === explicitCell.range.startColumn ? "origin" : "horizontalSpan";
+  return column === semanticCell.rect.startColumn ? "origin" : "horizontalSpan";
 }

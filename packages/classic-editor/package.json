@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/classic-editor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/classic-editor"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/classic-editor"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/classic-editor#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit paginated classic editor product shell and contribution runtime.",
@@ -72,7 +76,8 @@
     "@zag-js/vue": "1.43.3",
     "@quirekit/data-view": "workspace:*",
     "@quirekit/data-view-editor": "workspace:*",
-    "@quirekit/extension-data-view": "workspace:*"
+    "@quirekit/extension-data-view": "workspace:*",
+    "uuid": "14.0.3"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

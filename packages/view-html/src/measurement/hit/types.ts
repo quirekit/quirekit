@@ -45,8 +45,9 @@ export interface HtmlBlockHitGeometry {
    * Publishes existing measured blocks; an identical root reuses its index.
    * @param root - Current continuous-flow block geometry.
    * @param document - Canonical document represented by those blocks.
+   * @param changed - Verified topology-preserving changes, when available.
    */
-  update(root: QuireLayoutNode, document: ProseMirrorNode): void;
+  update(root: QuireLayoutNode, document: ProseMirrorNode, changed?: ReadonlyMap<string, QuireLayoutNode>): void;
   /**
    * Resolves a local block without reading every mounted element.
    * @param left - Viewport x coordinate.

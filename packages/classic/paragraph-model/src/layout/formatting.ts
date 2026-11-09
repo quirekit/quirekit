@@ -26,18 +26,21 @@ const supportedParagraphBorderStyles = new Set([
  *
  * @param formatting - Effective paragraph formatting after style resolution.
  * @param direct - Whether the paragraph node carries direct Word formatting.
+ * @param defaultTabInterval - Effective document interval for literal-tab paragraphs, in twips.
  * @returns Layout projection carrying the formatting as its token.
  */
 export function projectWordParagraphLayoutFormatting(
   formatting: WordParagraphFormatting,
-  direct: boolean
+  direct: boolean,
+  defaultTabInterval?: number
 ): WordParagraphModelFormatting {
   const line = formatting.spacing.line;
+  const tabs = projectWordParagraphTabs(formatting, defaultTabInterval);
   return {
     token: formatting,
-    signature: createWordParagraphLayoutSignature(formatting),
+    signature: createWordParagraphLayoutSignature(formatting) + (tabs?.defaultInterval === undefined ? '' : `|default-tab:${tabs.defaultInterval}`),
     indentation: formatting.indentation,
-    tabs: projectWordParagraphTabs(formatting),
+    tabs,
     autoSpacing: {
       ideographAlpha: formatting.eastAsianLayout.autoSpaceLatin === false ? 0 : 0.25,
       ideographNumeric: formatting.eastAsianLayout.autoSpaceNumber === false ? 0 : 0.25

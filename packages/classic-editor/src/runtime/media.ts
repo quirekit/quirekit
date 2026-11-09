@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import { createQuireMemoryMediaRepository, createQuireMediaResolverChain, createQuireInlineImageResolver } from "@quirekit/media";
 import type {
   QuireMediaAssetKind,
@@ -8,7 +9,6 @@ import type { ClassicEditorMediaServices } from "../types";
 /** Default in-memory media services owned by one Classic Editor instance. */
 class ClassicEditorMemoryMediaServices implements ClassicEditorMediaServices {
   readonly #repository: QuireMediaRepository;
-  #sequence = 0;
 
   /**
    * Creates one isolated repository and identity sequence.
@@ -35,14 +35,13 @@ class ClassicEditorMemoryMediaServices implements ClassicEditorMediaServices {
   }
 
   /**
-   * Allocates a collision-resistant identity within this instance.
+   * Allocates a random identity, so concurrent editors of one document never pick the same one.
    *
    * @param kind - Media family receiving the identity.
    * @returns A repository-local stable identity.
    */
   createAssetId(kind: QuireMediaAssetKind): string {
-    this.#sequence += 1;
-    return `classic-${kind}-${this.#sequence}`;
+    return `classic-${kind}-${uuidv4()}`;
   }
 }
 

@@ -5,7 +5,7 @@ export type { MdDocumentPropertiesProps } from "./properties/types";
 export { withMdReading } from "../reading/contributions/extension";
 export type { MdReadingContext, MdReadingDefinition, MdReadingError } from "../reading/contributions/types";
 export { vueMdEditorExtensions } from "./extensions";
-export type { MdEditorProps, MdEditorInstance, MdProseProps, MdEditorLocale, MdEditorToolbar, MdOutlinePosition } from "./types";
+export type { MdEditorProps, MdEditorInstance, MdProseProps, MdEditorLocale, MdEditorToolbar, MdOutlinePosition, MdSelectionAction, MdSelectionContext } from "./types";
 export type { MdFileMode } from "./files/types";
 export type { MdDocxOptions, MdDocxPolicy, MdDocxConverter, MdDocxRequest } from '../docx/types';
 export type { MdExporter, MdExportContext, MdExportResult } from '../export/types';

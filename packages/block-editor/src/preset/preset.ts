@@ -22,6 +22,7 @@ import { MindMap } from "@quirekit/extension-mind-map";
 import { openBlockMindMapDialog } from "../mind-map/open";
 import { openBlockFlowchartDialog } from "../flowchart/open";
 import type { QuireAnyExtension } from "@quirekit/core";
+import { BlockCollaboration } from "../collab/extension";
 import { Link } from "@quirekit/extension-link";
 import { TextStyleKit } from "@quirekit/extension-text-style";
 import { BlockInteraction, CharacterCount, Formatting } from "@quirekit/extensions";
@@ -47,6 +48,7 @@ export function createBlockEditorPreset(
   options: BlockEditorPresetOptions = {}
 ): readonly QuireAnyExtension[] {
   return [
+    BlockCollaboration.configure({}),
     ...(options.richContent === false ? [] : [BlockRichContent.configure(options.richContent ?? {}), BlockColumns.configure({}), BlockColumn.configure({}), BlockAsset.configure({}), BlockInlineAttachment.configure({}), BlockImageGallery.configure({}), BlockWebCard.configure({})]),
     ...(options.bodyContent === false ? [] : [BlockFootnotes.configure({}), BlockDefinitions.configure({}), BlockInlineContent.configure({})]),
     ...(options.math === false ? [] : [BlockMath.configure({})]),

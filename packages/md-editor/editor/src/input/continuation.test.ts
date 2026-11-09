@@ -30,17 +30,21 @@ describe("document quote continuation", () => {
   it.each([
     ["> text\n> ¦", "> text\n\n¦"],
     ["> text\n>¦", "> text\n\n¦"],
-    ["> text\n> ¦\n\nnext", "> text\n\n¦\nnext"],
-    ["> text\n>   ¦\n\nnext", "> text\n\n¦\nnext"],
+    ["> text\n> ¦\n\nnext", "> text\n\n¦\n\nnext"],
+    ["> text\n>   ¦\n\nnext", "> text\n\n¦\n\nnext"],
     ["> text\n> ¦\n> rest", "> text\n\n¦\n> rest"],
     ["> outer\n> > inner\n> > ¦", "> outer\n> > inner\n> \n> ¦"],
-    ["> outer\n> > inner\n> > ¦\n> \n> next", "> outer\n> > inner\n> \n> ¦\n> next"],
+    ["> outer\n> > inner\n> > ¦\n> \n> next", "> outer\n> > inner\n> \n> ¦\n> \n> next"],
     ["- > inner\n  > ¦", "- > inner\n  \n  ¦"],
     ["> - > inner\n>   > ¦", "> - > inner\n>   \n>   ¦"],
     ["- > ¦", "- ¦"],
     ["> ¦", "¦"],
-    ["> first\n> \n> ¦", "> first\n> \n¦"],
-    ["> text¦", "> text\n> ¦"],
+    ["> first\n> \n> ¦", "> first\n\n¦"],
+    ["> text¦", "> text\n>\n> ¦"],
+    ["> 甲¦乙", "> 甲\n>\n> ¦乙"],
+    ["> > 内¦", "> > 内\n> >\n> > ¦"],
+    ["> text\n>\n> ¦", "> text\n\n¦"],
+    ["> outer\n> > inner\n> >\n> > ¦", "> outer\n> > inner\n> \n> ¦"],
   ])("continues text or exits exactly one empty quote level: %s", (source, expected) => {
     const state = EditorState.create({ doc: source.replace("¦", ""), selection: { anchor: source.indexOf("¦") },
       extensions: [markdown({ extensions: GFM }), modeFacet.of("live")] });
@@ -74,7 +78,7 @@ describe("document quote continuation", () => {
 
   it("maps compatible carets in one transaction without a partial exit for mixed selections", () => {
     const source = "> first\n> ¦\n\nnext\n\n> second\n> ¦";
-    const expected = "> first\n\n¦\nnext\n\n> second\n\n¦";
+    const expected = "> first\n\n¦\n\nnext\n\n> second\n\n¦";
     const positions = [...source.matchAll(/¦/gu)].map((match, index) => match.index - index);
     const state = EditorState.create({ doc: source.replaceAll("¦", ""),
       selection: EditorSelection.create(positions.map(pos => EditorSelection.cursor(pos))),

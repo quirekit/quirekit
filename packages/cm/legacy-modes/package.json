@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/cm-legacy-modes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Collection of ported legacy language modes for the CodeMirror code editor",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/cm/legacy-modes"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/cm/legacy-modes"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/cm/legacy-modes#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

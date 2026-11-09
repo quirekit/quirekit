@@ -4,6 +4,7 @@ export { Strikethrough } from "./inline/strikethrough";
 export { HorizontalRule } from "./block/rule";
 export { Blockquote } from "./block/quote";
 export { ListMarkers } from "./list/markers";
+export { changeListIndent } from "./list/commands";
 export { TaskItem } from "./list/task";
 export type { TaskAttributes } from "./list/types";
 export type {} from "./types";

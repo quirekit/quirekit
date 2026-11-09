@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/extension-link",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/extensions/link"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/extensions/link"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/extensions/link#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit safe hyperlink mark extension.",

@@ -1,4 +1,4 @@
-import { HtmlDomMappingGapError, type HtmlRetainedDocumentView } from "../document";
+import { HtmlDomMappingGapError, type HtmlDomPoint, type HtmlRetainedDocumentView } from "../document";
 import type {
   HtmlMeasuredDomPoint,
   HtmlMeasuredPosition,
@@ -13,6 +13,7 @@ import type {
  * @param regionId - Stable continuous-flow region identity.
  * @param pos - Canonical document position.
  * @param side - Preferred boundary side.
+ * @param project - Carries the point past transient DOM such as an IME preedit.
  * @returns Owned DOM point with complete provenance.
  */
 export function resolveHtmlMeasuredDomPoint(
@@ -20,9 +21,11 @@ export function resolveHtmlMeasuredDomPoint(
   rootId: string,
   regionId: string,
   pos: number,
-  side: number
+  side: number,
+  project?: <T extends HtmlDomPoint>(point: T) => T
 ): HtmlMeasuredDomPoint {
-  const point = documentView.domAtPos(pos, side);
+  const retained = documentView.domAtPos(pos, side);
+  const point = project === undefined ? retained : project(retained);
   return {
     node: point.node,
     offset: point.offset,

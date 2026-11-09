@@ -8,6 +8,7 @@ import type {
 } from "../text";
 import type { QuireInlineLayoutOptions, QuireInlineTextRun } from "./types";
 import { buildVisualRunCaretStops } from "./visual-run-caret";
+import { resolveQuireInlineRunPosition } from "./run-slice";
 
 /**
  * Builds a measured fragment for one visual run.
@@ -40,8 +41,8 @@ export function buildVisualRunFragment(input: {
 
   // Clamp to the run's document range: generated visual runs may carry text
   // longer than their represented document range.
-  const from = Math.min(run.range.from + fromOffset, run.range.to);
-  const to = Math.min(run.range.from + toOffset, run.range.to);
+  const from = resolveQuireInlineRunPosition(run, fromOffset);
+  const to = resolveQuireInlineRunPosition(run, toOffset);
   const caretStops = buildVisualRunCaretStops(visualRun, rtl, run, from, to);
   const shapedRun = buildVisualRunShapedRun(visualRun, run, fromOffset, rtl);
   const baselineShift = run.baselineShift ?? 0;

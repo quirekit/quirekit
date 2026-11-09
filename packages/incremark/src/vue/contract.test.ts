@@ -27,6 +27,12 @@ describe("public streaming Markdown", () => {
     expect(root.querySelector("script")).toBeNull(); expect(error).not.toHaveBeenCalled(); expect(warn).not.toHaveBeenCalled();
   });
 
+  it("renders a line break tag without the HTML opt-in and keeps other tags as source", async () => {
+    const html = await render({ content: "| a | b |\n| --- | --- |\n| 一<br>二 | <b>三</b> |\n\n甲<br/>乙" });
+    expect(html.match(/<br[\s>]/gu)).toHaveLength(2);
+    expect(html).toContain("&lt;b&gt;");
+  });
+
   it("overrides elements without reparsing or losing an open code body", async () => {
     const content = shallowRef("[link](/target)\n\n```ts\none\ntwo"), status = shallowRef("receiving");
     const components = shallowRef({});

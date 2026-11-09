@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/extension-flowchart",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/extensions/flowchart"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/extensions/flowchart"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/extensions/flowchart#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit extension that embeds editable flowcharts in documents.",

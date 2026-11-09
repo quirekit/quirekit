@@ -5,6 +5,8 @@ import { whiteboardCommands } from "./commands";
 import { whiteboardLayout } from "./layout";
 import { whiteboardNodeView } from "./view";
 import { openWhiteboard } from "./session";
+import { forkWhiteboardSlice } from "./clipboard";
+import { createWhiteboardRevisionPlugin } from "./revision";
 import type { WhiteboardOptions, WhiteboardStorage } from "./types";
 import { whiteboardAiCapabilities } from "./ai/facts";
 import { describeWhiteboardCommands } from "./diagram/commands";
@@ -51,8 +53,9 @@ export const Whiteboard = Node.create<WhiteboardOptions, WhiteboardStorage>({
   /** @returns Canvas-compatible object activation through public PM handlers. */
   addProseMirrorPlugins() {
     const editor = this.editor, open = this.options.open;
-    if (!editor) return [];
-    return [new Plugin({ props: {
+    if (!editor) return [createWhiteboardRevisionPlugin()];
+    return [createWhiteboardRevisionPlugin(), new Plugin({ props: {
+      transformPasted: forkWhiteboardSlice,
       /** @param _view - Mounted view. @param _pos - Pointer position. @param node - Hit node. @param pos - Atom start. @param _event - Native activation. @param direct - Direct object hit. @returns Whether the task opened. */
       handleDoubleClickOn(_view: EditorView, _pos: number, node: PMNode, pos: number, _event: MouseEvent, direct: boolean) { return direct && node.type.name === "whiteboard" && openWhiteboard(editor, open, pos); },
       /** @param view - Current selection owner. @returns Whether the selected object opened. */

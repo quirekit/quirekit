@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/classic-styles-model",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -39,11 +39,20 @@
   "devDependencies": {
     "@quirekit/ai-contract": "workspace:*",
     "@quirekit/ai-runtime": "workspace:*",
+    "@quirekit/collab-contract": "workspace:*",
     "@quirekit/dom-view": "workspace:*",
     "@quirekit/starter-kit": "workspace:*",
     "@types/node": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@quirekit/collab-contract": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "@quirekit/collab-contract": {
+      "optional": true
+    }
   }
 }

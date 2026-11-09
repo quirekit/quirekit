@@ -63,10 +63,12 @@ describe("page license state", () => {
   });
   it("treats packaged shells serving from a local port as production", () => {
     const dev = () => isDevelopmentLocation({ protocol: "http:", hostname: "localhost", port: "41234" });
+    // An Electron browser embedded in an editor still shows the dev server; Node integration marks a packaged app.
     vi.stubGlobal("navigator", { userAgent: "Mozilla/5.0 (Macintosh) AppleWebKit/537.36 Chrome/130.0 Electron/33.2.0 Safari/537.36" });
-    expect(dev()).toBe(false);
-    vi.stubGlobal("navigator", { userAgent: "Mozilla/5.0 (Macintosh) Chrome/130.0 Safari/537.36" });
     expect(dev()).toBe(true);
+    vi.stubGlobal("process", { ...process, versions: { ...process.versions, electron: "33.2.0" } });
+    expect(dev()).toBe(false);
+    vi.unstubAllGlobals();
     vi.stubGlobal("Capacitor", {});
     expect(dev()).toBe(false);
   });

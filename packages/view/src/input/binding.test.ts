@@ -71,7 +71,7 @@ describe("QuireMountedInputBinding", () => {
     }
   });
 
-  it("rejects programmatic focus while the live mounted view is read-only", () => {
+  it("focuses the read-only proxy for copy after clearing transient input", () => {
     const editor = createEditor({
       extensions: [StarterKit.configure({ undoRedo: false })],
       content: { type: "doc", content: [{ type: "paragraph" }] }
@@ -84,17 +84,25 @@ describe("QuireMountedInputBinding", () => {
       readEditable: () => editable
     });
     document.body.appendChild(inputProxy);
+    inputProxy.readOnly = true;
+    inputProxy.value = "stale preedit";
 
     binding.focus();
 
-    expect(document.activeElement).not.toBe(inputProxy);
+    expect(document.activeElement).toBe(inputProxy);
+    expect(inputProxy.readOnly).toBe(true);
+    expect(inputProxy.value).toBe("");
 
     editable = true;
+    inputProxy.readOnly = false;
     binding.focus();
 
     expect(document.activeElement).toBe(inputProxy);
 
     binding.destroy();
+    inputProxy.blur();
+    binding.focus();
+    expect(document.activeElement).not.toBe(inputProxy);
     inputProxy.remove();
     editor.destroy();
   });

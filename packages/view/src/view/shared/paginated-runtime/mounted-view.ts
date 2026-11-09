@@ -80,6 +80,11 @@ export abstract class MountedPaginatedEditorView<
     return this.mountedRuntime.geometry.getTextRangeRects(range, sourceDocument);
   }
 
+  /** @param range - Explicit half-open range. @param sourceDocument - Exact source identity. @returns Passive client-space boxes of structured targets, such as table cells, or unavailable. */
+  getStructuredRangeRects(range: import("@quirekit/renderer").QuireDocumentRange, sourceDocument: import("@quirekit/pm").Node): readonly import("@quirekit/core").QuireMountedTextRangeRect[] | null {
+    return this.mountedRuntime.geometry.getStructuredRangeRects(range, sourceDocument);
+  }
+
   /** @returns The presented caret in client CSS pixels, including IME preview, or null without a caret. */
   getCaretRect(): import("@quirekit/core").QuireMountedCaretRect | null {
     return this.mountedRuntime.geometry.getCaretRect();

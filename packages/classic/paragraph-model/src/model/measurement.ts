@@ -233,6 +233,7 @@ function isTabStop(
     || value.alignment === "end"
     || value.alignment === "decimal"
     || value.alignment === "bar"
+    || value.alignment === "num"
     || value.alignment === "clear";
 }
 

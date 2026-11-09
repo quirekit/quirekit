@@ -15,6 +15,18 @@ function fixture(): QuireEditor {
   ] } }); editors.push(editor); return editor;
 }
 afterEach(() => { editors.splice(0).forEach(editor => editor.destroy()); });
+
+/**
+ * Undo restores an earlier map under a newer revision, since every write of a map advances it.
+ * @param json - Document JSON. @param revision - Expected revision of the map, the second top-level block.
+ * @returns The JSON with that map's revision replaced.
+ */
+function revised(json: ReturnType<QuireEditor["getJSON"]>, revision: number): ReturnType<QuireEditor["getJSON"]> {
+  const content = [...json.content!];
+  const node = content[1]!;
+  content[1] = { ...node, attrs: { ...node.attrs, mind: { ...(node.attrs!.mind as Record<string, unknown>), document: { ...(node.attrs!.mind as { document: Record<string, unknown> }).document, revision } } } };
+  return { ...json, content };
+}
 describe("atomic PM mindMap sessions", () => {
   it("refuses invalid public positions without reading outside the document", () => {
     const editor = fixture();
@@ -35,8 +47,8 @@ describe("atomic PM mindMap sessions", () => {
     const beforeSave = editor.getJSON();
     expect(request.commit(prepareMindMapSave(mind, { ...preview, source: serializeMindMap(mind.document) }))).toBe("saved");
     request.release();
-    expect(editor.commands.undo()).toBe(true); expect(editor.getJSON()).toEqual(beforeSave);
-    expect(editor.commands.redo()).toBe(true); expect(editor.state.pm.doc.nodeAt(14)?.attrs.mind.document.revision).toBe(1);
+    expect(editor.commands.undo()).toBe(true); expect(editor.getJSON()).toEqual(revised(beforeSave, 2));
+    expect(editor.commands.redo()).toBe(true); expect(editor.state.pm.doc.nodeAt(14)?.attrs.mind.document.revision).toBe(3);
   });
   it("rejects readonly, changed and deleted targets without losing the draft", () => {
     const editor = fixture(), request = captureMindMapRequest(editor, 8)!;

@@ -125,9 +125,9 @@ describe("Block Editor product foundation", () => {
     const first = createBlockEditorPreset();
     const second = createBlockEditorPreset();
     expect(first.map((extension) => extension.name)).toEqual([
-      "blockRichContent", "blockColumns", "blockColumn", "blockAsset", "inlineAttachment", "imageGallery", "webCard", "blockFootnotes", "blockDefinitions", "blockInlineContent", "blockMath", "blockContainer", "image", "blockWritingHint", "dataView", "textDiagram", "mindMap", "flowchart", "whiteboard", "starterKit", "horizontalRule", "codeBlock", "wordParagraph", "blockParagraph", "textStyleKit", "blockScriptFonts", "link", "characterCount", "search", "formatting", "blockSections", "blockContextMenus", "blockInteraction"
+      "blockCollaboration", "blockRichContent", "blockColumns", "blockColumn", "blockAsset", "inlineAttachment", "imageGallery", "webCard", "blockFootnotes", "blockDefinitions", "blockInlineContent", "blockMath", "blockContainer", "image", "blockWritingHint", "dataView", "textDiagram", "mindMap", "flowchart", "whiteboard", "starterKit", "horizontalRule", "codeBlock", "wordParagraph", "blockParagraph", "textStyleKit", "blockScriptFonts", "link", "characterCount", "search", "formatting", "blockSections", "blockContextMenus", "blockInteraction"
     ]);
     expect(first[0]).not.toBe(second[0]);
-    expect(createBlockEditorPreset({ richContent: false, bodyContent: false, math: false, containers: false, image: false, dataView: false, starterKit: false, paragraphFormat: false, textStyle: false, link: false, characterCount: false, whiteboard: false, flowchart: false, mindMap: false, textDiagram: false, search: false, formatting: false, blockInteraction: false })).toEqual([]);
+    expect(createBlockEditorPreset({ richContent: false, bodyContent: false, math: false, containers: false, image: false, dataView: false, starterKit: false, paragraphFormat: false, textStyle: false, link: false, characterCount: false, whiteboard: false, flowchart: false, mindMap: false, textDiagram: false, search: false, formatting: false, blockInteraction: false }).map((extension) => extension.name)).toEqual(["blockCollaboration"]);
   });
 });

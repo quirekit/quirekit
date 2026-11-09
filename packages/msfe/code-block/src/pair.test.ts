@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { EditorSelection, EditorState, Prec, type EditorState as State } from "@quirekit/cm-state";
 import { ensureSyntaxTree } from "@quirekit/cm-language";
 import { createMsfeReadState } from "@quirekit/msfe-core";
+import { compositionEffect } from "@quirekit/msfe-core/state";
 import { CodeBlock } from "./code-block";
 
 /** Fixture presentation: plain source, or the live view with hidden syntax. */
@@ -46,7 +47,32 @@ function backspace(markdown: string): string {
     userEvent: "delete.backward" }).state);
 }
 
+/** @param markdown - Fixture source. @param commits - Text each IME composition commits. @returns Source after every composition ends. */
+function compose(markdown: string, ...commits: string[]): string {
+  let state = fixture(markdown);
+  for (const text of commits) {
+    state = state.update({ effects: compositionEffect.of(true) }).state;
+    const head = state.selection.main.head;
+    state = state.update({ changes: { from: head, insert: text }, selection: EditorSelection.cursor(head + text.length), userEvent: "input.type.compose" }).state;
+    expect(state.doc.lines).toBe(fixture(markdown).doc.lines);
+    state = state.update({ effects: compositionEffect.of(false) }).state;
+  }
+  return show(state);
+}
+
 describe("fence pairing", () => {
+  it("closes a fence committed through an input method once the composition ends", () => {
+    expect(compose("|\n```\ncode\n```", "`", "`", "`")).toBe("```|\n```\n```\ncode\n```");
+    expect(compose("|\n```\ncode\n```", "```")).toBe("```|\n```\n```\ncode\n```");
+    expect(compose("|", "你好")).toBe("你好|");
+  });
+
+  it("closes a fence typed right after a composition", () => {
+    const state = fixture("``|\n```\ncode\n```"), head = state.selection.main.head;
+    expect(show(state.update({ changes: { from: head, insert: "`" }, selection: EditorSelection.cursor(head + 1), userEvent: "input.type.compose" }).state))
+      .toBe("```|\n```\n```\ncode\n```");
+  });
+
   it("closes a fence opened above an existing code block", () => {
     expect(type("text\n\n``|\n\n```\ncode\n```", "`")).toBe("text\n\n```|\n```\n\n```\ncode\n```");
     expect(type("~~|", "~")).toBe("~~~|\n~~~");
@@ -68,6 +94,17 @@ describe("fence pairing", () => {
     expect(type("a ``|", "`")).toBe("a ```|");
     expect(type("``|js", "`")).toBe("```|js");
     expect(type("``|", "`", false)).toBe("```|");
+  });
+
+  it("drops the paired closer when the author types their own", () => {
+    expect(type("```\ncode\n``|\n```\n\n```\nnext\n```", "`")).toBe("```\ncode\n```|\n\n```\nnext\n```");
+    expect(type("```\ncode\n|\n\n```\n```\nnext\n```", "```")).toBe("```\ncode\n```|\n```\nnext\n```");
+    expect(type("> ```\n> a\n> |\n> ```", "```")).toBe("> ```\n> a\n> ```|");
+  });
+
+  it("reopens the remaining code when a typed fence closes a block early", () => {
+    expect(type("```js\na\n|\nb\n```\n\n```\nnext\n```", "```")).toBe("```js\na\n```|\n```\nb\n```\n\n```\nnext\n```");
+    expect(type("- ```\n  a\n  |\n  b\n  ```", "```")).toBe("- ```\n  a\n  ```|\n  ```\n  b\n  ```");
   });
 
   it("lengthens the closing fence with its opener", () => {

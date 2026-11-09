@@ -16,17 +16,17 @@ export const proseHighlightCss = `
 :is(.qk-prose-container, .qk-prose-highlight-swatch)[data-qk-prose-highlight-text="blue"] { color: var(--qk-color-info-text); }
 :is(.qk-prose-container, .qk-prose-highlight-swatch)[data-qk-prose-highlight-text="purple"] { color: color-mix(in oklab, var(--qk-color-info-text), var(--qk-color-danger-text)); }
 :is(.qk-prose-container, .qk-prose-highlight-swatch)[data-qk-prose-highlight-text="gray"] { color: var(--qk-color-text-secondary); }
-/* The icon sits in the start padding so body lines keep normal vertical flow in both reading and editing. */
+/* The icon floats at the start of the first row; later rows use the full width. */
 .qk-prose-container[data-qk-prose-highlight] {
   --qk-prose-container-surface: var(--qk-prose-highlight-surface);
   --qk-prose-container-border: transparent;
   --qk-prose-highlight-icon-size: 1.75em;
-  position: relative; padding: var(--qk-space-surface);
-  padding-inline-start: calc(var(--qk-space-surface) + var(--qk-prose-highlight-icon-size) + var(--qk-space-inline));
+  position: relative; display: flow-root; padding: var(--qk-space-surface);
 }
 .qk-prose-container[data-qk-prose-highlight] > .qk-prose-container__header {
-  position: absolute; inset-block-start: var(--qk-space-surface); inset-inline-start: var(--qk-space-surface); padding: 0; font-weight: inherit;
+  float: inline-start; display: flex; align-items: center; block-size: var(--qk-type-body-line-height); margin-inline-end: var(--qk-space-inline);
+  padding: 0; font-weight: inherit;
 }
-.qk-prose-container[data-qk-prose-highlight] > .qk-prose-container__body { padding: 0; }
+.qk-prose-container[data-qk-prose-highlight] > .qk-prose-container__body { display: block; min-block-size: var(--qk-type-body-line-height); padding: 0; }
 .qk-prose-highlight-icon { display: inline-flex; align-items: center; justify-content: center; inline-size: var(--qk-prose-highlight-icon-size, 1.75em); padding: 0; }
 `;

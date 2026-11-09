@@ -1,15 +1,30 @@
 {
   "name": "@quirekit/mind-map-simple",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/mind-map-simple"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/mind-map-simple"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/mind-map-simple#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Lazy browser adapter for SimpleMindMap using QuireKit mind map documents.",
   "type": "module",
   "sideEffects": false,
-  "files": ["LICENSE.md", "THIRD_PARTY_NOTICES.md", "licenses", "dist", "src"],
-  "exports": {".": {"types": "./dist/index.d.mts", "import": "./dist/index.mjs"}},
+  "files": [
+    "LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "licenses",
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
   "types": "./dist/index.d.mts",
   "scripts": {
     "dev": "pnpm --filter @quirekit/mind-map build && pnpm run build && vite --config test-support/vite.config.ts",
@@ -19,9 +34,17 @@
     "test:browser": "playwright test --config test-support/playwright.config.ts",
     "test:browser:matrix": "playwright test --config test-support/matrix.config.ts"
   },
-  "dependencies": {"@quirekit/ime": "workspace:*", "@quirekit/mind-map": "workspace:*", "simple-mind-map": "0.14.0-fix.3", "uuid": "14.0.3"},
+  "dependencies": {
+    "@quirekit/ime": "workspace:*",
+    "@quirekit/mind-map": "workspace:*",
+    "simple-mind-map": "0.14.0-fix.3",
+    "uuid": "14.0.3"
+  },
   "devDependencies": {
-    "@playwright/test": "1.61.1", "tsdown": "catalog:", "typescript": "catalog:",
-    "vite": "^8.1.0", "vitest": "catalog:"
+    "@playwright/test": "1.61.1",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vite": "^8.1.0",
+    "vitest": "catalog:"
   }
 }

@@ -1,6 +1,8 @@
 export {
   projectEditorUIAnchorGeometry,
-  resolveEditorUIAnchorGeometry
+  resolveEditorUIAnchorGeometry,
+  resolveEditorUIStructuredRangeRects,
+  resolveEditorUITextRangeRects
 } from "./anchor";
 export {
   createEditorUIBlockDropIndicator,
@@ -47,6 +49,8 @@ export type {
   EditorUIVirtualAnchorRequest,
   EditorUIWidgetAnchorGeometry,
   EditorUIWidgetAnchorRequest,
+  EditorUIRangeFrame,
+  EditorUIRangeSurface,
   ProjectEditorUIAnchorGeometryOptions,
   ResolveEditorUIAnchorGeometryOptions
 } from "./anchor";

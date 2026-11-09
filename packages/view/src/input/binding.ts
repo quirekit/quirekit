@@ -87,11 +87,13 @@ export class QuireMountedInputBinding implements QuireEditorInputBinding {
 
   /** Focuses the hidden input proxy without exposing it to application code. */
   focus(): void {
+    if (this.destroyed) return;
     if (!readQuireMountedInputEditable(this.options)) {
       this.eventRouter.cancelTransientInputState();
-      return;
     }
 
+    // Read-only selections still need a native event target for semantic copy.
+    // Editing stays guarded at event time and by the proxy's readOnly state.
     this.eventRouter.claimFocusOwnership();
     this.options.inputProxy.focus({ preventScroll: true });
   }

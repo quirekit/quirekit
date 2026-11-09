@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/accessibility",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/accessibility"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/accessibility"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/accessibility#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Optional bounded reading and native text context for QuireKit Canvas/SVG views.",

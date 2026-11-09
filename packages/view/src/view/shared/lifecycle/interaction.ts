@@ -2,11 +2,7 @@ import { bindMountedDrawingKeyboard } from "../drawing-interaction/input/keyboar
 import { readMountedDrawingModel } from "../drawing-interaction/model";
 import { activateMountedText } from "./text-activation";
 import { createMountedHeaderFooterSessionLifecycle } from "./header-footer-session";
-import {
-  resolveQuireActiveSelectionContext,
-  type QuireInteractionSelectionTarget,
-  type QuireSelectionGeometryContext
-} from "@quirekit/view-engine";
+import type { QuireInteractionSelectionTarget, QuireSelectionGeometryContext } from "@quirekit/view-engine";
 import { createMountedInputBinding } from "../input-binding";
 import {
   createMountedDrawingContextualCommandsController,
@@ -23,7 +19,7 @@ import {
 } from "../header-footer-editing/session-target";
 import { createMountedSelectionGeometryContext } from "../selection";
 import { createMountedViewCleanupRegistry } from "./cleanup";
-import { createMountedInteractionTargetSnapshot } from "./interaction-target";
+import { createMountedInteractionTargetSnapshot, readLiveMountedInteractionTarget, resolveMountedSelectionContext } from "./interaction-target";
 import type {
   CreateMountedViewInteractionLifecycleOptions,
   MountedViewInteractionLifecycle
@@ -50,6 +46,8 @@ export function createMountedViewInteractionLifecycle(
     getContext: options.getWidgetContext
   });
   let interactionTarget: QuireInteractionSelectionTarget | null = null;
+  /** @returns Retained target that still routes input for the current selection. */
+  const liveTarget = () => readLiveMountedInteractionTarget(interactionTarget, options.editor.state.pm.selection);
   let selectionGeometryContext: QuireSelectionGeometryContext | undefined;
   let drawingTextSession: MountedDrawingTextEditingSession | null = null;
   let pendingCreatedTextBox: MountedDrawingCreatedTextBox | null = null;
@@ -208,14 +206,8 @@ export function createMountedViewInteractionLifecycle(
     ...(options.clipboardOutputStrategy === undefined
       ? {}
       : { clipboardOutputStrategy: options.clipboardOutputStrategy }),
-    getSelectionContext: () =>
-      interactionTarget === null
-        ? undefined
-        : resolveQuireActiveSelectionContext({
-            selection: options.editor.state.pm.selection,
-            interactionTarget
-          }),
-    getInteractionTarget: () => interactionTarget,
+    getSelectionContext: () => resolveMountedSelectionContext(liveTarget(), options.editor.state.pm.selection),
+    getInteractionTarget: liveTarget,
     shouldRouteInput: () =>
       !storyInputSuspended
       && !headerFooterSession.selectionInUnownedStory()
@@ -347,8 +339,7 @@ export function createMountedViewInteractionLifecycle(
       cleanupRegistry.add(cleanup);
     },
     getInteractionTarget: () => interactionTarget,
-    getInteractionTargetSnapshot: () =>
-      createMountedInteractionTargetSnapshot(interactionTarget),
+    getInteractionTargetSnapshot: () => createMountedInteractionTargetSnapshot(interactionTarget),
     setInteractionTarget(target): void {
       if (isHeaderFooterTarget(target) && !headerFooterEditing.matchesTarget(target)) {
         interactionTarget = null;
@@ -370,13 +361,7 @@ export function createMountedViewInteractionLifecycle(
     setSelectionGeometryContext(context): void {
       selectionGeometryContext = context;
     },
-    getSelectionContext: () =>
-      interactionTarget === null
-        ? undefined
-        : resolveQuireActiveSelectionContext({
-            selection: options.editor.state.pm.selection,
-            interactionTarget
-          }),
+    getSelectionContext: () => resolveMountedSelectionContext(liveTarget(), options.editor.state.pm.selection),
     destroy(): void {
       cancelDrawingCreation();
       pendingCreatedTextBox = null;

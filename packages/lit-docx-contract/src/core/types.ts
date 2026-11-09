@@ -170,8 +170,10 @@ export interface NumberingLevelDefinition {
 
 /** 编号层级覆盖定义，来自 w:lvlOverride */
 export interface NumberingLevelOverride extends Partial<NumberingLevelDefinition> {
-  /** 覆盖后的起始序号 */
+  /** 实例外层 w:startOverride；缺失与显式零不同。 */
   start?: number
+  /** 完整覆盖层级中显式的 w:lvl/w:start；缺失时不伪造默认子元素。 */
+  levelStart?: number
 }
 
 /** 编号实例：numId 映射到抽象编号，并可携带层级覆盖 */
@@ -424,6 +426,8 @@ export interface ParseWarning {
  * 包含递归解析子节点的帮助函数、各类定义表及选项。
  */
 export interface ParseContext {
+  /** Original OPC part owning this complete parser Story. */
+  sourcePart?: string
   /** Captures detached XML references using the explicitly named source part. */
   preserveXmlRelationships?: (element: XmlElement, sourcePart: string) => XmlElement
   /** Immutable opaque chart graph captured before story parsing. */

@@ -24,14 +24,14 @@ describe("semantic destination writing", () => {
   });
   it("materializes only one reference usage while preserving formatted labels and shared definitions", () => {
     const source = '[**A**][id] and [B][id]\n\n[id]: /old "Title"';
-    expect(patched(source, { url: "/new" }).text).toBe('[**A**](</new> "Title") and [B][id]\n\n[id]: /old "Title"');
+    expect(patched(source, { url: "/new" }).text).toBe('[**A**](/new "Title") and [B][id]\n\n[id]: /old "Title"');
     const image = patched('![alt][id]\n\n[id]: /img.png "T"', { label: '[new] &amp;', title: '"quote"' });
     expect(image.destination).toMatchObject({ url: "/img.png", title: '"quote"' });
     expect(image.text).toContain('![\\[new\\] &amp;amp;]');
   });
   it("handles angle and bare automatic links without wrapping destination child tokens", () => {
-    expect(patched('<https://example.com?a=&copy;>', { url: '/new' }).text).toBe('[https://example.com?a=&amp;copy;](</new>)');
-    expect(patched('www.example.com', { url: '/new' }).text).toBe('[www.example.com](</new>)');
+    expect(patched('<https://example.com?a=&copy;>', { url: '/new' }).text).toBe('[https://example.com?a=&amp;copy;](/new)');
+    expect(patched('www.example.com', { url: '/new' }).text).toBe('[www.example.com](/new)');
   });
   it("rejects active destinations after entity decoding instead of hiding control characters with URI encoding", () => {
     for (const url of ['jav&#x61;script:alert(1)', 'java&#10;script:alert(1)', 'data:text/html,x']) {

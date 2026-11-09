@@ -10,6 +10,7 @@ import { HtmlDomMappingGapError } from "../reconcile/ownership/mapping-gap";
 import type {
   AttachHtmlCompositionDomOptions,
   HtmlAttachedComposition,
+  HtmlCompositionAnchor,
   HtmlCompositionAttachmentResult,
   HtmlCompositionTextSnapshot,
   HtmlDomPoint
@@ -61,7 +62,8 @@ export function attachHtmlCompositionDom(
         descriptor,
         preedit: options.preedit,
         snapshots,
-        suffixDOM: placement.suffixDOM
+        suffixDOM: placement.suffixDOM,
+        anchor: placement.anchor
       },
       writes: placement.writes
     };
@@ -91,6 +93,26 @@ export function detachHtmlCompositionDom(
   removeDomNode(attached.suffixDOM);
   attached.descriptor.destroy();
   return attached.snapshots.length + 2;
+}
+
+/**
+ * Carries a canonical text offset across the prefix/suffix split: text after
+ * the preedit lives in the suffix, and an offset inside replaced text resolves
+ * to where the preedit starts.
+ *
+ * @param attached - Attached session.
+ * @param point - DOM point from retained ownership.
+ * @returns Point valid in the composing DOM.
+ */
+export function projectHtmlCompositionDomPoint<T extends HtmlDomPoint>(attached: HtmlAttachedComposition, point: T): T {
+  const { anchor, suffixDOM } = attached;
+  if (anchor !== undefined && suffixDOM !== undefined && point.node === anchor.node) {
+    if (point.offset <= anchor.start) return point;
+    return point.offset < anchor.end ? { ...point, offset: anchor.start } : { ...point, node: suffixDOM, offset: point.offset - anchor.end };
+  }
+  // Other text nodes the preedit replaced are shortened in place.
+  const length = point.node.nodeType === 3 ? point.node.nodeValue?.length ?? 0 : Infinity;
+  return point.offset <= length ? point : { ...point, offset: length };
 }
 
 /**
@@ -169,7 +191,7 @@ function insertCompositionDom(
   snapshots: readonly HtmlCompositionTextSnapshot[],
   preedit: QuireImePreedit,
   ownerDocument: Document
-): { readonly suffixDOM: Text | undefined; readonly writes: number } {
+): { readonly suffixDOM: Text | undefined; readonly anchor: HtmlCompositionAnchor | undefined; readonly writes: number } {
   const compositionDOM = descriptor.mount?.dom;
   if (!compositionDOM) {
     throw new HtmlDomMappingGapError("Composition descriptor has no mounted DOM product.");
@@ -177,7 +199,7 @@ function insertCompositionDom(
   if (owner.kind !== "text") {
     const reference = point.node.childNodes[point.offset] ?? null;
     point.node.insertBefore(compositionDOM, reference as ChildNode | null);
-    return { suffixDOM: undefined, writes: 1 };
+    return { suffixDOM: undefined, anchor: undefined, writes: 1 };
   }
   const anchorSnapshot = snapshots.find((snapshot) => snapshot.descriptor === owner);
   const anchorDOM = owner.mount?.dom;
@@ -207,7 +229,7 @@ function insertCompositionDom(
     snapshot.descriptor.mount.dom.nodeValue =
       snapshot.value.slice(0, from) + snapshot.value.slice(to);
   }
-  return { suffixDOM, writes: snapshots.length + 2 };
+  return { suffixDOM, anchor: { node: anchorDOM, start: anchorStart, end: anchorEnd }, writes: snapshots.length + 2 };
 }
 
 /**

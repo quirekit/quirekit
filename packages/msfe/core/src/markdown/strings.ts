@@ -15,3 +15,13 @@ export function encodeMarkdownField(value: string, delimiters = ""): string {
   return [...value].map(character => character === "&" ? "&amp;"
     : character === "\\" || delimiters.includes(character) ? `\\${character}` : character).join("");
 }
+
+/**
+ * @param url - Literal link destination.
+ * @returns Its shortest CommonMark form: bare when no character needs delimiting, otherwise angle-bracketed.
+ */
+export function encodeMarkdownDestination(url: string): string {
+  // Ampersands are escaped only where they would read as a character reference.
+  const text = url.replace(/&(?=#?[0-9A-Za-z]+;)/gu, "&amp;");
+  return url && /^[^\s()<>\\\u0000-\u001f\u007f]+$/u.test(url) ? text : `<${text.replace(/[\\<>]/gu, "\\$&")}>`;
+}

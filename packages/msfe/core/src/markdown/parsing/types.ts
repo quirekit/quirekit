@@ -38,6 +38,14 @@ export interface ReferenceCertificate {
 /** Weak native ownership, isolated from other parser configurations and documents. */
 export type ReferenceCertificates = WeakMap<Tree | TreeBuffer, ReferenceCertificate>;
 
+/** A native chunk with its absolute position, as found by a traversal. */
+export interface ReferenceChunk {
+  /** Immutable parser chunk. */
+  readonly chunk: Tree | TreeBuffer;
+  /** Its absolute source position. */
+  readonly offset: number;
+}
+
 /** Actual reference-refinement work for one accepted parser snapshot. */
 export interface ReferenceParseWork extends ReferenceComparisonWork, SyntaxReuseWork {
   /** Immutable chunks visited while locating affected blocks. */

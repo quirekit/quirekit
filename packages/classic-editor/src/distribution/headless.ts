@@ -1,3 +1,5 @@
+import "../plugin/augmentation";
+
 export { defineClassicEditorPlugin } from "../plugin/define";
 export {
   buildClassicEditorFixedLayoutFrame,
@@ -23,6 +25,8 @@ export type {
 } from "../export-support";
 export type {
   ClassicEditorPlugin,
+  ClassicEditorMountedRenderable,
+  ClassicEditorRenderContext,
   ClassicEditorServiceContext,
   ClassicEditorImportContext,
   ClassicEditorImportOptions

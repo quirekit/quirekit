@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/extension-list",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/extensions/list"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/extensions/list"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/extensions/list#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit list node extensions.",

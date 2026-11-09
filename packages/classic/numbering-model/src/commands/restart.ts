@@ -63,7 +63,7 @@ export function createWordNumberingSequenceCommand(
 /**
  * Creates an exact marker-owned restart or continue command.
  *
- * @param mode - Write a positive start override or clear the local override.
+ * @param mode - Write a non-negative start override or clear the local override.
  * @param paragraphTypes - Registered paragraph-like node names.
  * @returns Command that mutates one numbered paragraph without moving selection.
  */
@@ -133,17 +133,17 @@ export function createWordNumberingSequenceAtPositionCommand(
 }
 
 /**
- * Validates one positive restart value.
+ * Validates one non-negative restart value.
  *
  * @param value - Candidate restart payload.
- * @returns Positive integer or undefined.
+ * @returns Non-negative integer or undefined.
  */
 function readStart(value: unknown): number | undefined {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
     return undefined;
   }
   const start = (value as RestartWordNumberingOptions).start;
-  return Number.isInteger(start) && start > 0 ? start : undefined;
+  return Number.isInteger(start) && start >= 0 ? start : undefined;
 }
 
 /**

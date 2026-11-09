@@ -21,6 +21,7 @@ import type { QuireAiCapability } from "@quirekit/ai-contract";
 ## 使用时注意
 
 - 这个包只有类型，不含运行时代码；读取文档、执行编辑和校验由 `@quirekit/ai-runtime` 完成。
+- 格式的 `satisfied` 可声明整个选中范围的幂等条件，与 `apply` 使用同一个 owner；未声明时仍逐段或逐字符 run 比较 `read`。回调只读取当前文档和映射范围，不执行命令。
 
 ## 相关说明
 

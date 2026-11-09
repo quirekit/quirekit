@@ -12,6 +12,8 @@ export interface QuireTextTabStop {
 export interface QuireTextTabs {
   /** Explicit stops, in increasing logical position. */
   readonly stops: readonly QuireTextTabStop[];
+  /** Positive CSS pixel interval after the final explicit stop, anchored at the same origin. */
+  readonly defaultInterval?: number | undefined;
   /** Logical distance from the tab origin to this layout region's leading edge. */
   readonly offset?: number | undefined;
 }

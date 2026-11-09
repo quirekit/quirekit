@@ -180,9 +180,12 @@ export function applyQuireAiFormat(props: CommandProps, range: QuireAiEditRange,
  * @param doc - Current document.
  * @param range - Range in the current document.
  * @param value - Format and value.
- * @returns Whether every text block (paragraph) or text run (character) in the range has the value.
+ * @returns Whether the owner rule, or every consumer by default, already matches.
  */
 function hasFormatValue(doc: Node, range: QuireAiEditRange, value: QuireAiFormatValue): boolean {
+  if (value.format.satisfied !== undefined) {
+    return value.format.satisfied({ doc, from: range.from, to: range.to }, value.value);
+  }
   const expected = JSON.stringify(value.value ?? null);
   // An object value names only the fields it sets, such as a list kind without a level; the others may differ.
   const fields = value.value !== null && typeof value.value === "object" && !Array.isArray(value.value)

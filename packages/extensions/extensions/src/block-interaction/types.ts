@@ -57,7 +57,7 @@ export interface BlockCatalog {
   readonly blocks: readonly BlockFact[];
   /** Unique identity lookup; conflicts are omitted. */
   readonly byId: ReadonlyMap<string, BlockFact>;
-  /** Complete source-boundary lookup prepared only on document changes. */
+  /** Complete source-boundary lookup, collected on first use after a document change. */
   readonly byFrom: ReadonlyMap<number, BlockFact>;
 }
 

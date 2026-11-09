@@ -27,7 +27,13 @@ export function documentViewport(toolbar: () => HTMLElement | null, dock: () => 
     name: "mdDocumentViewport",
     /** @returns A lazy geometry read, shared by all navigation and input consumers. */
     addCodeMirrorExtensions() {
-      return EditorView.scrollMargins.of(() => documentChromeMargins(toolbar(), dock(), task()));
+      return EditorView.scrollMargins.of(view => {
+        const chrome = documentChromeMargins(toolbar(), dock(), task()), win = view.dom.ownerDocument.defaultView;
+        if (!win || !view.dom.closest('[data-layout="document"]')) return chrome;
+        // A page-scrolled document keeps room below the caret instead of typing against the window's bottom edge.
+        const writing = Math.min(120, Math.round((win.visualViewport?.height ?? win.innerHeight) * 0.15));
+        return { top: chrome?.top ?? 0, bottom: Math.max(chrome?.bottom ?? 0, writing) };
+      });
     },
   });
 }

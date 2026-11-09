@@ -92,11 +92,8 @@
 .qk-block-editor__content table { max-width: none; }
 .qk-block-data-view { margin: 16px 0; min-width: 0; max-width: 100%; outline: none; }
 .qk-block-gutter { position: relative; z-index: 20; display: flex; align-items: center; height: var(--qk-block-handle-size); }
-.qk-block-gutter__handle { cursor: grab; touch-action: none; width: var(--qk-block-handle-width); height: var(--qk-block-handle-size); min-height: var(--qk-block-handle-size); padding: 0 4px; gap: 2px; color: var(--qk-color-text-secondary); background: var(--qk-color-surface-page); }
+.qk-block-gutter__handle { height: var(--qk-block-handle-size); min-height: var(--qk-block-handle-size); }
 .qk-block-gutter__insert { width: var(--qk-block-handle-size); height: var(--qk-block-handle-size); min-height: var(--qk-block-handle-size); }
-.qk-block-gutter__type { display: flex; align-items: center; gap: 2px; width: 30px; height: 16px; }
-.qk-block-gutter__grip { width: 12px; height: 16px; color: var(--qk-color-text-tertiary); }
-.qk-block-gutter__handle:hover, .qk-block-gutter__handle[aria-expanded=true] { color: var(--qk-color-action-primary); background: var(--qk-color-surface-hover); }
 .qk-block-drag-ghost { position: relative; z-index: 100; pointer-events: none; overflow: hidden; border-radius: var(--qk-radius-control); background: var(--qk-color-surface-page); box-shadow: var(--qk-elevation-overlay); opacity: .88; }
 .qk-block-drag-ghost * { pointer-events: none !important; }
 .qk-block-drop-indicator { position: relative; z-index: 100; pointer-events: none; height: 2px; background: var(--qk-color-action-primary); }

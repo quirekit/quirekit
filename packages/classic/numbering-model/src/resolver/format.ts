@@ -25,6 +25,7 @@ import {
   resolveWordTextLanguage
 } from "./formats/text-language";
 import { formatDeterministicWordNumberingCounter } from "./deterministic";
+import { formatWordZeroCounter } from "./formats/zero";
 
 const letterCycleLength = 780;
 const romanCycleLength = 32_767;
@@ -48,7 +49,7 @@ const romanTokens = [
  * Formats one validated Word numbering counter without mutating sequence state.
  *
  * @param format - Canonical non-bullet numbering format.
- * @param value - Positive integer counter value.
+ * @param value - Non-negative integer counter value.
  * @param options - Marker language and custom expression context.
  * @returns Visible counter text for marker-template expansion.
  */
@@ -57,9 +58,10 @@ export function formatWordNumberingCounter(
   value: number,
   options: WordNumberingCounterFormatOptions = {}
 ): string {
-  if (!Number.isInteger(value) || value < 1) {
-    throw new RangeError("Word numbering counters must be positive integers.");
+  if (!Number.isInteger(value) || value < 0) {
+    throw new RangeError("Word numbering counters must be non-negative integers.");
   }
+  if (value === 0) return formatWordZeroCounter(format, options);
   switch (format) {
     case "decimal":
       return String(value);

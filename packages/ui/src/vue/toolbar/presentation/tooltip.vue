@@ -13,6 +13,8 @@ interface Props {
   readonly label: string;
   /** Override the label, or disable a tooltip owned by an enclosing compound control. */
   readonly tooltip?: string | false | undefined;
+  /** Keys shown beside the explanation; hidden while a disabled reason replaces it. */
+  readonly shortcut?: readonly string[] | undefined;
   /** Explanation displayed while the command is unavailable. */
   readonly disabledReason?: string | undefined;
   /** Current command availability, independent of tooltip availability. */
@@ -35,7 +37,7 @@ defineSlots<{
     <QuireTooltipTrigger as-child><slot /></QuireTooltipTrigger>
     <slot name="content">
       <QuireTooltipContent v-bind="{ ...(tooltip === false ? {} : { content: tooltip ?? label }),
-        ...(disabledReason === undefined ? {} : { disabledReason }) }" :subject-disabled="subjectDisabled ?? false" />
+        ...(disabledReason === undefined ? {} : { disabledReason }), ...(shortcut?.length ? { shortcut } : {}) }" :subject-disabled="subjectDisabled ?? false" />
     </slot>
   </QuireTooltipRoot>
 </template>

@@ -40,7 +40,12 @@ describe("whiteboard through the central model tools", () => {
     ] } });
     expect(updated.summary).toContain("Applied 1 operation(s).");
     expect(readWhiteboardDocument(editor.getJSON().content![1]!.attrs!.board).scene.elements).toEqual(expect.arrayContaining([expect.objectContaining({ id: "b:label", text: "发布" })]));
-    expect(editor.commands.undo()).toBe(true); expect(editor.getJSON()).toEqual(before);
+    // Undo restores the earlier board under a newer revision, since every write of a board advances it.
+    expect(editor.commands.undo()).toBe(true);
+    const undone = editor.getJSON(), undoneBoard = undone.content![1]!.attrs!.board as { revision: number };
+    expect(undoneBoard.revision).toBe(board.revision + 2);
+    expect({ ...undoneBoard, revision: board.revision }).toEqual(before.content![1]!.attrs!.board);
+    expect({ ...undone, content: undone.content!.filter((_, index) => index !== 1) }).toEqual({ ...before, content: before.content!.filter((_, index) => index !== 1) });
     expect(editor.state.doc.textContent).toBe("流程如下保留结尾");
   });
 

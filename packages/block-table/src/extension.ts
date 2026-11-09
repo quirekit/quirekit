@@ -1,5 +1,6 @@
+import type {} from "@quirekit/collab-contract";
 import { Extension, type QuireAnyExtension, type QuireJSONContent } from "@quirekit/core";
-import { createWordTableJSON } from "@quirekit/classic-table-model";
+import { createWordTableCollabRules, createWordTableJSON } from "@quirekit/classic-table-model";
 import { BlockTableNode, BlockTableRowNode, BlockTableCellNode } from "./html/nodes";
 import { WordTableLayoutProfile } from "@quirekit/classic-table-model";
 import type { BlockTableFeature, BlockTableSize, BlockTableInsertOptions } from "@quirekit/block-editor";
@@ -11,6 +12,8 @@ import { createBlockTableStylePastePlugin } from "./styles/paste";
 const BlockTable = Extension.create<Record<string, never>, BlockTableFeature>({
   name: "blockTable",
   priority: 110,
+  /** @returns Shared Word table rules. */
+  addCollabRules() { return createWordTableCollabRules(); },
   /** @returns Built-in definition preparation before canonical paste validation. */
   addProseMirrorPlugins() { return [createBlockTableStylePastePlugin()]; },
   /** @returns Whole-table actions shared by any contextual block-menu consumer. */

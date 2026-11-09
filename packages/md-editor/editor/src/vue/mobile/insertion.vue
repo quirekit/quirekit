@@ -92,7 +92,7 @@ function activate(value: string): void {
   if (!actions.value.some(action => action.value === value && !action.disabled)) return;
   if (["date", "emoji", "mention", "image"].includes(value)) { page.value = value; error.value = ""; return; }
   const source = blockInsertionSource(props.editor, props.locale, value);
-  if (source) { commit(source, true); return; }
+  if (source !== null) { commit(source, true); return; }
   const target = writer ? writer.anchor.target() : anchor.value?.target();
   if (!target || scope !== props.editor.documentScope) { error.value = text.value.conflict; return; }
   const boundary = side.value ? adjacent.value?.target(side.value) : props.target;

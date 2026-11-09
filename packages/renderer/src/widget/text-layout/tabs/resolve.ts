@@ -2,7 +2,7 @@ import type { QuireTextLayoutOptions } from "../types";
 import type { QuireTextTabPaint, QuireTextTabs } from "./types";
 
 /**
- * Resolves an explicit tab's advance in the current logical line slot.
+ * Resolves an explicit stop or default grid in the current logical line slot.
  *
  * The field width is measured from the same source units used by wrapping.
  * Stops beyond the slot end are clipped before alignment, so a narrow column
@@ -12,7 +12,7 @@ import type { QuireTextTabPaint, QuireTextTabs } from "./types";
  * @param position - Current logical position relative to the unindented origin.
  * @param end - Logical end of the available line slot.
  * @param fieldWidth - Measured following field up to the next tab or hard break.
- * @returns Advance and leader, or undefined after the last explicit stop.
+ * @returns Advance and leader, or undefined when no successor is configured.
  */
 export function resolveTextTab(
   tabs: QuireTextTabs, position: number, end: number, fieldWidth: number
@@ -25,7 +25,14 @@ export function resolveTextTab(
     else high = middle;
   }
   const stop = tabs.stops[low];
-  if (stop === undefined) return undefined;
+  if (stop === undefined) {
+    if (tabs.defaultInterval === undefined) return undefined;
+    // A hanging first line reaches the normal region edge before the grid.
+    // Arithmetic then keeps subsequent stepping bounded even for a tiny interval.
+    const target = position < (tabs.offset ?? 0) - 0.001 ? tabs.offset ?? 0 : position < -0.001 ? 0
+      : (Math.floor((position + 0.001) / tabs.defaultInterval) + 1) * tabs.defaultInterval;
+    return { advance: Math.max(0, Math.min(target, end) - position) };
+  }
   const reserve = stop.alignment === "end" ? fieldWidth : stop.alignment === "center" ? fieldWidth / 2 : 0;
   return { advance: Math.max(0, Math.min(stop.position, end) - position - reserve), leader: stop.leader };
 }
@@ -37,6 +44,9 @@ export function resolveTextTab(
 export function validateTextTabs(tabs: QuireTextTabs | undefined): void {
   if (tabs === undefined) return;
   if (!Number.isFinite(tabs.offset ?? 0)) throw new RangeError("Tab origin must be finite.");
+  if (tabs.defaultInterval !== undefined && (!Number.isFinite(tabs.defaultInterval) || tabs.defaultInterval <= 0)) {
+    throw new RangeError("Default tab interval must be positive and finite.");
+  }
   let previous = -Infinity;
   for (const stop of tabs.stops) {
     if (!Number.isFinite(stop.position) || stop.position < previous) {

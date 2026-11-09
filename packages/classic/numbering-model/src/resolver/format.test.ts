@@ -93,7 +93,7 @@ describe("Word numbering counter formats", () => {
   });
 
   it("rejects counters outside the validated canonical domain", () => {
-    expect(() => formatWordNumberingCounter("decimal", 0)).toThrow(RangeError);
+    expect(() => formatWordNumberingCounter("decimal", -1)).toThrow(RangeError);
     expect(() => formatWordNumberingCounter("decimal", 1.5)).toThrow(RangeError);
   });
 });

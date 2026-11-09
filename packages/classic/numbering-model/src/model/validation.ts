@@ -70,7 +70,7 @@ export function resolveWordParagraphNumbering(
   }
   const startOverride = value.startOverride;
   if (startOverride !== null && (
-    !Number.isInteger(startOverride) || Number(startOverride) < 1
+    !Number.isInteger(startOverride) || Number(startOverride) < 0
   )) return null;
   const task = value.task;
   if (task !== null && (!isRecord(task) || typeof task.checked !== "boolean")) {
@@ -130,7 +130,7 @@ export function isWordNumberingLevel(
     )
     && typeof value.text === "string"
     && Number.isInteger(value.start)
-    && Number(value.start) >= 1
+    && Number(value.start) >= 0
     && isLevelRestart(value.restartAfterLevel, Number(value.level))
     && (value.suffix === "tab" || value.suffix === "space" || value.suffix === "nothing")
     && (value.justification === "start" || value.justification === "center" || value.justification === "end")
@@ -288,7 +288,7 @@ function isMeasurementOrNull(value: unknown): boolean {
 /** @param value - Candidate numbering-level tab. @returns Whether it uses canonical paragraph tab semantics. */
 function isTabStop(value: unknown): boolean {
   return isRecord(value) && value.position !== null && isMeasurementOrNull(value.position)
-    && ["start", "center", "end", "decimal", "bar", "clear"].includes(String(value.alignment))
+    && ["start", "center", "end", "decimal", "bar", "num", "clear"].includes(String(value.alignment))
     && (value.leader === undefined || value.leader === null || typeof value.leader === "string");
 }
 

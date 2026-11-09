@@ -3,9 +3,11 @@ import type { UserShortcuts } from "@unocss/core";
 /** UnoCSS preset 发布的 Accordion anatomy 类。 */
 export const accordionRecipeCatalog = Object.freeze([
   "qk-accordion",
+  "qk-accordion--plain",
   "qk-accordion--horizontal",
   "qk-accordion--vertical",
   "qk-accordion__item",
+  "qk-accordion__item--plain",
   "qk-accordion__trigger",
   "qk-accordion__trigger--sm",
   "qk-accordion__trigger--md",
@@ -24,6 +26,7 @@ export const accordionShortcuts = [
     "min-w-0 overflow-hidden rounded-qk-control border border-qk-border-default bg-qk-surface-page text-qk-text-primary",
     { layer: "qk-recipes" }
   ],
+  ["qk-accordion--plain", "!border-0 !bg-transparent gap-qk-inline", { layer: "qk-recipes" }],
   ["qk-accordion--vertical", "grid", { layer: "qk-recipes" }],
   ["qk-accordion--horizontal", "flex items-stretch", { layer: "qk-recipes" }],
   [
@@ -31,6 +34,7 @@ export const accordionShortcuts = [
     "min-w-0 border-0 border-qk-border-subtle data-[orientation=vertical]:border-b data-[orientation=vertical]:last:border-b-0 data-[orientation=horizontal]:flex-1 data-[orientation=horizontal]:border-r data-[orientation=horizontal]:last:border-r-0",
     { layer: "qk-recipes" }
   ],
+  ["qk-accordion__item--plain", "!border-0", { layer: "qk-recipes" }],
   [
     "qk-accordion__trigger",
     [

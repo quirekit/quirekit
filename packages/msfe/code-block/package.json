@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/msfe-code-block",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Fenced code blocks with language selection and highlighting for the MSFE Markdown source editor.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/msfe/code-block"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/msfe/code-block"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/msfe/code-block#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

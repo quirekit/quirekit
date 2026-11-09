@@ -24,6 +24,7 @@ export const selectRecipeCatalog = Object.freeze([
   "qk-select__list",
   "qk-select__item",
   "qk-select__item-label",
+  "qk-select__item-shortcut",
   "qk-select__item-indicator"
 ]);
 
@@ -78,5 +79,6 @@ export const selectShortcuts = [
     { layer: "qk-recipes" }
   ],
   ["qk-select__item-label", "min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap", { layer: "qk-recipes" }],
+  ["qk-select__item-shortcut", ["shrink-0 whitespace-nowrap text-qk-text-tertiary", { "font-family": "inherit", "font-size": "inherit", "letter-spacing": "0.12em" }], { layer: "qk-recipes" }],
   ["qk-select__item-indicator", "inline-flex [&[hidden]]:hidden size-[16px] shrink-0 items-center justify-center text-qk-action-text", { layer: "qk-recipes" }]
 ] satisfies UserShortcuts;

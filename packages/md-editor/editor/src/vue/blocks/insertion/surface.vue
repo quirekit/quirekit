@@ -41,7 +41,7 @@ function menu(open: boolean): void {
 /** @param value - Installed insertion identity from the common catalog. */
 function insert(value: string): void {
   const source = blockInsertionSource(props.controls.editor, props.locale, value);
-  if (source) {
+  if (source !== null) {
     if (props.controls.editor.run(blockInsertionCommand(target.value, source), props.controls.target).ok) menu(false);
     else error.value = blockLabels(props.locale).stale;
   } else { emit("insert", { ...target.value, value }); menu(false); }
@@ -63,5 +63,7 @@ function insert(value: string): void {
 </template>
 <style scoped>
 .md-empty-insert { position: absolute; z-index: 3; pointer-events: auto; }
-.md-empty-insert__button { background: var(--qk-color-surface-subtle); }
+/* Matches the block handle: hairline edge on the page, fill only on hover. */
+.md-empty-insert__button { border-radius: var(--qk-radius-group); border-color: var(--qk-color-border-subtle); background: var(--qk-color-surface-page); box-shadow: none; }
+.md-empty-insert__button:hover, .md-empty-insert__button[aria-expanded="true"] { background: var(--qk-color-surface-hover); }
 </style>

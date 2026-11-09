@@ -417,6 +417,9 @@ importers:
       '@playwright/test':
         specifier: 1.61.1
         version: 1.61.1
+      '@quirekit/collab-contract':
+        specifier: workspace:*
+        version: link:../collab-contract
       happy-dom:
         specifier: 20.10.6
         version: 20.10.6
@@ -466,6 +469,9 @@ importers:
         specifier: 14.0.3
         version: 14.0.3
     devDependencies:
+      '@quirekit/collab-contract':
+        specifier: workspace:*
+        version: link:../collab-contract
       tsdown:
         specifier: 'catalog:'
         version: 0.22.3(@tsdown/css@0.22.3)(typescript@6.0.3)(vue-tsc@3.3.7(typescript@6.0.3))
@@ -506,6 +512,9 @@ importers:
         specifier: workspace:*
         version: link:../ui
     devDependencies:
+      '@quirekit/collab-contract':
+        specifier: workspace:*
+        version: link:../collab-contract
       tsdown:
         specifier: 'catalog:'
         version: 0.22.3(@tsdown/css@0.22.3)(typescript@6.0.3)(vue-tsc@3.3.7(typescript@6.0.3))
@@ -633,6 +642,9 @@ importers:
       '@zag-js/vue':
         specifier: 1.43.3
         version: 1.43.3(vue@3.5.43(typescript@6.0.3))
+      uuid:
+        specifier: 14.0.3
+        version: 14.0.3
     devDependencies:
       '@iconify-json/tabler':
         specifier: ^1.2.37
@@ -679,10 +691,16 @@ importers:
       '@quirekit/pm':
         specifier: workspace:*
         version: link:../../pm/pm
+      uuid:
+        specifier: 14.0.3
+        version: 14.0.3
     devDependencies:
       '@quirekit/ai-contract':
         specifier: workspace:*
         version: link:../../ai/contract
+      '@quirekit/collab-contract':
+        specifier: workspace:*
+        version: link:../../collab-contract
       '@quirekit/starter-kit':
         specifier: workspace:*
         version: link:../../core/starter-kit
@@ -720,6 +738,9 @@ importers:
       '@quirekit/ai-contract':
         specifier: workspace:*
         version: link:../../ai/contract
+      '@quirekit/collab-contract':
+        specifier: workspace:*
+        version: link:../../collab-contract
       '@quirekit/starter-kit':
         specifier: workspace:*
         version: link:../../core/starter-kit
@@ -770,6 +791,9 @@ importers:
       '@quirekit/ai-runtime':
         specifier: workspace:*
         version: link:../../ai/runtime
+      '@quirekit/collab-contract':
+        specifier: workspace:*
+        version: link:../../collab-contract
       '@quirekit/dom-view':
         specifier: workspace:*
         version: link:../../dom-view
@@ -810,6 +834,9 @@ importers:
       '@quirekit/ai-contract':
         specifier: workspace:*
         version: link:../../ai/contract
+      '@quirekit/collab-contract':
+        specifier: workspace:*
+        version: link:../../collab-contract
       '@quirekit/extensions':
         specifier: workspace:*
         version: link:../../extensions/extensions
@@ -1194,6 +1221,25 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 4.1.9(@opentelemetry/api@1.9.0)(@types/node@26.0.0)(happy-dom@20.10.6)(vite@8.3.4(@types/node@26.0.0)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.51.0)(terser@5.51.2)(yaml@2.9.0))
+
+  packages/collab-contract:
+    dependencies:
+      '@quirekit/core':
+        specifier: workspace:*
+        version: link:../core/editor
+      '@quirekit/pm':
+        specifier: workspace:*
+        version: link:../pm/pm
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 26.0.0
+      tsdown:
+        specifier: 'catalog:'
+        version: 0.22.3(@tsdown/css@0.22.3)(typescript@6.0.3)(vue-tsc@3.3.7(typescript@6.0.3))
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
 
   packages/core/docx:
     dependencies:
@@ -2841,6 +2887,28 @@ importers:
       uuid:
         specifier: 14.0.3
         version: 14.0.3
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 26.0.0
+      tsdown:
+        specifier: 'catalog:'
+        version: 0.22.3(@tsdown/css@0.22.3)(typescript@6.0.3)(vue-tsc@3.3.7(typescript@6.0.3))
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.9(@opentelemetry/api@1.9.0)(@types/node@26.0.0)(happy-dom@20.10.6)(vite@8.3.4(@types/node@26.0.0)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.51.0)(terser@5.51.2)(yaml@2.9.0))
+
+  packages/lit-doc:
+    dependencies:
+      '@quirekit/lit-docx-contract':
+        specifier: workspace:*
+        version: link:../lit-docx-contract
+      fflate:
+        specifier: 0.8.3
+        version: 0.8.3
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -6840,6 +6908,7 @@ packages:
   '@smithy/core@3.35.0':
     resolution: {integrity: sha512-zRMhfkByhT2snNdr1si24vJitU6Cr9ix2MikUfWmkAgp4jrNP0GcKSP5YvwQ+TlI8AZXER5QOGJn3JsVtSD9/A==}
     engines: {node: '>=18.0.0'}
+    deprecated: Deprecated due to a bug in custom logger data redaction. See https://github.com/aws/aws-sdk-js-v3/issues/8393.
 
   '@smithy/credential-provider-imds@4.5.2':
     resolution: {integrity: sha512-A9uSdn72ozbRUSit0eib0TW7nXuNPlaeM0zcGkJ+nE6tFcSDbnmtwoxbTCFBukVQcszDAyvsd7+rTduPTXpygg==}

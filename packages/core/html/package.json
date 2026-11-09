@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/html",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/core/html"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/core/html"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/core/html#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "HTML parser and serializer utilities for QuireKit.",

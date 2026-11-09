@@ -329,6 +329,11 @@ export interface LitAstTextBoxNode extends LitAstNode {
   readonly type: "textBox";
   /** Optional rich block content. */
   readonly children?: readonly LitAstNode[] | undefined;
+  /** Optional logical chain; only its first frame owns author content. */
+  readonly attrs?: Readonly<Record<string, unknown>> & {
+    /** Shared flow identity and this frame's order, without cached pagination fragments. */
+    readonly textBoxLink?: import('./textbox/types.js').LitAstTextBoxLink | undefined;
+  };
 }
 
 /** Normalized Picture source rectangle expressed as edge fractions. */

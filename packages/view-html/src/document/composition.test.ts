@@ -11,6 +11,29 @@ import { createHtmlRetainedDocumentView } from "./runtime";
 import { createHtmlDocumentCompositionRuntime } from "./composition";
 
 describe("retained HTML document composition", () => {
+  it("resolves positions after the preedit in the suffix that holds their text", () => {
+    const fixture = createFixture("abcd");
+    const runtime = createHtmlDocumentCompositionRuntime({
+      documentView: fixture.view,
+      resolveDomPoint: (pos, side) => fixture.view.domAtPos(pos, side),
+      ownerDocument: fixture.ownerDocument as unknown as Document,
+      rootId: "html:root",
+      regionId: "html:body"
+    });
+    const canonical = fixture.view.domAtPos(4);
+    expect(runtime.projectDomPoint(canonical)).toBe(canonical);
+
+    runtime.sync({ range: { from: 2, to: 2 }, text: "ni" }, presentation());
+    const projected = runtime.projectDomPoint(canonical);
+    expect(projected.node.nodeValue).toBe("bcd");
+    expect(projected.offset).toBe(2);
+    const prefix = fixture.view.domAtPos(2);
+    expect(runtime.projectDomPoint(prefix)).toBe(prefix);
+
+    runtime.sync(undefined, presentation());
+    expect(runtime.projectDomPoint(canonical)).toBe(canonical);
+  });
+
   it("inserts, updates, measures, and cancels one in-flow preedit session", () => {
     const fixture = createFixture("abc");
     const text = fixture.view.domAtPos(2).node as unknown as FakeSvgMountElement;

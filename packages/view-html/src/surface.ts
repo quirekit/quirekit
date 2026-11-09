@@ -175,9 +175,11 @@ function syncHtmlContentSurfaceGeometry(
   displaySize: HtmlSurfaceSize,
   runtime: HtmlMountedViewRuntimeOptions | undefined
 ): void {
-  surface.style.width = runtime?.width === undefined ? "100%" : `${displaySize.width}px`;
-  surface.style.height = "";
-  surface.style.minHeight = `${displaySize.height}px`;
+  const width = runtime?.width === undefined ? "100%" : `${displaySize.width}px`;
+  const height = `${displaySize.height}px`;
+  if (surface.style.width !== width) surface.style.width = width;
+  if (surface.style.height !== "") surface.style.height = "";
+  if (surface.style.minHeight !== height) surface.style.minHeight = height;
 }
 
 /**

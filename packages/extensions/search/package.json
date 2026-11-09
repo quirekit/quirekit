@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/extension-search",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/extensions/search"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/extensions/search"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/extensions/search#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit headless find and replace extension.",

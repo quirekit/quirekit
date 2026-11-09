@@ -1,14 +1,18 @@
-import { getChangedRanges } from "@quirekit/core";
-import { Plugin, Mapping } from "@quirekit/pm";
+import { getChangedRanges, readQuireTransactionOrigin } from "@quirekit/core";
+import { Plugin, PluginKey, Mapping } from "@quirekit/pm";
 import { v4 as uuid } from "uuid";
 import { readNotes } from "./query";
+
+/** Key of the plugin below; collaboration declares it a client-side plugin. */
+const blockNoteIdentityKey = new PluginKey("blockNoteIdentity");
 
 /** @returns Remaps duplicated definitions and their copied references in the same insertion, preserving original associations. */
 export function noteIdentityPlugin(): Plugin {
   return new Plugin({
+    key: blockNoteIdentityKey,
     /** @param transactions - Accepted changes since the last plugin pass. @param oldState - Original identities. @param state - Current source. @returns Identity repair joined to the originating history event, or null. */
     appendTransaction(transactions, oldState, state) {
-      if (!transactions.some(tr => tr.docChanged)) return null;
+      if (!transactions.some(tr => tr.docChanged) || transactions.some(tr => readQuireTransactionOrigin(tr) === "collaboration")) return null;
       const mapping = new Mapping(); transactions.forEach(tr => mapping.appendMapping(tr.mapping));
       // Existing definitions retain their identity even when a copy is inserted before them.
       const retained = new Set(readNotes(oldState.doc).flatMap(note => note.definitions.map(def => mapping.mapResult(def.from, 1)).filter(result => !result.deleted).map(result => result.pos)));

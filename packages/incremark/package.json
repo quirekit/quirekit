@@ -1,10 +1,14 @@
 {
   "name": "@quirekit/incremark",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Streaming Markdown sessions and extensible Vue reading with QuireKit Lezer.",
   "type": "module",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/incremark"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/incremark"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/incremark#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "sideEffects": [

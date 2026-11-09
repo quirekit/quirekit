@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/whiteboard",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Renderer-neutral whiteboard documents, validation, previews and save preparation.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/whiteboard"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/whiteboard"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/whiteboard#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

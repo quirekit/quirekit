@@ -10,6 +10,7 @@ import { emptyCodeLayer } from "./empty/layer";
 import { codeBlockBoundary } from "./boundaries";
 import { indentCode } from "./indent";
 import { fencePairing } from "./pair";
+import { toggleCodeBlock } from "./toggle";
 
 /** @returns Code container projection retaining the outer editor as the only input owner. */
 function codeBlockBackend(): MsfeExtension {
@@ -73,10 +74,12 @@ export const CodeBlock = Node.create<CodeBlockOptions>({ name: "code-block",
   /** @returns Measured placeholder only when the canonical block has no body line. */
   addProjectionLayers() { return emptyCodeLayer(this.name, this.options, () => this.editor); },
   addCommands() { return { setCodeLanguage: (language: string) => sourceCommand(setCodeLanguage(language)),
-    indentCode: () => sourceCommand(indentCode(1)), outdentCode: () => sourceCommand(indentCode(-1)) }; },
-  /** @returns Code-editor indentation inside fenced bodies; elsewhere the keys fall through to other owners. */
+    indentCode: () => sourceCommand(indentCode(1)), outdentCode: () => sourceCommand(indentCode(-1)),
+    toggleCodeBlock: () => sourceCommand(toggleCodeBlock()) }; },
+  /** @returns Code-editor indentation inside fenced bodies, where other keys fall through, and the code block toggle anywhere. */
   addKeyboardShortcuts() { return { Tab: () => this.editor.commands.indentCode(), "Shift-Tab": () => this.editor.commands.outdentCode(),
-    "Mod-]": () => this.editor.commands.indentCode(), "Mod-[": () => this.editor.commands.outdentCode() }; },
+    "Mod-]": () => this.editor.commands.indentCode(), "Mod-[": () => this.editor.commands.outdentCode(),
+    "Mod-Alt-c": () => this.editor.commands.toggleCodeBlock() }; },
   addAttributes() { return { language: { default: "", validate: value => typeof value === "string" && /^[a-zA-Z0-9_+#.-]{0,40}$/u.test(value) } }; },
   addSource() { return defineSource({ nodes: ["FencedCode"], placement: "before", read: readCodeBlock, patch: patchCodeBlock,
     source: (document, node) => document.lineAt(node.from).text, renderer: codeBlockRenderer }); },

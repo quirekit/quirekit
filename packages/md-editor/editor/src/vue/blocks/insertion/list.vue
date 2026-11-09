@@ -5,6 +5,7 @@ import type { MdBlockInsertionTarget } from "./types";
 import { blockInsertionCommand } from "./command";
 import type { MdEditorLocale } from "../../types";
 import { blockInsertionItems, blockInsertionSource } from "./catalog";
+import { blockToneStyle } from "../tones";
 const props = defineProps<{
   /** Frozen block boundary or empty-line destination. */ target: MdBlockInsertionTarget;
   /** Product language. */ locale: MdEditorLocale;
@@ -20,7 +21,7 @@ const groups = computed(() => blockInsertionItems(props.target.controls.editor, 
   <QuireScrollArea scrollbar-visibility="always" class="md-block-insert-scroll" data-md-block-insert-scroll>
     <QuireMenuGroup v-for="group in groups" :key="group.value" :label="group.label">
       <QuireMenuItem v-for="item in group.children" :key="item.value" :value="`${target.side}-${item.value}`" :disabled="item.disabled ?? false" @select="emit('select', item.value)">
-        <template #leading><QuireIcon :name="item.icon!" /></template>{{ item.label }}
+        <template #leading><QuireIcon :name="item.icon!" :style="blockToneStyle(item.value)" /></template>{{ item.label }}
       </QuireMenuItem>
     </QuireMenuGroup>
   </QuireScrollArea>

@@ -1,4 +1,4 @@
-import { ViewPlugin, type ViewUpdate } from "@quirekit/cm-view";
+import { ViewPlugin, type EditorView, type ViewUpdate } from "@quirekit/cm-view";
 import { syntaxTree } from "@quirekit/cm-language";
 import { MapMode } from "@quirekit/cm-state";
 import { readSourcePresentation, type MsfeEditor } from "@quirekit/msfe-core";
@@ -8,6 +8,24 @@ import { mapTableLayoutCache } from "./cache";
 import type { MeasuredTable, TableLayoutCache, TableLayoutMeasurement, TableLayoutWork } from "./types";
 
 const counters = new WeakMap<HTMLElement, TableLayoutWork>();
+
+/**
+ * Resolved on demand: a position stored on the row would change, and redraw it, with every edit above the table.
+ * @param view - Mounted source view.
+ * @param row - Rendered table row.
+ * @returns Current start of the row's table, which keys its layout, or null while that line is unparsed.
+ */
+function tableKeyOf(view: EditorView, row: HTMLElement): string | null {
+  const line = view.state.doc.lineAt(view.posAtDOM(row));
+  let key: string | null = null;
+  syntaxTree(view.state).iterate({ from: line.from, to: line.to, enter: node => {
+    if (key !== null) return false;
+    if (node.name !== "Table") return true;
+    key = String(node.from);
+    return false;
+  } });
+  return key;
+}
 
 /** @param editor - Mounted editor. @returns Actual sampled layout work, independent of source serialization. */
 export function getTableLayoutWork(editor: MsfeEditor): Readonly<TableLayoutWork> {
@@ -30,7 +48,8 @@ export const tableLayout = ViewPlugin.define(view => {
     if (!context || presentation.mode === "source") return [];
     const nodes = new Map<string, HTMLElement[]>();
     for (const row of view.contentDOM.querySelectorAll<HTMLElement>(".msfe-table-row")) {
-      const key = row.dataset.msfeTable!;
+      const key = tableKeyOf(view, row);
+      if (key === null) continue;
       if (!nodes.has(key)) nodes.set(key, []);
       nodes.get(key)!.push(row);
     }
@@ -107,7 +126,8 @@ export const tableLayout = ViewPlugin.define(view => {
   function scroll(event: Event): void {
     const row = scrolledTableRow(event.target);
     if (!row) return;
-    const source = event.target as HTMLElement, key = row.dataset.msfeTable!, left = source.scrollLeft;
+    const source = event.target as HTMLElement, key = tableKeyOf(view, row), left = source.scrollLeft;
+    if (key === null) return;
     if (Math.abs((offsets.get(key) ?? 0) - left) < .5) return;
     offsets.delete(key); offsets.set(key, left);
     // Retain only the most recently scrolled tables, independently of document length.
@@ -138,7 +158,7 @@ export const tableLayout = ViewPlugin.define(view => {
       // Source transactions map cache keys before CM draws. This write-only phase
       // bridges redraws to the deferred measurement phase without an equal-width frame.
       for (const row of view.contentDOM.querySelectorAll<HTMLElement>(".msfe-table-row")) {
-        const value = cache.get(row.dataset.msfeTable!);
+        const key = tableKeyOf(view, row), value = key === null ? undefined : cache.get(key);
         if (value) applyWidths(row, value.style);
       }
     },

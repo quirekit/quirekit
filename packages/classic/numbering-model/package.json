@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/classic-numbering-model",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -35,13 +35,23 @@
     "@quirekit/classic-styles-model": "workspace:*",
     "@quirekit/core": "workspace:*",
     "@quirekit/extensions": "workspace:*",
-    "@quirekit/pm": "workspace:*"
+    "@quirekit/pm": "workspace:*",
+    "uuid": "14.0.3"
   },
   "devDependencies": {
     "@quirekit/ai-contract": "workspace:*",
+    "@quirekit/collab-contract": "workspace:*",
     "@quirekit/starter-kit": "workspace:*",
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@quirekit/collab-contract": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "@quirekit/collab-contract": {
+      "optional": true
+    }
   }
 }

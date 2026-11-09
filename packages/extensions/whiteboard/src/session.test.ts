@@ -15,6 +15,18 @@ function fixture(): QuireEditor {
   ] } }); editors.push(editor); return editor;
 }
 afterEach(() => { editors.splice(0).forEach(editor => editor.destroy()); });
+/**
+ * Undo restores an earlier board under a newer revision, since every write of a board advances it.
+ * @param json - Document JSON. @param index - Board position among the top-level blocks. @param revision - Expected revision.
+ * @returns The JSON with that board's revision replaced.
+ */
+function revised(json: ReturnType<QuireEditor["getJSON"]>, index: number, revision: number): ReturnType<QuireEditor["getJSON"]> {
+  const content = [...json.content!];
+  const node = content[index]!;
+  content[index] = { ...node, attrs: { ...node.attrs, board: { ...(node.attrs!.board as Record<string, unknown>), revision } } };
+  return { ...json, content };
+}
+
 it("replaces an explicit trigger only once and rejects a mismatched board", () => {
   const editor = fixture(), before = editor.getJSON();
   const request = captureWhiteboardRequest(editor, undefined, { from: 0, to: 8 })!;
@@ -39,8 +51,8 @@ describe("atomic PM whiteboard sessions", () => {
     const beforeSave = editor.getJSON();
     expect(request.commit(prepareWhiteboardSave(board, board.scene, preview))).toBe("saved");
     request.release();
-    expect(editor.commands.undo()).toBe(true); expect(editor.getJSON()).toEqual(beforeSave);
-    expect(editor.commands.redo()).toBe(true); expect(editor.state.pm.doc.nodeAt(14)?.attrs.board.revision).toBe(1);
+    expect(editor.commands.undo()).toBe(true); expect(editor.getJSON()).toEqual(revised(beforeSave, 1, 2));
+    expect(editor.commands.redo()).toBe(true); expect(editor.state.pm.doc.nodeAt(14)?.attrs.board.revision).toBe(3);
   });
   it("rejects readonly, changed and deleted targets without losing the draft", () => {
     const editor = fixture(), request = captureWhiteboardRequest(editor, 8)!;

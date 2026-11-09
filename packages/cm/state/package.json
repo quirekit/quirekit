@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/cm-state",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Editor state data structures for the CodeMirror code editor",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/cm/state"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/cm/state"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/cm/state#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

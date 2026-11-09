@@ -1,10 +1,14 @@
 {
   "name": "@quirekit/font-pack",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Optional application-mounted open font assets for QuireKit.",
   "type": "module",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/font-pack"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/font-pack"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/font-pack#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "sideEffects": [

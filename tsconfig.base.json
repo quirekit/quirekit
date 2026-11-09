@@ -253,6 +253,9 @@
       "@quirekit/core": [
         "packages/core/editor/src/index.ts"
       ],
+      "@quirekit/collab-contract": [
+        "packages/collab-contract/src/index.ts"
+      ],
       "@quirekit/core/layout-provider": [
         "packages/core/editor/src/layout-provider/index.ts"
       ],
@@ -390,6 +393,21 @@
       ],
       "@quirekit/layout/text": [
         "packages/layout/src/text/index.ts"
+      ],
+      "@quirekit/lit-doc": [
+        "packages/lit-doc/src/index.ts"
+      ],
+      "@quirekit/lit-doc/browser": [
+        "packages/lit-doc/src/browser/index.ts"
+      ],
+      "@quirekit/lit-doc/conversion": [
+        "packages/lit-doc/src/conversion/index.ts"
+      ],
+      "@quirekit/lit-doc/conversion/browser": [
+        "packages/lit-doc/src/browser/conversion/index.ts"
+      ],
+      "@quirekit/lit-doc/conversion/worker-runtime": [
+        "packages/lit-doc/src/worker/conversion/index.ts"
       ],
       "@quirekit/lit-docx-contract": [
         "packages/lit-docx-contract/dist/index.d.mts"

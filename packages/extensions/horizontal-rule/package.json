@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/extension-horizontal-rule",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/extensions/horizontal-rule"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/extensions/horizontal-rule"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/extensions/horizontal-rule#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit horizontal rule node extension.",

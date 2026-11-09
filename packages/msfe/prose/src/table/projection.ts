@@ -27,7 +27,7 @@ export function projectTable({ state, node, from, to, active, selection, mode }:
     const delimiter = row.name === "TableDelimiter";
     const rowActive = active && isSourceActive(selection, row.from, row.to);
     result.push(Decoration.line({ class: `msfe-table-row${row.name === "TableHeader" ? " msfe-table-header" : ""}${delimiter ? " msfe-table-separator" : ""}${active ? " msfe-table-active" : ""}${row.to === node.to ? " msfe-table-last" : ""}`,
-      attributes: { style: `--msfe-table-columns:${count}`, "data-msfe-table": String(node.from),
+      attributes: { style: `--msfe-table-columns:${count}`,
         ...(reading ? delimiter ? { "aria-hidden": "true" } : { role: "row", "aria-rowindex": String(reading.indexes.get(row.from)) } : {}) } }).range(line.from));
     if (delimiter) {
       // The delimiter has its own permanent, compact grid row. Visibility changes only
@@ -44,11 +44,13 @@ export function projectTable({ state, node, from, to, active, selection, mode }:
       continue;
     }
     const pipes = row.getChildren("TableDelimiter");
-    let start = pipes[0]?.from === row.from ? pipes[0].to : row.from;
+    // Each cell owns the pipe before it, so its first position measures inside the cell rather than the previous cell's box.
+    let start = row.from;
     let index = 0;
     let hiddenFrom = row.to;
-    const ends = pipes.filter(pipe => pipe.from >= start).map(pipe => pipe.from);
-    if (pipes.at(-1)?.to !== row.to) ends.push(row.to);
+    // The closing pipe belongs to the last cell for the same reason.
+    const ends = pipes.filter(pipe => pipe.from > start && pipe.to < row.to).map(pipe => pipe.from);
+    ends.push(row.to);
     const surplus = ends.length > count;
     // Include surrounding source whitespace in each cell box. Parser cell ranges trim it,
     // which otherwise produces unequal offsets and drops empty cells between pipes.
@@ -74,7 +76,7 @@ export function projectTable({ state, node, from, to, active, selection, mode }:
         result.push(Decoration.mark({ class: "msfe-table-surplus" }).range(end, row.to));
         hiddenFrom = end; index++; break;
       }
-      start = end + 1; index++;
+      start = end; index++;
     }
     for (; index < count; index++) result.push(Decoration.widget({ widget: new TableSpacer(index, reading ? row.name === "TableHeader" ? "columnheader" : "cell" : undefined), side: 1 }).range(row.to));
     for (const mark of pipes) if (mark.to <= hiddenFrom) result.push(Decoration.mark({ class: "msfe-table-pipe", ...(reading ? { attributes: { "aria-hidden": "true" } } : {}) }).range(mark.from, mark.to));

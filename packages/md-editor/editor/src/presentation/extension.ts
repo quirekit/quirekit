@@ -17,6 +17,33 @@ import { inlineBoundaryNavigation } from "@quirekit/msfe-core";
 import { mdInlineBoundaries } from "./inline";
 import { editingBoundaries } from "@quirekit/msfe-core";
 import { Prec } from "@quirekit/cm-state";
+import { keymap } from "@quirekit/cm-view";
+import { commandKeyBinding } from "@quirekit/msfe-core";
+import { linkDestinationInput } from "../input/link";
+import { opaqueBlockInput } from "../input/edges/opaque";
+import { pasteInput } from "../input/paste/handler";
+import { leaveLastBlock, trailingClick } from "../input/edges/trailing";
+import { lineBreakTags } from "./breaks";
+import { closeTypedBlock, editNewMath } from "../input/fences/closers";
+import { backspaceBeforeStyle } from "../input/edges/style";
+import { deleteBlockEdgeBackward, deleteBlockEdgeForward, deleteEmptyCodeBlock, skipOpaqueBlock, unwrapContainer } from "../input/edges/blocks";
+
+/** Backspace/Delete at the edges of blocks that cannot absorb neighboring text, and Left/Right over blocks without a text caret. */
+const blockEdgeKeys = Prec.highest(keymap.of([
+  { key: "Enter", run: view => {
+    const spec = closeTypedBlock(view.state);
+    if (!spec) return false;
+    const from = view.state.doc.lineAt(view.state.selection.main.head).from, math = view.state.sliceDoc(from, from + 2) === "$$";
+    view.dispatch(spec);
+    if (math) editNewMath(view, from);
+    return true;
+  } },
+  { key: "Backspace", run: backspaceBeforeStyle },
+  commandKeyBinding("Backspace", state => deleteEmptyCodeBlock(state) ?? unwrapContainer(state) ?? deleteBlockEdgeBackward(state)),
+  commandKeyBinding("Delete", deleteBlockEdgeForward),
+  { key: "ArrowLeft", run: skipOpaqueBlock(false) }, { key: "ArrowRight", run: skipOpaqueBlock(true) },
+  { key: "ArrowDown", run: leaveLastBlock },
+]));
 
 /** Shared public Prose document presentation for MSFE consumers. */
 export const ProsePresentation = Extension.create<MdPresentationOptions, MdPresentationStorage>({ name: "quirekitProse",
@@ -31,8 +58,8 @@ export const ProsePresentation = Extension.create<MdPresentationOptions, MdPrese
     return [sourceInputProxy({ mediaQuery: "(max-width: 767px) and (any-pointer: coarse)", revealMargin: mobileHandleMargin, onSelectionTap: tapMobileSelection }), mobileSelectionActions,
       sourceRevealSetting.extension(() => this.storage.editingMode === "document" ? "hidden" : "selection"),
       inlineBoundaryNavigation(this.options.inlineBoundaries),
-      Prec.high(editingBoundaries(this.options.editingBoundaries)),
-      sourceRevealResolver.of(markdownRevealOwner), sourceBlockScopes.of(containerBlockScope), proseStructureField, proseSpacing, proseActiveBlock, proseDocumentSelection, proseMobileSelection, proseEditorGeometry, proseHighlighting, sourceMarkdownHighlighting, EditorView.contentAttributes.of(view => ({
+      Prec.high(editingBoundaries(this.options.editingBoundaries)), blockEdgeKeys, linkDestinationInput, opaqueBlockInput, pasteInput, trailingClick,
+      sourceRevealResolver.of(markdownRevealOwner), sourceBlockScopes.of(containerBlockScope), proseStructureField, proseSpacing, lineBreakTags, proseActiveBlock, proseDocumentSelection, proseMobileSelection, proseEditorGeometry, proseHighlighting, sourceMarkdownHighlighting, EditorView.contentAttributes.of(view => ({
       class: [readSourcePresentation(view.state).mode === "source" ? "" : "qk-prose qk-prose--compact", mobileSelectionContentClass(view)].filter(Boolean).join(" "),
     }))];
   },

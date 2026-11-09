@@ -1,10 +1,14 @@
 {
   "name": "@quirekit/incremark-core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Framework-neutral incremental Markdown parsing and semantic reading.",
   "type": "module",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/incremark-core"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/incremark-core"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/incremark-core#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "sideEffects": false,

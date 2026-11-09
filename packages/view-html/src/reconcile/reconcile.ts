@@ -37,6 +37,7 @@ export function reconcileHtmlDescriptorTree(
     changedRanges: options.changedRanges
   });
   const context: HtmlReconcileContext = {
+    ownershipChanged: false,
     ownerDocument: options.ownerDocument,
     allocateId: options.allocateId,
     patchHost: createHtmlDomPatchHost(trace),
@@ -80,6 +81,7 @@ export function reconcileHtmlDescriptorTree(
 
   return {
     root: options.root,
+    ownershipChanged: context.ownershipChanged,
     dirtyContainers: dirtyContainers.map((descriptor) => descriptor.id),
     diagnostics: context.diagnostics,
     trace

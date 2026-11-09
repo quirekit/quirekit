@@ -28,6 +28,7 @@ import {
 /** Extension hooks that declare product UI without a catch-all registry channel. */
 const extensionSurfaceHooks = Object.freeze([
   "addBlockTypes",
+  "addBlockPresentations",
   "addInsertItems",
   "addRibbonTabs",
   "addRibbonGroups",

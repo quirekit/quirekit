@@ -81,10 +81,10 @@ export type PreviewActivation = "click" | "dblclick";
 
 /** Internal source-bound successful output cache; it never retains editing targets or pending requests. */
 export interface PreviewOutputCache {
-  /** @param props - Exact semantic body. @param owner - Mounted output's document. @returns Previously accepted safe output, if eligible. */
-  get(props: PreviewProps, owner: Document): string | undefined;
-  /** @param props - Original accepted request body. @param owner - Mounted document. @param html - Successful safe output. */
-  set(props: PreviewProps, owner: Document, html: string): void;
+  /** @param props - Exact semantic body. @param owner - Mounted output's document. @param typography - Current font role, when known. @returns Previously accepted safe output, if eligible. */
+  get(props: PreviewProps, owner: Document, typography?: PreviewTypography): string | undefined;
+  /** @param props - Original accepted request body. @param owner - Mounted document. @param html - Successful safe output. @param typography - Font role the output was laid out with. */
+  set(props: PreviewProps, owner: Document, html: string, typography?: PreviewTypography): void;
 }
 
 /** Internal presentation policy chosen by each renderer family. */

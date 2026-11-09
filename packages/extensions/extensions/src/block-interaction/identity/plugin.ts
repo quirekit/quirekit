@@ -1,4 +1,4 @@
-import { inheritQuireAppendedHistory, type QuireEditor } from "@quirekit/core";
+import { inheritQuireAppendedHistory, readQuireTransactionOrigin, type QuireEditor } from "@quirekit/core";
 import { Plugin, PluginKey } from "@quirekit/pm";
 import { v4 as uuidv4 } from "uuid";
 import type { BlockCatalog, BlockInteractionOptions } from "../types";
@@ -27,6 +27,8 @@ export function createBlockIdentityPlugin(editor: QuireEditor, options: BlockInt
     props: { transformPasted: stripBlockIdentities, transformCopied: stripBlockIdentities },
     appendTransaction(transactions, oldState, state) {
       if (!editor.isEditable || !transactions.some(tr => tr.docChanged)) return null;
+      // Identities are random, so peers must not allocate them for changes they all receive; the server repairs repeats.
+      if (transactions.some(tr => readQuireTransactionOrigin(tr) === "collaboration")) return null;
       const tr = state.tr;
       return normalizeBlockIdentities(tr, options, oldState.doc, transactions) ? inheritQuireAppendedHistory(transactions, tr) : null;
     }

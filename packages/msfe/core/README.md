@@ -153,6 +153,10 @@ editor.destroy()
 
 Run this during page or component cleanup. Invalid configuration can make editor creation throw; your application must still handle initialization failures. `onError` reports errors during operation.
 
+## Performance
+
+MSFE parses incrementally and renders only the visible part of the document, so typing cost grows slowly with document length. [MD Editor](../../md-editor/editor/README.md), the complete product built on MSFE, takes p50 5.5 ms, p90 6.0 ms, p95 6.8 ms and p99 7.9 ms from key press to the accepted document in a 1,000,000-character document made mostly of long paragraphs (Document view, Apple M3 Max, Chromium 149, excluding the operating system, input method and display). The method and full table are in its README, and `pnpm --filter @quirekit/msfe-docs performance:latency` reproduces it in the QuireKit repository.
+
 ## Related packages
 
 | Package | Responsibility |

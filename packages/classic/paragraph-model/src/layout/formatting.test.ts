@@ -30,6 +30,26 @@ describe("Word paragraph layout projection", () => {
     ] }), true).tabs).toBeUndefined();
   });
 
+  it('consumes clear instructions before native geometry without disabling the default grid', () => {
+    const formatting = resolveWordParagraphFormatting({ tabs: [
+      { position: { unit: 'dxa', value: 1440 }, alignment: 'clear' },
+      { position: { unit: 'dxa', value: 2160 }, alignment: 'start' },
+    ] });
+    expect(projectWordParagraphLayoutFormatting(formatting, true, 720).tabs).toEqual({
+      stops: [{ position: 144, alignment: 'start' }], defaultInterval: 48,
+    });
+    expect(formatting.tabs).toHaveLength(2);
+    const cleared = resolveWordParagraphFormatting({ tabs: [
+      { position: { unit: 'dxa', value: 1440 }, alignment: 'clear' },
+    ] });
+    expect(projectWordParagraphLayoutFormatting(cleared, true, 720).tabs).toEqual({ stops: [], defaultInterval: 48 });
+    const ordered = resolveWordParagraphFormatting({ tabs: [
+      { position: { unit: 'dxa', value: 720 }, alignment: 'start' },
+      { position: { unit: 'dxa', value: 720 }, alignment: 'clear' },
+    ] });
+    expect(projectWordParagraphLayoutFormatting(ordered, true, 720).tabs).toEqual({ stops: [], defaultInterval: 48 });
+  });
+
   it("projects an unformatted paragraph to single spacing with two-line widow control", () => {
     expect(projectWordParagraphLayoutFormatting(defaultWordParagraphFormatting, false)).toMatchObject({
       alignment: null, direction: null, snapToGrid: null, lineSpacing: null, naturalLineMetrics: false,

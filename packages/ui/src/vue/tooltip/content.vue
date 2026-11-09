@@ -5,11 +5,14 @@ import { computed, onMounted, ref, useAttrs } from "vue";
 import { Tooltip, useTooltipContext } from "@ark-ui/vue/tooltip";
 import { resolveTooltipContent } from "../../components/tooltip";
 import { useModalPortal } from "../shared/surface/use-modal-portal";
+import { chordText, keyLabel } from "../kbd/labels";
 
 /** Tooltip Content 的公开属性。 */
 interface Props {
   /** 普通提示标签或快捷键说明。 */
   readonly content?: string;
+  /** 显示在提示文字后的快捷键，按阅读顺序列出；仅展示，不注册按键。 */
+  readonly shortcut?: readonly string[];
   /** 控件不可用时替换普通提示的原因说明。 */
   readonly disabledReason?: string;
   /** 被提示的控件是否不可用。 */
@@ -55,6 +58,8 @@ const resolvedContent = computed(() =>
       : { disabledReason: props.disabledReason })
   })
 );
+const shortcutText = computed(() =>
+  props.shortcut?.length && !(props.subjectDisabled && props.disabledReason) ? chordText(props.shortcut) : "");
 </script>
 
 <template>
@@ -89,7 +94,7 @@ const resolvedContent = computed(() =>
             />
           </Tooltip.Arrow>
           <slot :content="resolvedContent">
-            {{ resolvedContent }}
+            {{ resolvedContent }}<kbd v-if="shortcutText" class="qk-tooltip__shortcut" :aria-label="keyLabel(shortcut!)">{{ shortcutText }}</kbd>
           </slot>
         </Tooltip.Content>
       </Tooltip.Positioner>

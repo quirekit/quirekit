@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/msfe-react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React bindings for the MSFE Markdown source editor: hooks, editor content and React node views.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/msfe/react"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/msfe/react"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/msfe/react#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

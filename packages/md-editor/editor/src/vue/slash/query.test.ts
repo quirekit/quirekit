@@ -50,7 +50,7 @@ it("searches the same installed catalog by localized names, aliases and pinyin i
   for (const query of ["表格", "table", "BG"]) expect(searchBlockInsertions(catalog, query).map(item => item.key)).toEqual(["insert-table"]);
   expect(searchBlockInsertions(catalog, "h2").map(item => item.key)).toEqual(["insert-h2"]);
   for (const query of ["高亮块", "glk", "callout"]) expect(searchBlockInsertions(catalog, query).map(item => item.key)).toEqual(["insert-highlight"]);
-  expect(blockInsertionSource(editor, "zh-CN", "insert-highlight")).toBe("::: highlight {emoji=📌 color=orange}\n在这里写下需要突出的内容。\n:::");
+  expect(blockInsertionSource(editor, "zh-CN", "insert-highlight")).toBe("::: highlight {emoji=📌 color=orange}\n\u0000\n:::");
   expect(searchBlockInsertions(catalog, "")).toHaveLength(catalog.flatMap(group => group.children ?? []).length);
   expect(searchBlockInsertions([{ value: "g", label: "g", children: [{ value: "insert-table", label: "Table", disabled: true }] }], "table")).toEqual([]);
 });

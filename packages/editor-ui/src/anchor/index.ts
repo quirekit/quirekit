@@ -1,5 +1,7 @@
 export { projectEditorUIAnchorGeometry } from "./projection";
 export { resolveEditorUIAnchorGeometry } from "./resolver";
+export { resolveEditorUIStructuredRangeRects, resolveEditorUITextRangeRects } from "./range-rects";
+export type { EditorUIRangeFrame, EditorUIRangeSurface } from "./range-rects";
 export type {
   EditorUIAnchorCoordinateSpace,
   EditorUIAnchorGeometryResolution,

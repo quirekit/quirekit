@@ -56,31 +56,12 @@ function moveSelection(
   direction: -1 | 1
 ): Transaction | null {
   const { selection, doc } = options.state;
-
-  if (!selection.empty) {
-    return collapseSelectionToHorizontalEdge(options, direction);
-  }
-
-  const tableBoundaryPosition = resolveTableHorizontalBoundaryPosition(
-    options,
-    direction
-  );
-
-  if (tableBoundaryPosition !== null) {
-    return setCollapsedSelection(options, tableBoundaryPosition, direction);
-  }
-
-  const anchor = direction < 0 ? selection.from : selection.to;
-  const nextPosition = clampKeyboardSelectionPosition(
-    options,
-    Math.min(Math.max(anchor + direction, 0), doc.content.size)
-  );
-
-  if (nextPosition === selection.from && nextPosition === selection.to) {
-    return null;
-  }
-
-  return setCollapsedSelection(options, nextPosition, direction);
+  if (!selection.empty) return collapseSelectionToHorizontalEdge(options, direction);
+  const tableBoundaryPosition = resolveTableHorizontalBoundaryPosition(options, direction);
+  if (tableBoundaryPosition !== null) return setCollapsedSelection(options, tableBoundaryPosition, direction);
+  // One position step; an atomic inline node is crossed whole by the shared target resolver.
+  const nextPosition = clampKeyboardSelectionPosition(options, Math.min(Math.max(selection.from + direction, 0), doc.content.size));
+  return nextPosition === selection.from ? null : setCollapsedSelection(options, nextPosition, direction);
 }
 
 /**

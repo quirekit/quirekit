@@ -1,0 +1,321 @@
+{
+  "referenceCommit": "72b0421c0bbf9d01eed9cf14834ae47eb2df1b50",
+  "scope": "Independently observed zero-only behavior; not copied implementation or a positive-range oracle",
+  "results": [
+    {
+      "format": "aiueo",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "aiueoFullWidth",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "arabicAbjad",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "arabicAlpha",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "bahtText",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "bullet",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Zero"
+    },
+    {
+      "format": "chicago",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "chineseCounting",
+      "value": 0,
+      "reference": "○"
+    },
+    {
+      "format": "chineseCountingThousand",
+      "value": 0,
+      "reference": "○"
+    },
+    {
+      "format": "chineseLegalSimplified",
+      "value": 0,
+      "reference": "零"
+    },
+    {
+      "format": "chosung",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "custom",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "decimal",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "decimalEnclosedCircle",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "decimalEnclosedCircleChinese",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "decimalEnclosedFullstop",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "decimalEnclosedParen",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "decimalFullWidth",
+      "value": 0,
+      "reference": "０"
+    },
+    {
+      "format": "decimalFullWidth2",
+      "value": 0,
+      "reference": "０"
+    },
+    {
+      "format": "decimalHalfWidth",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "decimalZero",
+      "value": 0,
+      "reference": "00"
+    },
+    {
+      "format": "dollarText",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "ganada",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "hebrew1",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "hebrew2",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "hex",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "hindiConsonants",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "hindiCounting",
+      "value": 0,
+      "reference": "शून्य"
+    },
+    {
+      "format": "hindiNumbers",
+      "value": 0,
+      "reference": "०"
+    },
+    {
+      "format": "hindiVowels",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "ideographDigital",
+      "value": 0,
+      "reference": "〇"
+    },
+    {
+      "format": "ideographEnclosedCircle",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "ideographLegalTraditional",
+      "value": 0,
+      "reference": "零"
+    },
+    {
+      "format": "ideographTraditional",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "ideographZodiac",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "ideographZodiacTraditional",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "iroha",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "irohaFullWidth",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "japaneseCounting",
+      "value": 0,
+      "reference": "〇"
+    },
+    {
+      "format": "japaneseDigitalTenThousand",
+      "value": 0,
+      "reference": "〇"
+    },
+    {
+      "format": "japaneseLegal",
+      "value": 0,
+      "reference": "〇"
+    },
+    {
+      "format": "koreanCounting",
+      "value": 0,
+      "reference": "영"
+    },
+    {
+      "format": "koreanDigital",
+      "value": 0,
+      "reference": "영"
+    },
+    {
+      "format": "koreanDigital2",
+      "value": 0,
+      "reference": "零"
+    },
+    {
+      "format": "koreanLegal",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "format": "lowerLetter",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "lowerRoman",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "none",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "numberInDash",
+      "value": 0,
+      "reference": "- 0 -"
+    },
+    {
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0th"
+    },
+    {
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Zeroth"
+    },
+    {
+      "format": "russianLower",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "russianUpper",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "taiwaneseCounting",
+      "value": 0,
+      "reference": "○"
+    },
+    {
+      "format": "taiwaneseCountingThousand",
+      "value": 0,
+      "reference": "零"
+    },
+    {
+      "format": "taiwaneseDigital",
+      "value": 0,
+      "reference": "○"
+    },
+    {
+      "format": "thaiCounting",
+      "value": 0,
+      "reference": "ศูนย์"
+    },
+    {
+      "format": "thaiLetters",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "thaiNumbers",
+      "value": 0,
+      "reference": "๐"
+    },
+    {
+      "format": "upperLetter",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "upperRoman",
+      "value": 0,
+      "reference": ""
+    },
+    {
+      "format": "vietnameseCounting",
+      "value": 0,
+      "reference": "không"
+    }
+  ]
+}

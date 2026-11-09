@@ -38,7 +38,7 @@ const chinese = {
   linkTextRequired: "请填写链接显示的文字。",
   linkUnavailable: "请在同一段文字中放置光标或选择内容；代码和跨段选区不能设置链接。",
   linkSelection: "链接将应用于所选文字，并保留原有格式。", preserveLinkText: "保留链接内的文字与格式；文字内容可在正文中修改。",
-  footnote: "脚注", footnoteBody: "在这里填写脚注说明。", definition: "定义列表", markdown: "导入 Markdown", export: "导出 Markdown", exportWithComments: "导出 Markdown（含评论）",
+  footnote: "脚注", definition: "定义列表", markdown: "导入 Markdown", export: "导出 Markdown", exportWithComments: "导出 Markdown（含评论）",
   rowBefore: "在上方插入行", rowAfter: "在下方插入行", deleteRow: "删除当前行", columnBefore: "在左侧插入列", columnAfter: "在右侧插入列", deleteColumn: "删除当前列",
   alignLeft: "列左对齐", alignCenter: "列居中", alignRight: "列右对齐", alignDefault: "恢复默认列对齐",
   confirm: "确定", cancel: "取消", url: "地址", alt: "替代文字", linkText: "显示文字", optionalTitle: "标题（可选）", diagramSource: "图表源码", markdownSource: "Markdown 内容", chooseFile: "选择本地 Markdown 文件",
@@ -51,9 +51,10 @@ const chinese = {
   objectActions: "对象操作", objectEdit: "编辑", objectRename: "重命名", objectPreview: "预览", objectDownload: "下载图片",
   objectCopy: "复制", objectCut: "剪切", objectDelete: "删除",
   openTextLink: "打开链接",
-  placeholder: "输入 / 插入内容，或直接开始写作",
+  placeholder: "输入 / 插入内容，或直接开始写作", linePlaceholder: "输入 / 插入内容",
   uploadImage: "上传本地图片", uploadingImage: "正在上传…", uploadImageFailed: "图片上传失败，请重试或改填地址。",
   outline: "大纲", collapseOutline: "收起大纲", expandOutline: "展开大纲", untitledHeading: "无标题", emptyOutline: "添加标题后显示大纲",
+  shortcuts: "快捷键", editing: "编辑与跳转", lineBreak: "段内换行", exitBlock: "跳出当前块", previousHeading: "上一个标题", switchView: "切换视图", nextHeading: "下一个标题", blockMenu: "打开块菜单",
   addComment: "添加评论", comments: "评论", previousComment: "上一条评论", nextComment: "下一条评论", allComments: "全部评论", addDocumentComment: "添加全文评论",
 };
 const english: Record<keyof typeof chinese, string> = {
@@ -96,7 +97,7 @@ const english: Record<keyof typeof chinese, string> = {
   linkTextRequired: "Enter the text to display for this link.",
   linkUnavailable: "Place the caret or select text within one paragraph. Code and selections across paragraphs cannot be linked.",
   linkSelection: "Link the selected text while preserving its formatting.", preserveLinkText: "Keep the link’s text and formatting. Edit its content in the document.",
-  footnote: "Footnote", footnoteBody: "Write the footnote here.", definition: "Definition list", markdown: "Import Markdown", export: "Export Markdown", exportWithComments: "Export Markdown with comments",
+  footnote: "Footnote", definition: "Definition list", markdown: "Import Markdown", export: "Export Markdown", exportWithComments: "Export Markdown with comments",
   rowBefore: "Insert row above", rowAfter: "Insert row below", deleteRow: "Delete current row", columnBefore: "Insert column left", columnAfter: "Insert column right", deleteColumn: "Delete current column",
   alignLeft: "Align column left", alignCenter: "Center column", alignRight: "Align column right", alignDefault: "Reset column alignment",
   confirm: "Confirm", cancel: "Cancel", url: "Address", alt: "Alternative text", linkText: "Display text", optionalTitle: "Title (optional)", diagramSource: "Diagram source", markdownSource: "Markdown content", chooseFile: "Choose a local Markdown file",
@@ -109,9 +110,10 @@ const english: Record<keyof typeof chinese, string> = {
   objectActions: "Object actions", objectEdit: "Edit", objectRename: "Rename", objectPreview: "Preview", objectDownload: "Download image",
   objectCopy: "Copy", objectCut: "Cut", objectDelete: "Delete",
   openTextLink: "Open link",
-  placeholder: "Type / to insert content, or just start writing",
+  placeholder: "Type / to insert content, or just start writing", linePlaceholder: "Type / to insert",
   uploadImage: "Upload image", uploadingImage: "Uploading…", uploadImageFailed: "The image could not be uploaded. Try again or enter an address.",
   outline: "Outline", collapseOutline: "Collapse outline", expandOutline: "Expand outline", untitledHeading: "Untitled", emptyOutline: "Add headings to build an outline",
+  shortcuts: "Keyboard shortcuts", editing: "Editing and navigation", lineBreak: "Line break", exitBlock: "Leave block", previousHeading: "Previous heading", switchView: "Switch view", nextHeading: "Next heading", blockMenu: "Open block menu",
   addComment: "Add comment", comments: "Comments", previousComment: "Previous comment", nextComment: "Next comment", allComments: "All comments", addDocumentComment: "Comment on document",
 };
 /** Product controls stay translated independently of document and syntax identifiers. */

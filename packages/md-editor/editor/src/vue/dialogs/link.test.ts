@@ -80,7 +80,7 @@ it("validates the destination, focuses the address and preserves formatted selec
   await address("/guide");
   expect((await button("插入")).disabled).toBe(false);
   (await button("插入")).click(); await nextTick();
-  expect(editor.getMarkdown()).toBe("some [**formatted**](</guide>) text");
+  expect(editor.getMarkdown()).toBe("some [**formatted**](/guide) text");
   editor.undo(); expect(editor.getMarkdown()).toBe(markdown); expect(editor.history.canUndo).toBe(false);
 });
 
@@ -92,7 +92,7 @@ it("edits and unlinks only the captured reference usage, retaining formatted tex
   expect(document.body.textContent).toContain("编辑链接");
   await address("#new");
   (await button("应用")).click(); await nextTick();
-  expect(editor.getMarkdown()).toBe('[**kept**](<#new> "title") and [second][shared]\n\n[shared]: /old "title"');
+  expect(editor.getMarkdown()).toBe('[**kept**](#new "title") and [second][shared]\n\n[shared]: /old "title"');
   editor.undo(); expect(editor.getMarkdown()).toBe(markdown);
   editor.setSelection(EditorSelection.single(4)); await nextTick();
   (await button("链接")).click(); await nextTick();
@@ -137,7 +137,7 @@ it("hands a mobile insertion to the same link task and retains its selected text
   await address("/mobile");
   const submit = document.querySelector<HTMLButtonElement>('button[type="submit"]')!;
   submit.click(); await nextTick();
-  expect(editor.getMarkdown()).toBe("some [**formatted**](</mobile>) text");
+  expect(editor.getMarkdown()).toBe("some [**formatted**](/mobile) text");
   editor.undo(); expect(editor.getMarkdown()).toBe("some **formatted** text"); expect(editor.history.canUndo).toBe(false);
 });
 

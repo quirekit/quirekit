@@ -87,7 +87,7 @@ export interface CreateMountedPaginatedGeometryFacadeOptions {
 /** Shared editor-facing geometry and scroll contract for paginated mounted views. */
 export interface MountedPaginatedGeometryFacade extends Required<Pick<
   QuireMountedEditorView,
-  "getCaretRect" | "getTextRangeRects" | "getTextblockContentWidth" | "getObjectAnchor"
+  "getCaretRect" | "getTextRangeRects" | "getStructuredRangeRects" | "getTextblockContentWidth" | "getObjectAnchor"
   | "resolveUIAnchor" | "getTableChrome"
   | "coordsAtPos" | "endOfTextblock"
 >> {

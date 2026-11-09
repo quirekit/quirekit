@@ -64,6 +64,25 @@ describe("mounted paginated render flow", () => {
     expect(requests[1]).not.toHaveProperty("imePreedit");
   });
 
+  it("keeps preedit with the caret when another transaction changes text before it", () => {
+    const requests: MountedPaginatedDocumentRenderRequest<TestReason>[] = [];
+    const flow = createTestFlow({ requests });
+    const editor = createParagraphEditor("One", "Two");
+
+    flow.renderUpdate({
+      reason: "composition",
+      imePreedit: { range: { from: 4, to: 4 }, text: "ni" }
+    });
+    // A collaborator's text arrives before and exactly at the composing caret.
+    flow.renderUpdate({
+      reason: "transaction",
+      transactions: [editor.state.pm.tr.insertText("AB", 2).insertText("C", 6)]
+    });
+
+    expect(flow.imePreedit).toEqual({ range: { from: 7, to: 7 }, text: "ni" });
+    expect(requests[1]?.imePreedit).toEqual({ range: { from: 7, to: 7 }, text: "ni" });
+  });
+
   it("projects real transactions into one canonical dirty document request", () => {
     const requests: MountedPaginatedDocumentRenderRequest<TestReason>[] = [];
     const prepareFillRender = vi.fn(() => ({

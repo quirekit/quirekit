@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/block-table",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/block-table"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/block-table"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/block-table#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Optional canonical table authoring for QuireKit continuous documents.",
@@ -38,14 +42,21 @@
     "@quirekit/editor-ui": "workspace:*"
   },
   "peerDependencies": {
+    "@quirekit/collab-contract": "workspace:*",
     "vue": "^3.5.0"
   },
   "devDependencies": {
+    "@quirekit/collab-contract": "workspace:*",
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",
     "vue": "^3.5.40",
     "vue-tsc": "^3.3.7",
     "unplugin-vue": "^7.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@quirekit/collab-contract": {
+      "optional": true
+    }
   }
 }

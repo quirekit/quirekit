@@ -1,0 +1,420 @@
+{
+  "referenceCommit": "72b0421c0bbf9d01eed9cf14834ae47eb2df1b50",
+  "scope": "Independently observed zero-only behavior; not copied implementation or a positive-range oracle",
+  "results": [
+    {
+      "language": "en-US",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Zero"
+    },
+    {
+      "language": "en-US",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Zeroth"
+    },
+    {
+      "language": "en-US",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0th"
+    },
+    {
+      "language": "ja-JP",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Zero"
+    },
+    {
+      "language": "ja-JP",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Zeroth"
+    },
+    {
+      "language": "ja-JP",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0th"
+    },
+    {
+      "language": "unsupported-tag",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Zero"
+    },
+    {
+      "language": "unsupported-tag",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Zeroth"
+    },
+    {
+      "language": "unsupported-tag",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0th"
+    },
+    {
+      "language": "bg-BG",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Нула"
+    },
+    {
+      "language": "bg-BG",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Нулевят"
+    },
+    {
+      "language": "bg-BG",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0th"
+    },
+    {
+      "language": "cs-CZ",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Nula"
+    },
+    {
+      "language": "cs-CZ",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Nultý"
+    },
+    {
+      "language": "cs-CZ",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0."
+    },
+    {
+      "language": "el-GR",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Μηδέν"
+    },
+    {
+      "language": "el-GR",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Μηδενικό"
+    },
+    {
+      "language": "el-GR",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0ο"
+    },
+    {
+      "language": "lv-LV",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Nulle"
+    },
+    {
+      "language": "lv-LV",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Nultais"
+    },
+    {
+      "language": "lv-LV",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0th"
+    },
+    {
+      "language": "pl-PL",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Zero"
+    },
+    {
+      "language": "pl-PL",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Zerowy"
+    },
+    {
+      "language": "pl-PL",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0."
+    },
+    {
+      "language": "ru-RU",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Ноль"
+    },
+    {
+      "language": "ru-RU",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Нулевой"
+    },
+    {
+      "language": "ru-RU",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0-й"
+    },
+    {
+      "language": "sr-Cyrl-RS",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Нула"
+    },
+    {
+      "language": "sr-Cyrl-RS",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Нулти"
+    },
+    {
+      "language": "sr-Cyrl-RS",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0."
+    },
+    {
+      "language": "sr-Latn-RS",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Nula"
+    },
+    {
+      "language": "sr-Latn-RS",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Nulti"
+    },
+    {
+      "language": "sr-Latn-RS",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0."
+    },
+    {
+      "language": "uk-UA",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Нуль"
+    },
+    {
+      "language": "uk-UA",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Нульовий"
+    },
+    {
+      "language": "uk-UA",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0th"
+    },
+    {
+      "language": "de-DE",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Null"
+    },
+    {
+      "language": "de-DE",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Nullte"
+    },
+    {
+      "language": "de-DE",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0."
+    },
+    {
+      "language": "es-ES",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Cero"
+    },
+    {
+      "language": "es-ES",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Cero"
+    },
+    {
+      "language": "es-ES",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0º"
+    },
+    {
+      "language": "eu-ES",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Zero"
+    },
+    {
+      "language": "eu-ES",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Zerogarren"
+    },
+    {
+      "language": "eu-ES",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0."
+    },
+    {
+      "language": "fr-FR",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Zéro"
+    },
+    {
+      "language": "fr-FR",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Zéro"
+    },
+    {
+      "language": "fr-FR",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0"
+    },
+    {
+      "language": "it-IT",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Zero"
+    },
+    {
+      "language": "it-IT",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Zero"
+    },
+    {
+      "language": "it-IT",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0°"
+    },
+    {
+      "language": "nl-NL",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Nul"
+    },
+    {
+      "language": "nl-NL",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Nulde"
+    },
+    {
+      "language": "nl-NL",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0e"
+    },
+    {
+      "language": "pt-BR",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Zero"
+    },
+    {
+      "language": "pt-BR",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Zero"
+    },
+    {
+      "language": "pt-BR",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0º"
+    },
+    {
+      "language": "pt-PT",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Zero"
+    },
+    {
+      "language": "pt-PT",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Zero"
+    },
+    {
+      "language": "pt-PT",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0º"
+    },
+    {
+      "language": "sk-SK",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Nula"
+    },
+    {
+      "language": "sk-SK",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Nultý"
+    },
+    {
+      "language": "sk-SK",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0th"
+    },
+    {
+      "language": "sv-SE",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Noll"
+    },
+    {
+      "language": "sv-SE",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Nollte"
+    },
+    {
+      "language": "sv-SE",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0:e"
+    },
+    {
+      "language": "tr-TR",
+      "format": "cardinalText",
+      "value": 0,
+      "reference": "Sıfır"
+    },
+    {
+      "language": "tr-TR",
+      "format": "ordinalText",
+      "value": 0,
+      "reference": "Sıfırıncı"
+    },
+    {
+      "language": "tr-TR",
+      "format": "ordinal",
+      "value": 0,
+      "reference": "0."
+    }
+  ]
+}

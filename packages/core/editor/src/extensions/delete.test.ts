@@ -46,4 +46,18 @@ describe("delete observer after compound mark removal and ancestor deletion", ()
       expect(marks[0]).toMatchObject({ newRange: { from: 2, to: 3 }, partial: true });
     } finally { editor.destroy(); }
   });
+
+  it("schedules nothing for an edit that removes nothing, and still reports a deletion", () => {
+    vi.useFakeTimers();
+    const events: QuireEditorDeleteEvent[] = [];
+    const editor = createEditor({ content: { type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: "abc" }] }] }, onDelete: event => { events.push(event); } });
+    try {
+      editor.view.dispatch(editor.state.pm.tr.insertText("x", 2));
+      expect(vi.getTimerCount()).toBe(0);
+      editor.view.dispatch(editor.state.pm.tr.delete(1, 3));
+      vi.runAllTimers();
+      expect(events.some(event => event.type === "node")).toBe(true);
+    } finally { editor.destroy(); vi.useRealTimers(); }
+  });
 });
+

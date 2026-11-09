@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/pm-decoration",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "DOM-free ProseMirror decoration data structures under the QuireKit scope.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/pm/decoration"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/pm/decoration"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/pm/decoration#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

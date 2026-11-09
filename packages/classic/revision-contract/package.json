@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/classic-revision-contract",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/classic/revision-contract"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/classic/revision-contract"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/classic/revision-contract#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit extension contribution seam for Word revision capabilities.",
@@ -10,7 +14,10 @@
   "sideEffects": false,
   "files": [
     "LICENSE.md",
-    "THIRD_PARTY_NOTICES.md","dist", "src"],
+    "THIRD_PARTY_NOTICES.md",
+    "dist",
+    "src"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",

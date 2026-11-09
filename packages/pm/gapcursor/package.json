@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/pm-gapcursor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "QuireKit vendored ProseMirror gap cursor boundary.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/pm/gapcursor"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/pm/gapcursor"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/pm/gapcursor#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

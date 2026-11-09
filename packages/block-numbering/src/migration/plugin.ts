@@ -1,5 +1,5 @@
-import { getChangedRanges } from "@quirekit/core";
-import { Mapping, Plugin, TextSelection, type Node, type Transaction } from "@quirekit/pm";
+import { getChangedRanges, readQuireTransactionOrigin } from "@quirekit/core";
+import { Mapping, Plugin, PluginKey, TextSelection, type Node, type Transaction } from "@quirekit/pm";
 import { resolveWordNumberingRegistry } from "@quirekit/classic-numbering-model";
 import { flattenList, isListContainer } from "./flatten";
 
@@ -44,11 +44,16 @@ export function normalizeListContainers(tr: Transaction, ranges?: readonly { fro
   return changed;
 }
 
+/** Key of the plugin below; collaboration declares it a client-side plugin. */
+const blockListMigrationKey = new PluginKey("blockListMigration");
+
 /** @returns Legacy JSON/HTML paste migration appended to the initiating history event. */
 export function createListMigrationPlugin(): Plugin {
   return new Plugin({
+    key: blockListMigrationKey,
     /** @param transactions - Accepted root changes. @param _old - Prior state. @param state - Latest state. @returns One migration or null. */
     appendTransaction(transactions, _old, state) {
+      if (transactions.some(transaction => readQuireTransactionOrigin(transaction) === "collaboration")) return null;
       // Project every actual change through later appended maps before examining its roots.
       // Ordinary typing cannot trigger a scan of unrelated legacy lists elsewhere in the document.
       const ranges = transactions.flatMap((transaction, index) => {

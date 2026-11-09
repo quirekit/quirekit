@@ -26,6 +26,7 @@ export function dispatchChromeIntent(editor: MsfeEditor, value: string, locale: 
   else if (value === "whiteboard") openMsfeWhiteboard(editor, openMdWhiteboardDialog, target?.selection.main ?? editor.state.selection.main);
   else if (value === "exportTemplate") intents.template();
   else if (value === "comment") intents.comment?.();
+  else if (value === "shortcuts") intents.shortcuts?.();
   else if (value === "comments-panel") intents.comments?.();
   else if (value === "comment-document") intents.documentComment?.();
   else if (value === "comment-previous" || value === "comment-next") intents.commentStep?.(value === "comment-next" ? 1 : -1);

@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/whiteboard-editor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Vue whiteboard workspace and dialog built on the QuireKit whiteboard model and Excalidraw.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/whiteboard-editor"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/whiteboard-editor"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/whiteboard-editor#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

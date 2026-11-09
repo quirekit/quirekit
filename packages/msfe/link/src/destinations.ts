@@ -1,6 +1,6 @@
 import { Facet, type EditorState } from "@quirekit/cm-state";
 import type { syntaxTree } from "@quirekit/cm-language";
-import { decodeMarkdownDestination, encodeMarkdownField, isSafeDestination, readSourceDestination, sourceDocument, sourceNode } from "@quirekit/msfe-core";
+import { decodeMarkdownDestination, encodeMarkdownDestination, isSafeDestination, readSourceDestination, sourceDocument, sourceNode } from "@quirekit/msfe-core";
 
 /** One source replacement produced for export. */
 export interface ExportEdit {
@@ -26,7 +26,7 @@ export function exportedDestinations(state: EditorState, tree: ReturnType<typeof
   const rewrite = (from: number, to: number, url: string) => {
     let next: string | null = null;
     for (const href of rewrites) if ((next = href(url)) !== null) break;
-    if (next && next !== url && isSafeDestination(next)) edits.push({ from, to, insert: `<${encodeMarkdownField(next, "<>")}>` });
+    if (next && next !== url && isSafeDestination(next)) edits.push({ from, to, insert: encodeMarkdownDestination(next) });
   };
   tree.iterate({ enter: (node) => {
     if (node.name === "Link") {

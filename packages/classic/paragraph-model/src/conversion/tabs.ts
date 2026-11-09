@@ -16,6 +16,7 @@ const litAstToCanonicalAlignment: Readonly<Record<string, WordParagraphTabAlignm
   end: "end",
   decimal: "decimal",
   bar: "bar",
+  num: "num",
   clear: "clear"
 };
 
@@ -25,6 +26,7 @@ const canonicalToLitAstAlignment: Readonly<Record<WordParagraphTabAlignment, str
   end: "right",
   decimal: "decimal",
   bar: "bar",
+  num: "num",
   clear: "clear"
 };
 

@@ -56,7 +56,7 @@ export function createSegmentedTokens(
       )
     }),
     trackInset: theme.borderWidth.focus,
-    trackRadius: theme.radius.group,
+    trackRadius: `calc(${theme.radius.control} + ${theme.borderWidth.focus})`,
     indicatorRadius: theme.radius.control,
     trackBackground: theme.color.surface.hover,
     foreground: theme.color.text.secondary,

@@ -19,7 +19,10 @@ function readScopeOrders(catalog: BlockCatalog): ReadonlyMap<string, ReadonlyMap
 }
 
 /**
- * Indexes direct children of each explicitly declared scope.
+ * Describes a document's blocks. The facts are collected on first use, so a
+ * document change only records the document: typing and the collaboration
+ * server never walk every block, while block handles, menus and commands read
+ * the same facts they did.
  * @param doc - Current document.
  * @param options - Explicit schema owners.
  * @param rootId - Loaded document epoch.
@@ -27,6 +30,19 @@ function readScopeOrders(catalog: BlockCatalog): ReadonlyMap<string, ReadonlyMap
  * @returns Identity catalog with ambiguous identities removed.
  */
 export function createBlockCatalog(doc: PMNode, options: BlockInteractionOptions, rootId: string, revision: number): BlockCatalog {
+  let facts: Pick<BlockCatalog, "blocks" | "byId" | "byFrom"> | undefined;
+  const read = () => facts ??= collectBlockFacts(doc, options, rootId);
+  return { rootId, revision, doc, get blocks() { return read().blocks; }, get byId() { return read().byId; }, get byFrom() { return read().byFrom; } };
+}
+
+/**
+ * Indexes direct children of each explicitly declared scope.
+ * @param doc - Document.
+ * @param options - Explicit schema owners.
+ * @param rootId - Loaded document epoch.
+ * @returns Blocks in order and their unique lookups.
+ */
+function collectBlockFacts(doc: PMNode, options: BlockInteractionOptions, rootId: string): Pick<BlockCatalog, "blocks" | "byId" | "byFrom"> {
   const blocks: BlockFact[] = [];
   const byId = new Map<string, BlockFact>();
   const duplicates = new Set<string>();
@@ -48,7 +64,7 @@ export function createBlockCatalog(doc: PMNode, options: BlockInteractionOptions
   };
   visit(doc, 0);
   for (const id of duplicates) byId.delete(id);
-  return { rootId, revision, doc, blocks, byId, byFrom: new Map(blocks.filter(block => byId.has(block.blockId)).map(block => [block.from, block])) };
+  return { blocks, byId, byFrom: new Map(blocks.filter(block => byId.has(block.blockId)).map(block => [block.from, block])) };
 }
 
 /** @param catalog - Current catalog. @param ref - Captured identity. @returns Current fact or null. */

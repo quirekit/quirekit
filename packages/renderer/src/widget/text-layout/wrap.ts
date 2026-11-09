@@ -114,7 +114,7 @@ export function wrapUnitsIntoLines(
       continue;
     }
 
-    if (unit.text === "\t" && tabs !== undefined && tabs.stops.length > 0) {
+    if (unit.text === "\t" && tabs !== undefined && (tabs.stops.length > 0 || tabs.defaultInterval !== undefined)) {
       // Tab fields are disjoint; lookahead reuses wrap's width cache and never
       // scans a following field again for a later tab.
       let fieldWidth = 0;

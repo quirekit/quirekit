@@ -7,6 +7,8 @@ export const commentShortcuts: StaticShortcut[] = [
   ['qk-comment-thread__target', 'flex min-w-0 flex-auto items-center gap-qk-inline p-0 border-0 bg-transparent text-start [color:inherit] [font:inherit] cursor-pointer', { layer: 'qk-recipes' }],
   ['qk-comment-thread__author', 'min-w-[2em] truncate font-qk-control [flex:0_1_auto]', { layer: 'qk-recipes' }],
   ['qk-comment-thread__time', 'ms-auto whitespace-nowrap text-qk-helper leading-qk-helper text-qk-text-muted [font-variant-numeric:tabular-nums]', { layer: 'qk-recipes' }],
+  ['qk-comment-thread__menu', 'inline-flex', { layer: 'qk-recipes' }],
+  ['qk-comment-message__menu', 'inline-flex ms-auto', { layer: 'qk-recipes' }],
   ['qk-comment-thread__actions', 'absolute flex flex-none items-center gap-[2px] [inset-block-start:50%] [inset-inline-end:-4px] [transform:translateY(-50%)]', { layer: 'qk-recipes' }],
   ['qk-comment-thread__stepper', 'flex items-center gap-[2px]', { layer: 'qk-recipes' }],
   ['qk-comment-thread__position', 'min-w-[3ch] whitespace-nowrap text-center text-qk-helper leading-qk-helper text-qk-text-muted [font-variant-numeric:tabular-nums]', { layer: 'qk-recipes' }],

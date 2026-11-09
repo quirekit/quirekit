@@ -33,14 +33,14 @@ for (const editingMode of ["document", "markdown"] as const) describe(`${editing
     ["## heading¦", "## heading\n\n¦"],
     ["heading¦\n===", "heading\n===\n\n¦"],
     ["***¦", "***\n\n¦"],
-    ["> text¦", "> text\n> ¦"],
+    ["> text¦", "> text\n>\n> ¦"],
     ["> text\n> ¦", "> text\n\n¦"],
     ["> > text\n> > ¦", "> > text\n> \n> ¦"],
     ["- item¦", "- item\n- ¦"],
     ["- [x] task¦", "- [x] task\n- [ ] ¦"],
     ["1. first¦", "1. first\n2. ¦"],
     ["::: note Title\ntext¦\n:::", "::: note Title\ntext\n\n¦\n:::"],
-    ["::: note Title\n> quote¦\n:::", "::: note Title\n> quote\n> ¦\n:::"],
+    ["::: note Title\n> quote¦\n:::", "::: note Title\n> quote\n>\n> ¦\n:::"],
     ["---\ntitle: Test\n---¦", "---\ntitle: Test\n---\n\n¦"],
   ])("preserves structural Enter semantics: %s", (source, expected) => {
     const editor = fixture(source, { view: editingMode === "markdown" ? "preview" : "document" });
@@ -81,13 +81,13 @@ for (const editingMode of ["document", "markdown"] as const) describe(`${editing
   });
 });
 
-it("keeps table row input in document mode and native Enter in Markdown editing", () => {
+it("breaks the line inside a table cell in document mode and keeps native Enter in Markdown editing", () => {
   for (const editingMode of ["document", "markdown"] as const) {
     const editor = fixture("| a¦ | b |\n| --- | --- |", { view: editingMode === "markdown" ? "preview" : "document" });
     if (editingMode === "markdown") expect(planBlockInput(editor.state, "enter")).toBeNull();
     else {
       expect(input(editor).ok).toBe(true);
-      expect(editor.getMarkdown()).toBe("| a | b |\n| --- | --- |\n|  |  |");
+      expect(editor.getMarkdown()).toBe("| a<br> | b |\n| --- | --- |");
       editor.undo(); expect(editor.getMarkdown()).toBe("| a | b |\n| --- | --- |");
     }
   }

@@ -24,6 +24,7 @@ import { createWordStylesHTMLSerializationTransforms } from "./serialization";
 import type { WordStylesOptions, WordStylesStorage } from "./types";
 import { wordStylesAiCapabilities } from "./ai/facts";
 import { WordCharacterStyle } from "./character/extension";
+import type {} from "@quirekit/collab-contract";
 
 /** Document-level named Word paragraph style registry and inheritance behavior. */
 export const WordStyles = Extension.create<WordStylesOptions, WordStylesStorage>({
@@ -31,6 +32,13 @@ export const WordStyles = Extension.create<WordStylesOptions, WordStylesStorage>
   priority: 120,
   /** @returns Identity-preserving character style support. */
   addExtensions() { return [WordCharacterStyle]; },
+  /** @returns Collaboration rules: styles are keyed by id, so concurrent edits merge style by style and field by field. */
+  addCollabRules() {
+    return [
+      { kind: "version", version: "1" },
+      { kind: "root", attribute: "wordStyleRegistry", strategy: "merge" }
+    ];
+  },
 
   /**
    * Supplies the textblock types that participate in named paragraph styles.

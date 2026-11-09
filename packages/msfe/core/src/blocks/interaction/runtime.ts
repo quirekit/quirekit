@@ -159,12 +159,12 @@ export class SourceBlockInteraction {
     this.endGesture(); this.opening = false; this.block = null; this.blank = null; this.pointer = null; this.current = null;
     this.options.change(null); this.options.insertionChange?.(null);
   }
-  /** @param update - Accepted native dependencies; ordinary text input closes obsolete actions. */
+  /** @param update - Accepted native dependencies; text input closes an open menu or drag, while idle controls follow the caret in place. */
   update(update: ViewUpdate): void {
     if (!this.enabled()) { this.clear(); return; }
     const reactivated = update.startState.readOnly || update.startState.field(compositionField)
       || update.startState.facet(modeFacet) !== "live";
-    if (update.docChanged) this.clear();
+    if (update.docChanged && (this.pinned || this.gesture)) this.clear();
     if ((update.selectionSet || update.docChanged || sourceInputFocusChanged(update) || reactivated) && !this.pinned && !this.gesture) {
       this.pointer = null; this.locate(sourceInputHasFocus(update.view) ? update.state.selection.main.head : null);
       if (!update.state.selection.main.empty) this.blank = null;

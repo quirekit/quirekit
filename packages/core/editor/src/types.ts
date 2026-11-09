@@ -3285,6 +3285,13 @@ export interface QuireMountedEditorView {
    */
   getTextRangeRects?(range: QuireCanvasDocumentRange, sourceDocument: PMNode): readonly import("./mounted-geometry/types").QuireMountedTextRangeRect[] | null;
   /**
+   * Queries passive boxes of the structured targets inside a range, such as table cells, without changing local selection.
+   * @param range - Half-open canonical document range.
+   * @param sourceDocument - Exact immutable source identity; stale frames are refused.
+   * @returns Client CSS-pixel boxes of the targets whose source lies in the range, empty when there are none, or null without matching geometry.
+   */
+  getStructuredRangeRects?(range: QuireCanvasDocumentRange, sourceDocument: PMNode): readonly import("./mounted-geometry/types").QuireMountedTextRangeRect[] | null;
+  /**
    * Queries exact nearby block occurrences without changing selection.
    * @param clientY - Vertical client coordinate used to narrow visible pages.
    * @returns Nearby source-backed body fragments; none before layout or while an auxiliary story owns editing.

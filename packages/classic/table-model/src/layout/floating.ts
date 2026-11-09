@@ -20,25 +20,25 @@ export function normalizeQuireWordTableFloating(
 
   const source = value as Readonly<Record<string, unknown>>;
   const verticalReference = readReference(
-    source.verticalAnchor ?? source.vertAnchor
+    source.verticalAnchor === undefined ? source.vertAnchor : source.verticalAnchor
   );
 
   return {
     horizontal: {
       reference: readReference(
-        source.horizontalAnchor ?? source.horzAnchor
+        source.horizontalAnchor === undefined ? source.horzAnchor : source.horizontalAnchor
       ),
-      offset: readTwipLength(source.x ?? source.tblpX),
+      offset: readTwipLength(source.x === undefined ? source.tblpX : source.x),
       alignment: readHorizontalAlignment(
-        source.xSpec ?? source.tblpXSpec
+        source.xSpec === undefined ? source.tblpXSpec : source.xSpec
       )
     },
     vertical: {
       reference: verticalReference,
-      offset: readTwipLength(source.y ?? source.tblpY),
+      offset: readTwipLength(source.y === undefined ? source.tblpY : source.y),
       alignment: verticalReference === "text"
         ? null
-        : readVerticalAlignment(source.ySpec ?? source.tblpYSpec)
+        : readVerticalAlignment(source.ySpec === undefined ? source.tblpYSpec : source.ySpec)
     },
     clearances: {
       top: readTwipLength(source.topFromText) ?? 0,

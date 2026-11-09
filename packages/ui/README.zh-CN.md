@@ -30,6 +30,7 @@ import '@quirekit/unocss-preset/quirekit.css'
 ## 使用时注意
 
 - 组件介绍和示例位于仓库的 `apps/design` 文档站。
+- 在应用外层放 `QuireIconProvider` 并传入 `quireIconRegistry`，否则按名称使用的图标会显示为空白。深色主题和主题覆盖使用 `QuireThemeProvider`。
 - 主题颜色、字号和间距可以统一配置；产品接入应沿用一套主题，避免每个组件各自修改。
 
 ## 相关说明

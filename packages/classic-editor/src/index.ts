@@ -167,6 +167,8 @@ export type {
   ClassicEditorBehaviorTrigger,
   ClassicEditorBlockInsertionTarget,
   ClassicEditorInsertItemContribution,
+  ClassicEditorBlockPresentation,
+  ClassicEditorBlockPresentationContribution,
   ClassicEditorBlockTypeContribution,
   ClassicEditorContribution,
   ClassicEditorContributionBase,

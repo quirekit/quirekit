@@ -68,7 +68,7 @@ export const paragraphDocxCodec = docx.codec.node<
   export: {
     convert: ({ node, convertChildren, resolveService }) => {
       const children = convertChildren(
-        normalizeEmptyParagraphContent(node.content ?? [])
+        normalizeEmptyParagraphContent(node)
       );
       const service = resolveService(paragraphDocxServiceKey);
       return [service?.exportParagraph(node, children)
@@ -97,15 +97,17 @@ export const paragraphDocxCodec = docx.codec.node<
 });
 
 /**
- * Removes the browser placeholder NBSP used by a visually empty paragraph.
+ * Removes an unpreserved browser placeholder while retaining imported whitespace.
  *
- * @param content - Canonical paragraph inline content.
+ * @param node - Canonical paragraph with current inline content and source provenance.
  * @returns Original content or an empty sequence for a placeholder-only paragraph.
  */
 function normalizeEmptyParagraphContent(
-  content: readonly QuireJSONContent[]
+  node: QuireJSONContent
 ): readonly QuireJSONContent[] {
-  return content.length === 1
+  const content = node.content ?? [];
+  const source = readRecord(readRecord(node.attrs)?.litAstNodePreservation);
+  return source === undefined && content.length === 1
     && content[0]?.type === "text"
     && content[0].text === "\u00A0"
     && (content[0].marks?.length ?? 0) === 0

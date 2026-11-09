@@ -1,22 +1,21 @@
 import type { HtmlDescriptor, HtmlDocumentDesc } from "../../descriptors";
 import type { HtmlDomPoint } from "../../document/types";
-import { isHtmlContainerDescriptor, walkHtmlDescriptors } from "./descriptor-tree";
+import { isHtmlContainerDescriptor } from "./descriptor-tree";
 import {
   clampHtmlDomOffset,
   findHtmlDeepestContainer,
-  findHtmlTextDescriptor,
   findHtmlUnrepresentedDescriptor,
   htmlChildOffsetAtPosition,
   positionAtHtmlChildOffset,
   requireHtmlMountedDOM
 } from "./dom-point";
 import { HtmlDomMappingGapError } from "./mapping-gap";
+import { findHtmlTextDescriptor } from "./text-query";
+import { createHtmlPositionIndexState } from "./position-state";
 
 /** Descriptor-owned DOM and canonical position index for one retained document. */
 export class HtmlDescriptorPositionIndex {
-  private domOwners = new WeakMap<Node, HtmlDescriptor>();
-  private descriptors: HtmlDescriptor[] = [];
-  private represented = new Set<HtmlDescriptor>();
+  private state = createHtmlPositionIndexState();
 
   /**
    * Creates and populates an ownership index.
@@ -33,35 +32,17 @@ export class HtmlDescriptorPositionIndex {
    * @param root - Current retained document root.
    */
   rebuild(root: HtmlDocumentDesc): void {
-    const owners = new WeakMap<Node, HtmlDescriptor>();
-    const descriptors: HtmlDescriptor[] = [];
-    const represented = new Set<HtmlDescriptor>();
+    this.state = createHtmlPositionIndexState(root);
+  }
 
-    walkHtmlDescriptors(root, (descriptor) => {
-      descriptors.push(descriptor);
-      const parentRepresented = descriptor.parent === null || represented.has(descriptor.parent);
-      const attached = descriptor.parent === null || (
-        descriptor.parent.mount?.contentDOM === descriptor.mount?.dom.parentNode
-      );
-
-      if (descriptor.mount && parentRepresented && attached) {
-        represented.add(descriptor);
-        owners.set(descriptor.mount.dom, descriptor);
-        if (descriptor.mount.contentDOM) {
-          owners.set(descriptor.mount.contentDOM, descriptor);
-        }
-      }
-    });
-    this.domOwners = owners;
-    this.descriptors = descriptors;
-    this.represented = represented;
+  /** @returns Whether custom view callbacks require conservative attachment validation on updates. */
+  requiresMountValidation(): boolean {
+    return this.state.customOwnership;
   }
 
   /** Releases every ownership lookup held by the index. */
   clear(): void {
-    this.domOwners = new WeakMap();
-    this.descriptors = [];
-    this.represented.clear();
+    this.state = createHtmlPositionIndexState();
   }
 
   /**
@@ -73,8 +54,8 @@ export class HtmlDescriptorPositionIndex {
    */
   resolveDomPoint(pos: number, side: number): HtmlDomPoint {
     const gap = findHtmlUnrepresentedDescriptor(
-      this.descriptors,
-      this.represented,
+      this.state.unrepresented,
+      this.state.represented,
       pos,
       side
     );
@@ -84,7 +65,7 @@ export class HtmlDescriptorPositionIndex {
         `Document position ${pos} is owned by unrepresented descriptor "${gap.id}".`
       );
     }
-    const text = findHtmlTextDescriptor(this.descriptors, pos, side);
+    const text = findHtmlTextDescriptor(this.state.texts, pos, side);
 
     if (text) {
       this.assertRepresented(text, `Document position ${pos} is unrepresented.`);
@@ -98,9 +79,9 @@ export class HtmlDescriptorPositionIndex {
         descriptorId: text.id
       };
     }
-    const container = findHtmlDeepestContainer(this.descriptors, pos);
+    const container = findHtmlDeepestContainer(this.state.descriptors, pos);
 
-    if (!container?.mount?.contentDOM || !this.represented.has(container)) {
+    if (!container?.mount?.contentDOM || !this.state.represented.has(container)) {
       throw new HtmlDomMappingGapError(
         `Document position ${pos} has no represented descriptor owner.`
       );
@@ -121,7 +102,7 @@ export class HtmlDescriptorPositionIndex {
    * @returns Canonical document position.
    */
   resolvePosition(node: Node, offset: number, bias: number): number {
-    const descriptor = this.domOwners.get(node);
+    const descriptor = this.state.domOwners.get(node);
 
     if (!descriptor) {
       throw new HtmlDomMappingGapError(
@@ -140,7 +121,7 @@ export class HtmlDescriptorPositionIndex {
         `DOM point owned by "${descriptor.id}" is not a mapped content point.`
       );
     }
-    return positionAtHtmlChildOffset(descriptor, offset, bias, this.domOwners);
+    return positionAtHtmlChildOffset(descriptor, offset, bias, this.state.domOwners);
   }
 
   /**
@@ -150,7 +131,7 @@ export class HtmlDescriptorPositionIndex {
    * @returns Retained outer DOM, or null when no node begins there.
    */
   resolveNodeDom(pos: number): Node | null {
-    const descriptor = this.descriptors.find((candidate) => (
+    const descriptor = this.state.descriptors.find((candidate) => (
       (candidate.kind === "node" || candidate.kind === "node-view") &&
       candidate.range.from === pos
     ));
@@ -170,7 +151,7 @@ export class HtmlDescriptorPositionIndex {
    */
   resolveOwner(node: Node): HtmlDescriptor | undefined {
     for (let current: Node | null = node; current; current = current.parentNode) {
-      const owner = this.domOwners.get(current);
+      const owner = this.state.domOwners.get(current);
       if (owner) {
         return owner;
       }
@@ -185,7 +166,7 @@ export class HtmlDescriptorPositionIndex {
    * @returns Current retained descriptor, or undefined when it is stale.
    */
   resolveDescriptor(descriptorId: string): HtmlDescriptor | undefined {
-    return this.descriptors.find((descriptor) => descriptor.id === descriptorId);
+    return this.state.descriptorsById.get(descriptorId);
   }
 
   /**
@@ -195,8 +176,8 @@ export class HtmlDescriptorPositionIndex {
    * @returns Ordered represented descriptors intersecting the range.
    */
   resolveDescriptorsInRange(range: { readonly from: number; readonly to: number }): readonly HtmlDescriptor[] {
-    return this.descriptors.filter((descriptor) =>
-      this.represented.has(descriptor) &&
+    return this.state.descriptors.filter((descriptor) =>
+      this.state.represented.has(descriptor) &&
       descriptor.range.from < range.to &&
       range.from < descriptor.range.to
     );
@@ -209,7 +190,7 @@ export class HtmlDescriptorPositionIndex {
    * @param message - Explicit mapping-gap detail.
    */
   private assertRepresented(descriptor: HtmlDescriptor, message: string): void {
-    if (!this.represented.has(descriptor)) {
+    if (!this.state.represented.has(descriptor)) {
       throw new HtmlDomMappingGapError(message);
     }
   }

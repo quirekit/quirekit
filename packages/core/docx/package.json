@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/docx",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/core/docx"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/core/docx"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/core/docx#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Instance-owned DOCX integration manager for QuireKit editors.",

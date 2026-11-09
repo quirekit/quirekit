@@ -64,7 +64,21 @@ export function projectionLayers(compiled: CompiledExtensions, editor: () => Msf
       const output = layerDecorations(inline.map((layer, i) => ({ layer, cache: caches[i]! })), view.state, editor, host, view.state.field(direct).output.replacements);
       inlineConflicts = output.conflicts; return output;
     }
-    return { output: project(), update(update) { this.output = project(update.startState, update.viewportChanged, update.changes); } };
+    // While IME composes, inline output is only mapped: a rebuilt component (such as a heading control
+    // labelled with the text being typed) would redraw the composing line, and WebKit then drops the preedit.
+    let frozen = false;
+    return { output: project(), update(update) {
+      if (update.state.field(compositionField) && update.startState.field(compositionField) && !update.viewportMoved) {
+        frozen = true;
+        if (!update.docChanged) return;
+        caches = caches.map(cache => mapLayerCache(cache, update.changes));
+        const { decorations, atomic, objects, replacements, conflicts } = this.output;
+        this.output = { decorations: decorations.map(update.changes), atomic: atomic.map(update.changes), objects: objects.map(update.changes), conflicts,
+          replacements: replacements.map(range => ({ from: update.changes.mapPos(range.from, 1), to: update.changes.mapPos(range.to, -1) })) };
+        return;
+      }
+      this.output = project(frozen ? undefined : update.startState, update.viewportChanged, update.changes); frozen = false;
+    } };
   }, { decorations: plugin => plugin.output.decorations,
     provide: plugin => EditorView.atomicRanges.of(view => view.plugin(plugin)?.output.atomic ?? view.state.field(direct).output.atomic),
   });

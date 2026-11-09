@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/renderer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/renderer"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/renderer"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/renderer#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Quire Render core: declarative qkView, neutral display lists, Canvas 2D and SVG backends.",

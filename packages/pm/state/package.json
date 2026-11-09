@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/pm-state",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "QuireKit vendored ProseMirror state boundary.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/pm/state"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/pm/state"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/pm/state#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

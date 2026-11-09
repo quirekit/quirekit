@@ -18,7 +18,8 @@ const readingOffset = 24;
  */
 export function useOutlineLayout(root: Ref<HTMLElement | null>, toolbar: Ref<HTMLElement | null>, enabled: () => boolean, comments: () => boolean = () => false) {
   const width = shallowRef(0), toolbarHeight = shallowRef(0), collapsed = shallowRef(false);
-  watch([root, toolbar, enabled] as const, ([element, bar, on], _previous, cleanup) => {
+  // The comment rail pins content below the toolbar too, so its height matters without an outline.
+  watch([root, toolbar, () => enabled() || comments()] as const, ([element, bar, on], _previous, cleanup) => {
     const Observer = element?.ownerDocument.defaultView?.ResizeObserver;
     if (!element || !on || !Observer) return;
     const observer = new Observer(() => {

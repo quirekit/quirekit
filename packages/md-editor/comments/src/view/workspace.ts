@@ -1,5 +1,6 @@
-import { computed, defineComponent, h } from "vue";
+import { computed, defineComponent, h, type VNode } from "vue";
 import type { MdCommentsSetupInput, MdCommentsWorkspace } from "@quirekit/md-editor/vue";
+import type { CommentsController } from "@quirekit/msfe-comments";
 import type { QuireKitCommentMention } from "@quirekit/ui/vue";
 import { mdCommentsMessages } from "../messages";
 import type { MdCommentsOptions } from "../types";
@@ -20,7 +21,7 @@ export function createMdCommentsWorkspace(options: MdCommentsOptions, input: MdC
   const text = computed(() => mdCommentsMessages[input.locale()]);
   // Comments on the whole document get a section after the document only when the host asks for it.
   const sectioned = options.documentComments === "end";
-  const comments = useMdComments({ editor: input.editor, state: input.state, options: () => options, root: input.root, wide: input.wide,
+  const comments = useMdComments({ editor: input.editor, state: input.state, options: () => options, root: input.root, wide: input.wide, narrow: input.narrow, reading: input.reading,
     documentLabel: () => text.value.documentCommentQuote, documentSection: () => sectioned });
   const author = computed(() => options.user ? commentAuthor(options.user, options) : undefined);
   /** @param body - Root message. @param people - Mentioned people. */
@@ -28,24 +29,36 @@ export function createMdCommentsWorkspace(options: MdCommentsOptions, input: MdC
   /** @param body - Root message. @param people - Mentioned people. */
   const submitDocument = (body: string, people: readonly QuireKitCommentMention[]): void => comments.submitDocumentDraft(body, people);
 
-  const rail = defineComponent({ name: "MdCommentRail", setup: () => () => {
-    const controller = comments.controller.value;
-    return controller ? h(CommentSide, { items: comments.railItems.value, cards: comments.railCards.value, active: comments.active.value, controller,
-      author: author.value, draftQuote: comments.draftQuote.value, mentions: input.mentions(), positionOf: comments.positionOf,
-      onRail: (element: HTMLElement | null) => { comments.rail.value = element; }, onActivate: comments.activate, onStep: comments.step,
-      onResolve: comments.resolve, onSubmit: submit, onCancel: comments.cancelDraft }) : null;
-  } });
-
-  const list = defineComponent({ name: "MdCommentList", setup: () => () => {
-    const controller = comments.controller.value, labels = text.value;
-    return controller ? h(CommentList, { open: comments.panelOpen.value, "onUpdate:open": (open: boolean) => { comments.panelOpen.value = open; },
+  /**
+   * @param controller - Comment operations.
+   * @returns The list in its current presentation.
+   */
+  const listNode = (controller: CommentsController): VNode => {
+    const labels = text.value;
+    return h(CommentList, { presentation: comments.listPresentation.value, title: labels.comments, closeLabel: labels.closeComments,
+      open: comments.panelOpen.value, "onUpdate:open": (open: boolean) => { comments.panelOpen.value = open; },
       cards: comments.cards.value, active: comments.active.value, controller, author: author.value,
-      drafting: !!comments.draft.value && comments.layout.value !== "side", draftQuote: comments.draftQuote.value, narrow: input.narrow(),
+      drafting: !!comments.draft.value && comments.layout.value !== "side", draftQuote: comments.draftQuote.value,
       labels: { title: labels.comments, empty: labels.noComments, orphaned: labels.orphanedComments, resolved: labels.resolvedComments, document: labels.documentComments },
       mentions: input.mentions(), positionOf: comments.positionOf, documentDrafting: comments.documentDraft.value && !sectioned,
       documentAdd: author.value ? labels.addDocumentComment : undefined, onActivate: comments.activate, onStep: comments.step, onResolve: comments.resolve,
       onAddDocument: comments.openDocumentDraft, onSubmitDocument: submitDocument, onCancelDocument: comments.cancelDocumentDraft,
-      onSubmit: submit, onCancel: comments.cancelDraft }) : null;
+      onSubmit: submit, onCancel: comments.cancelDraft });
+  };
+
+  const rail = defineComponent({ name: "MdCommentRail", setup: () => () => {
+    const controller = comments.controller.value;
+    if (!controller) return null;
+    if (comments.listDocked.value) return listNode(controller);
+    return h(CommentSide, { items: comments.railItems.value, cards: comments.railCards.value, active: comments.active.value, controller,
+      author: author.value, draftQuote: comments.draftQuote.value, mentions: input.mentions(), positionOf: comments.positionOf,
+      onRail: (element: HTMLElement | null) => { comments.rail.value = element; }, onActivate: comments.activate, onStep: comments.step,
+      onResolve: comments.resolve, onSubmit: submit, onCancel: comments.cancelDraft });
+  } });
+
+  const list = defineComponent({ name: "MdCommentList", setup: () => () => {
+    const controller = comments.controller.value;
+    return controller && comments.listPresentation.value !== "dock" ? listNode(controller) : null;
   } });
 
   const documentSection = defineComponent({ name: "MdDocumentComments", setup: () => () => {
@@ -63,6 +76,7 @@ export function createMdCommentsWorkspace(options: MdCommentsOptions, input: MdC
     drafting: computed(() => !!comments.draft.value),
     openDraft: comments.openDraft, openDocumentDraft: comments.openDocumentDraft, step: comments.step,
     showList: () => { comments.panelOpen.value = true; },
+    setRailVisible: (visible: boolean) => { comments.railHidden.value = !visible; },
     documentSection: sectioned ? documentSection : null, rail, list,
   };
 }

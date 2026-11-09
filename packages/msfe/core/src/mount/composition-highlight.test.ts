@@ -10,7 +10,7 @@ function matches(view: EditorView): number {
 
 it("keeps selection-match highlights fixed while native composition owns the line", () => {
   const parent = document.createElement("div"); document.body.append(parent);
-  const editor = createMsfeEditor({ parent, mode: "live", markdown: "classic-editor 我们有" });
+  const editor = createMsfeEditor({ parent, mode: "source", markdown: "classic-editor 我们有" });
   const view = EditorView.findFromDOM(editor.element)!;
   try {
     view.dispatch({ selection: { anchor: 17 } });

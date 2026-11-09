@@ -45,6 +45,12 @@ while `none` retains only explicit breaks and empty lines. The latter supports t
 without adding width-driven lines, while retaining the shared shaping, alignment and cluster geometry.
 The caller owns scaling to the target frame.
 
+Optional `tabs` uses CSS pixels at one logical origin: sorted `stops`, a positive
+finite `defaultInterval` continuing the grid after the last explicit stop, and
+`offset` from that origin to the current region's leading edge. A hanging first
+line reaches that edge before the grid. Default stops
+have no leader; each Tab retains one source position. Absence keeps ordinary layout.
+
 `tryCreateQuireBrowserTextMeasurer({ ownerDocument, cacheSize? })` returns a clearable reader,
 or `undefined` when Canvas 2D is unavailable. Hosts own explicit fallback/error policy and font-loading
 invalidation. The reader uses no global document or mounted View. `measureText(text, font)` returns

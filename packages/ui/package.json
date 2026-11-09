@@ -1,13 +1,19 @@
 {
   "name": "@quirekit/ui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/ui"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/ui"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/ui#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Framework-neutral browser UI primitives shared by QuireKit products and mounted views.",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "LICENSE.md",
     "THIRD_PARTY_NOTICES.md",
@@ -15,6 +21,7 @@
     "src"
   ],
   "exports": {
+    "./styles.css": "./dist/style.css",
     ".": {
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",

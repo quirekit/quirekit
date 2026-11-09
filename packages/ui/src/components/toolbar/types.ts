@@ -205,6 +205,8 @@ export interface QuireKitToolbarEntry {
   readonly iconEmpty?: boolean;
   /** Tooltip explanation; defaults to label. False is for an enclosing compound tooltip owner. */
   readonly tooltip?: string | false;
+  /** Keyboard shortcut shown in the tooltip, in reading order such as `["⌘", "B"]`; display only, never registered. */
+  readonly shortcut?: readonly string[];
   /** Explanation shown while this entry is unavailable. */
   readonly disabledReason?: string;
   /** Native trigger data attributes; keyboard and interaction properties remain component-owned. */

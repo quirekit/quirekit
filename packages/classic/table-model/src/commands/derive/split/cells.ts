@@ -32,6 +32,7 @@ export function createSplitCellsForRow(
         gridSpan: 1,
         rowspan: 1,
         vMerge: null,
+        hMerge: null,
       }, options.sourceCell.content, options.sourceCell.marks);
     }
 

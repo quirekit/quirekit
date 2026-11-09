@@ -42,6 +42,11 @@ import {
 只保留显式换行和空行，不按宽度添加新行。后者供按外框适配的文字使用，仍共享原有 shaping、
 对齐和 cluster 几何；绘制外框的缩放由调用方负责。
 
+可选 `tabs` 使用同一逻辑原点的 CSS 像素：`stops` 按位置递增；正有限
+`defaultInterval` 在最后一个显式位置后继续默认网格，`offset` 表示当前区域前缘距
+原点的距离，悬挂首行先到该前缘再继续网格。默认网格无前导符，每个Tab仍只占一个
+源位置；缺省不改变普通文字行为。
+
 `tryCreateQuireBrowserTextMeasurer({ ownerDocument, cacheSize? })` 返回可清理的测量器；
 Canvas 2D 不可用时返回 `undefined`，由宿主决定报错或采用显式 fallback。它不读取全局
 `document`，不监听字体加载，不依赖 mounted View。`measureText(text, font)` 返回 CSS px

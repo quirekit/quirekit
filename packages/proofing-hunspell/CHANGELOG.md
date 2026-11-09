@@ -1,0 +1,3 @@
+# @quirekit/proofing-hunspell
+
+## 0.0.2

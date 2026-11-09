@@ -1,5 +1,5 @@
 import type { QuireEditor } from "@quirekit/core";
-import type { QuireRetainedLayoutSnapshot } from "@quirekit/view-engine";
+import type { QuireLayoutNode, QuireRetainedLayoutSnapshot } from "@quirekit/view-engine";
 import type { QuireMountedRenderResult } from "@quirekit/view/mounted-backend";
 import type { HtmlRetainedDocumentView } from "../document";
 import type { HtmlContinuousFlowDomGeometry } from "../presentation/types";
@@ -22,6 +22,12 @@ export interface HtmlFlowGeometryOptions {
   readonly surface: HTMLElement;
   /** Continuous document bounds and viewport. */
   readonly surfaceState: HtmlMountedRenderSurfaceState;
+  /** Verified complete native-flow boxes, when the retained geometry owner can reuse them. */
+  readonly retainedBlocks?: readonly QuireLayoutNode[] | undefined;
+  /** Previous index whose entry topology matches retainedBlocks exactly. */
+  readonly previousSnapshot?: QuireRetainedLayoutSnapshot | undefined;
+  /** Records actual native block measurements, independently of source traversal. */
+  readonly onBlockRead?: (() => void) | undefined;
 }
 
 /** Inputs for presenting a selection against an already current DOM snapshot. */

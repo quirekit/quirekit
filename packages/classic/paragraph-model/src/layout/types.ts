@@ -63,6 +63,8 @@ export interface WordParagraphModelFormatting {
       /** Repeated paint character; absent for no leader. */
       readonly leader?: string | undefined;
     }[];
+    /** Positive default grid interval in CSS pixels after the final explicit stop. */
+    readonly defaultInterval?: number | undefined;
   } | undefined;
   /** Effective Word formatting, passed back to this model. */
   readonly token: unknown;

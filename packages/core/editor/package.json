@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/core/editor"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/core/editor"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/core/editor#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "QuireKit editor core and extension manager.",

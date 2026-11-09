@@ -2,6 +2,7 @@ import type { Node as ProseMirrorNode } from "@quirekit/pm";
 import type { QuireLayoutNode } from "@quirekit/view-engine";
 import type { CreateHtmlDomMeasurementProviderOptions } from "../types";
 import { createHtmlBlockHitTree, queryHtmlBlockHitTree } from "./regions";
+import { refitHtmlBlockHitTree } from "./refit";
 import type { HtmlBlockHitGeometry, HtmlBlockHitTree } from "./types";
 
 /**
@@ -12,9 +13,9 @@ import type { HtmlBlockHitGeometry, HtmlBlockHitTree } from "./types";
 export function createHtmlBlockHitGeometry(options: CreateHtmlDomMeasurementProviderOptions): HtmlBlockHitGeometry {
   let root: QuireLayoutNode | undefined, document: ProseMirrorNode | undefined, tree: HtmlBlockHitTree | null = null;
   return {
-    /** @param nextRoot - Published block geometry. @param nextDocument - Canonical document owning it. */
-    update(nextRoot, nextDocument) {
-      if (root !== nextRoot) tree = createHtmlBlockHitTree(nextRoot);
+    /** @param nextRoot - Published block geometry. @param nextDocument - Canonical document owning it. @param changed - Verified stable-topology source/box changes. */
+    update(nextRoot, nextDocument, changed) {
+      if (root !== nextRoot) tree = root && changed ? refitHtmlBlockHitTree(tree, changed) : createHtmlBlockHitTree(nextRoot);
       root = nextRoot; document = nextDocument;
     },
     /** @param left - Client x. @param top - Client y. @param scope - Enclosing owner range. @returns Current local block. */

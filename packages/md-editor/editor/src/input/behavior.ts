@@ -1,11 +1,12 @@
 import type { BlockInputContext, BlockInputResult, BlockInputRule } from "@quirekit/msfe-core";
-import { insertTableRow } from "@quirekit/msfe-prose";
-import { continueDocumentMarkup } from "./continuation";
-import { documentInput, exitDocumentBlock, insertDocumentLineBreak, insertDocumentParagraph } from "./paragraph";
+import { continueDocumentMarkup, nextItemAfterBreak } from "./continuation";
+import { enterNewFence } from "./fences/language";
+import { breakInCell, tableFromHeader } from "./table";
+import { documentInput, exitDocumentBlock, insertDocumentLineBreak, insertDocumentParagraph, openBlankRow } from "./paragraph";
 
 /** @param context - Whole-selection input. @returns A paragraph split or delegation to its enclosing semantic block. */
 export function paragraphInput({ state }: BlockInputContext): BlockInputResult {
-  return insertDocumentParagraph(state) ?? "parent";
+  return tableFromHeader(state) ?? nextItemAfterBreak(state) ?? insertDocumentParagraph(state) ?? openBlankRow(state) ?? "parent";
 }
 
 /** @param context - Whole-selection input. @returns Native Markdown continuation with the product's empty-block exit rules. */
@@ -25,14 +26,12 @@ export function exitInput({ state }: BlockInputContext): BlockInputResult {
 
 /** @param context - Whole-selection input. @returns A paragraph only after a complete fence; literal contents retain native input. */
 export function fenceInput({ state }: BlockInputContext): BlockInputResult {
-  return insertDocumentParagraph(state) ?? "native";
+  return insertDocumentParagraph(state) ?? enterNewFence(state) ?? "native";
 }
 
-const appendTableRow = insertTableRow("after");
-
-/** @param context - Whole-selection input. @returns One table row in document mode; source-like table editing keeps native input. */
+/** @param context - Whole-selection input. @returns A line break inside the cell in document mode; source-like table editing keeps native input. */
 export function tableInput({ state }: BlockInputContext): BlockInputResult {
-  return documentInput(state) ? appendTableRow(state) ?? "native" : "native";
+  return documentInput(state) ? breakInCell(state) ?? "native" : "native";
 }
 
 /** Product defaults; transparent paragraph leaves let list, quote and custom block owners decide. */

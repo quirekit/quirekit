@@ -2,11 +2,11 @@ import { Parser, TreeFragment, type Input, type PartialParse, type Tree } from "
 import type { MarkdownParser } from "@quirekit/lezer-markdown";
 import { retainReferences } from "../references/collect";
 import { referenceInline } from "./inline";
-import { affectedReferenceBlocks, certifyReferences, referenceBlocks } from "./chunks";
+import { affectedReferenceBlocks, certifyFreshReferences, certifyReferences, referenceBlocks } from "./chunks";
 import { definitionSnapshot } from "./definitions";
 import { orderedReferenceTrace } from "./dependencies";
 import { retainSyntaxReuse } from "../../source/parsing/reuse";
-import type { ReferenceBlock, ReferenceCertificates, ReferenceDefinitions, ReferenceParseWork, ReferenceTrace } from "./types";
+import type { ReferenceBlock, ReferenceCertificates, ReferenceChunk, ReferenceDefinitions, ReferenceParseWork, ReferenceTrace } from "./types";
 
 const snapshots = new WeakMap<Tree, { definitions: ReferenceDefinitions | undefined; pending: boolean; work: ReferenceParseWork }>();
 
@@ -31,12 +31,15 @@ export class ReferenceMarkdownParser extends Parser {
     const certificates = this.certificates, trace: ReferenceTrace = new Map();
     const previous = fragments.map(fragment => snapshots.get(fragment.tree)?.definitions).find(Boolean);
     let definitions: ReferenceDefinitions | undefined, labels: ReadonlySet<string> | undefined, stopped: number | null = null;
-    const grammar = this.base.configure(referenceInline(this.base, () => labels, work, trace));
+    // Only a complete prior parse may vouch for the definitions its chunks were parsed under.
+    const assumed = previous && fragments.every(fragment => { const prior = snapshots.get(fragment.tree); return prior && !prior.pending && prior.definitions === previous; }) ? previous.labels : undefined;
+    const grammar = this.base.configure(referenceInline(this.base, () => labels ?? assumed, work, trace));
     let current = grammar.startParse(input, fragments, ranges);
     let structural: Tree | undefined;
-    /** @param tree - Final native tree for this slice. @param pending - Whether all definitions are still unknown. @returns Tree with weak ownership metadata only. */
-    function finish(tree: Tree, pending: boolean): Tree {
-      if (labels) certifyReferences(tree, ranges[0]!.from, labels, certificates, orderedReferenceTrace(trace, work), work);
+    /** @param tree - Final native tree for this slice. @param pending - Whether all definitions are still unknown. @param fresh - Chunks left to prove when the traversal already found them. @returns Tree with weak ownership metadata only. */
+    function finish(tree: Tree, pending: boolean, fresh?: readonly ReferenceChunk[]): Tree {
+      if (labels && fresh) certifyFreshReferences(fresh, labels, certificates, orderedReferenceTrace(trace, work), work);
+      else if (labels) certifyReferences(tree, ranges[0]!.from, labels, certificates, orderedReferenceTrace(trace, work), work);
       trace.clear();
       if (definitions && !pending) retainReferences(tree, definitions.entries);
       Object.assign(work, retainSyntaxReuse(tree, structural, fragments));
@@ -54,8 +57,12 @@ export class ReferenceMarkdownParser extends Parser {
         if (labels) return finish(tree, stopped !== null && stopped < input.length);
         if (stopped !== null && stopped < input.length) return finish(tree, referenceBlocks(tree, ranges[0]!.from, input).length > 0);
         definitions = definitionSnapshot(tree, input, work, previous); labels = definitions.labels;
-        const affected = affectedReferenceBlocks(tree, ranges[0]!.from, input, labels, work, certificates);
-        if (!affected.length) return finish(tree, false);
+        // The usual edit leaves the definitions alone, so this pass already used the right labels.
+        if (labels === assumed) return finish(tree, false);
+        trace.clear();
+        const fresh: ReferenceChunk[] = [];
+        const affected = affectedReferenceBlocks(tree, ranges[0]!.from, input, labels, work, certificates, fresh);
+        if (!affected.length) return finish(tree, false, fresh);
         // Same-length invalidations retain coordinates and all unaffected native fragments. No source edit is emitted.
         const changes = affected.map(block => ({ fromA: block.from, toA: block.to, fromB: block.from, toB: block.to }));
         const reusable = TreeFragment.applyChanges(TreeFragment.addTree(tree), changes, 0);

@@ -4,7 +4,7 @@ const lowerTurkish = Array.from("abcçdefgğhıijklmnoöprsştuüvyz");
 /**
  * Formats one Office 2010 custom numbering expression.
  *
- * @param value - Positive counter.
+ * @param value - Non-negative counter; zero has no Greek or alphabetic glyph.
  * @param expression - Exact `w:numFmt/@w:format` expression.
  * @returns Recognized custom marker or decimal fallback.
  */
@@ -33,7 +33,7 @@ export function formatCustomCounter(
 /**
  * Formats one Greek numeral inside the 9,999-value custom cycle.
  *
- * @param value - Positive counter.
+ * @param value - Non-negative counter.
  * @returns Greek numeral text.
  */
 function formatGreekNumeral(value: number): string {
@@ -58,7 +58,7 @@ function formatGreekNumeral(value: number): string {
 /**
  * Formats one repeated Turkish alphabet sequence.
  *
- * @param value - Positive counter.
+ * @param value - Non-negative counter.
  * @param alphabet - Uppercase or lowercase Turkish alphabet.
  * @returns Repeated alphabet marker.
  */

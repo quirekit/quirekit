@@ -23,3 +23,23 @@ it("isolates explicit operations while keeping adjacent typing in its normal gro
   editor.commands.undo(); expect(editor.getText()).toBe("");
   editor.destroy();
 });
+
+it("clears the undo history without changing the document", () => {
+  const editor = createEditor({ extensions: [UndoRedo,
+    Node.create({ name: "doc", topNode: true, content: "block+" }),
+    Node.create({ name: "paragraph", group: "block", content: "inline*" }),
+    Node.create({ name: "text", group: "inline" })
+  ] });
+  editor.commands.insertContent("a");
+  editor.commands.closeHistory();
+  editor.commands.insertContent("b");
+  const before = editor.state.doc;
+  expect(editor.commands.clearHistory()).toBe(true);
+  expect(editor.state.doc).toBe(before);
+  expect(editor.can().undo()).toBe(false);
+  editor.commands.insertContent("c");
+  editor.commands.undo();
+  expect(editor.getText()).toBe("ab");
+  expect(editor.can().undo()).toBe(false);
+  editor.destroy();
+});

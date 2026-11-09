@@ -1,7 +1,7 @@
 /**
  * Formats one numeric ordinal using the effective marker language.
  *
- * @param value - Positive counter.
+ * @param value - Non-negative counter, with the French zero handled by the caller.
  * @param language - Effective BCP 47 marker language.
  * @returns Language-specific numeric ordinal.
  */

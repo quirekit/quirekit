@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/pm-keymap",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "QuireKit vendored ProseMirror keymap boundary.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/pm/keymap"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/pm/keymap"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/pm/keymap#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

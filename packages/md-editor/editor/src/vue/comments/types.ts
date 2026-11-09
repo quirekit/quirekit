@@ -36,6 +36,7 @@ export interface MdCommentsSetupInput {
   /** Editor root, whose width decides the presentation. */ readonly root: Readonly<Ref<HTMLElement | null>>;
   /** Whether the centered document layout is shown on a wide screen. */ readonly wide: () => boolean;
   /** Whether the narrow (mobile) presentation is active. */ readonly narrow: () => boolean;
+  /** Whether the read-only reading view is showing. */ readonly reading: () => boolean;
   /** Product control language. */ readonly locale: () => MdEditorLocale;
   /** Host contacts offered after typing @ in a comment. */ readonly mentions: () => QuireKitCommentMentionSource | undefined;
 }
@@ -49,6 +50,7 @@ export interface MdCommentsWorkspace {
   /** @returns Whether a draft for a comment on the whole document opened. */ openDocumentDraft(): boolean;
   /** @param direction - 1 for next, -1 for previous. @returns Whether a thread was focused. */ step(direction: 1 | -1): boolean;
   /** Shows the list of every thread. */ showList(): void;
+  /** @param visible - Whether the side rail of anchored comments is shown. */ setRailVisible(visible: boolean): void;
   /** Section placed after the document, or null when the host keeps document comments in the list. */ readonly documentSection: Component | null;
   /** Rail rendered beside the document while `layout` is `side`. */ readonly rail: Component;
   /** List drawer of every thread. */ readonly list: Component;

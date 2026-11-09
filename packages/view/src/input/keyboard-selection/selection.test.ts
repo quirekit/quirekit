@@ -1,4 +1,4 @@
-import { createEditor, readQuireSelectionNavigation } from "@quirekit/core";
+import { createEditor, Node, readQuireSelectionNavigation } from "@quirekit/core";
 import { AllSelection, TextSelection, type EditorState } from "@quirekit/pm";
 import { StarterKit } from "@quirekit/starter-kit";
 import { describe, expect, it } from "vitest";
@@ -82,6 +82,31 @@ describe("canvas keyboard selection helper", () => {
     expect(transaction?.scrolledIntoView).toBe(true);
   });
 
+  describe("over an atomic inline node with text content", () => {
+    // "a" + guide("b") + "c": positions 1|a|2 [3 b 4] 5|c|6; the guide spans 2..5.
+    it.each([
+      { from: 2, key: "ArrowRight", expected: 5 },
+      { from: 5, key: "ArrowLeft", expected: 2 },
+      { from: 3, key: "ArrowRight", expected: 5 }
+    ])("moves $key from $from to $expected without entering the node", ({ from, key, expected }) => {
+      const state = createEditorStateWithInlineAtom(from);
+      const transaction = createQuireKeyboardSelectionTransaction({ state, event: createKeyboardEvent(key) });
+
+      expect(transaction!.selection).toBeInstanceOf(TextSelection);
+      expect(transaction!.selection.toJSON()).toEqual({ type: "text", anchor: expected, head: expected });
+    });
+
+    it("extends across the whole node", () => {
+      const state = createEditorStateWithInlineAtom(1);
+      const transaction = createQuireKeyboardSelectionTransaction({
+        state: state.apply(state.tr.setSelection(TextSelection.create(state.doc, 1, 2))),
+        event: createKeyboardEvent("ArrowRight", { shiftKey: true })
+      });
+
+      expect(transaction!.selection.toJSON()).toEqual({ type: "text", anchor: 1, head: 5 });
+    });
+  });
+
   it("ignores non-selection keyboard events", () => {
     const state = createEditorStateWithParagraph("abc");
 
@@ -138,6 +163,27 @@ function createEditorStateWithParagraph(text: string): EditorState {
   );
 
   return editor.state.pm;
+}
+
+/** Inline object whose base text is content but never a caret target, like a phonetic guide. */
+const InlineAtomWithText = Node.create({
+  name: "inlineAtomWithText", inline: true, group: "inline", content: "text*", atom: true, selectable: true
+});
+
+/**
+ * Creates "a" + atomic inline node holding "b" + "c" with a collapsed caret.
+ *
+ * @param caret - Collapsed caret position.
+ * @returns Editor state for atomic inline navigation.
+ */
+function createEditorStateWithInlineAtom(caret: number): EditorState {
+  const editor = createEditor({ extensions: [StarterKit, InlineAtomWithText] });
+  const { schema } = editor.state;
+  editor.setContent(schema.nodes.doc!.create(null, schema.nodes.paragraph!.create(null, [
+    schema.text("a"), schema.nodes.inlineAtomWithText!.create(null, schema.text("b")), schema.text("c")
+  ])));
+  const state = editor.state.pm;
+  return state.apply(state.tr.setSelection(TextSelection.create(state.doc, caret)));
 }
 
 /**

@@ -10,6 +10,7 @@ import {
   type WordTableExplicitCellRef
 } from "../map";
 import type { WordTableSelection } from "../selection";
+import { projectWordTableHtml } from "./html";
 
 /**
  * Creates an internal ProseMirror table slice from a structural table selection.
@@ -80,39 +81,7 @@ export function createWordTableSelectionHtmlSlice(
   if (!table || table.type.name !== "wordTable") {
     throw new RangeError("Word table HTML projection requires a copied wordTable");
   }
-  const map = createWordTableMap(table);
-  const explicitById = new Map(
-    map.explicitCells.map((cell) => [cell.id, cell] as const)
-  );
-  const rows: PMNode[] = [];
-
-  // Emit each semantic origin once. Covered vertical continuations remain in
-  // the private slice but cannot become sibling td elements below a rowspan.
-  for (let rowIndex = 0; rowIndex < map.height; rowIndex += 1) {
-    const sourceRow = table.child(rowIndex);
-    const cells: PMNode[] = [];
-
-    for (let column = 0; column < map.width; column += 1) {
-      const semanticCell = map.cellAt(rowIndex, column);
-
-      if (!semanticCell || semanticCell.rect.startRow !== rowIndex ||
-        semanticCell.rect.startColumn !== column) {
-        continue;
-      }
-      const explicit = explicitById.get(semanticCell.originExplicitCellId);
-
-      if (explicit) {
-        cells.push(readExplicitCellNode(table, explicit));
-      }
-    }
-    rows.push(sourceRow.type.create(sourceRow.attrs, cells, sourceRow.marks));
-  }
-
-  return new Slice(
-    Fragment.from(table.type.create(table.attrs, rows, table.marks)),
-    0,
-    0
-  );
+  return new Slice(Fragment.from(projectWordTableHtml(table)), 0, 0);
 }
 
 /**
@@ -157,8 +126,6 @@ function collectSelectedRowCells(options: {
 
     if (
       slot?.kind !== "cell" ||
-      slot.role === "horizontalSpan" ||
-      slot.role === "covered" ||
       emitted.has(slot.explicitCellId)
     ) {
       continue;

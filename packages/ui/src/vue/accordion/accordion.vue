@@ -4,7 +4,8 @@ import { computed } from "vue";
 import type {
   QuireKitAccordionItem,
   QuireKitAccordionOrientation,
-  QuireKitAccordionSize
+  QuireKitAccordionSize,
+  QuireKitAccordionVariant
 } from "../../components/accordion";
 import QuireIcon from "../icon/icon.vue";
 
@@ -24,6 +25,8 @@ interface Props {
   readonly orientation?: QuireKitAccordionOrientation;
   /** 触发器高度与排版尺寸。 */
   readonly size?: QuireKitAccordionSize;
+  /** outline 保留外框与分隔线；plain 通过间距组织条目。 */
+  readonly variant?: QuireKitAccordionVariant;
   /** 是否禁止整个 Accordion 的交互。 */
   readonly disabled?: boolean;
   /** 是否延迟挂载尚未展开过的内容。 */
@@ -62,6 +65,7 @@ const props = withDefaults(defineProps<Props>(), {
   collapsible: false,
   orientation: "vertical",
   size: "sm",
+  variant: "outline",
   disabled: false,
   lazyMount: false,
   unmountOnExit: false
@@ -98,7 +102,7 @@ function updateValue(value: string[]): void {
     :disabled="disabled"
     :lazy-mount="lazyMount"
     :unmount-on-exit="unmountOnExit"
-    :class="['qk-accordion', `qk-accordion--${orientation}`]"
+    :class="['qk-accordion', `qk-accordion--${orientation}`, { 'qk-accordion--plain': variant === 'plain' }]"
     @update:model-value="updateValue"
   >
     <Accordion.Item
@@ -106,7 +110,7 @@ function updateValue(value: string[]): void {
       :key="item.value"
       :value="item.value"
       :disabled="item.disabled"
-      class="qk-accordion__item"
+      :class="['qk-accordion__item', { 'qk-accordion__item--plain': variant === 'plain' }]"
     >
       <Accordion.ItemTrigger
         :class="['qk-accordion__trigger', `qk-accordion__trigger--${size}`]"

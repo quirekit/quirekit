@@ -47,6 +47,7 @@ const showLabels = inject(toolbarLabelsKey);
 const common = computed(() => ({
   ...props.item.attributes, label: props.item.label, disabled: unavailable.value,
   ...(props.item.tooltip === undefined ? {} : { tooltip: props.item.tooltip }),
+  ...(props.item.shortcut === undefined ? {} : { shortcut: props.item.shortcut }),
   ...(props.item.disabledReason === undefined ? {} : { disabledReason: props.item.disabledReason }),
   ...(props.item.describedBy === undefined ? {} : { describedBy: props.item.describedBy })
 }));

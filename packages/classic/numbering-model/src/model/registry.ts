@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import type {
   CreateWordNumberingInstanceResult,
   WordNumberingRegistry
@@ -18,7 +19,8 @@ export function resolveWordNumberingRegistry(value: unknown): WordNumberingRegis
 }
 
 /**
- * Adds one concrete list instance while preserving existing definitions.
+ * Adds one concrete list instance while preserving existing definitions. The
+ * id is a uuid so lists created concurrently by collaborators never share one.
  *
  * @param registry - Current document numbering registry.
  * @param abstractNumId - Existing abstract definition to instantiate.
@@ -31,12 +33,8 @@ export function createWordNumberingInstance(
   if (registry.abstractNums[abstractNumId] === undefined) {
     throw new Error(`Missing Word abstract numbering definition: ${abstractNumId}`);
   }
-  let next = Math.max(1, registry.nextInstanceId);
-  let numId = `quirekit-num-${next}`;
-  while (registry.nums[numId] !== undefined) {
-    next += 1;
-    numId = `quirekit-num-${next}`;
-  }
+  let numId = `quirekit-num-${v4()}`;
+  while (registry.nums[numId] !== undefined) numId = `quirekit-num-${v4()}`;
   return {
     numId,
     registry: {
@@ -44,8 +42,7 @@ export function createWordNumberingInstance(
       nums: {
         ...registry.nums,
         [numId]: { id: numId, abstractNumId }
-      },
-      nextInstanceId: next + 1
+      }
     }
   };
 }

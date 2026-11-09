@@ -139,6 +139,15 @@ describe("Quire table Word source adapter", () => {
     });
   });
 
+  it("clears imported floating aliases before projecting canonical coordinates", () => {
+    const floating = createSource(table([row([cell("A1")])], { floating: {
+      horizontalAnchor: null, verticalAnchor: null, x: 0, y: null, xSpec: null, ySpec: null,
+      horzAnchor: "page", vertAnchor: "page", tblpX: 1440, tblpY: 720, tblpXSpec: "center", tblpYSpec: "bottom"
+    } })).floating;
+    expect(floating?.horizontal).toEqual({ reference: "text", offset: 0, alignment: null });
+    expect(floating?.vertical).toEqual({ reference: "text", offset: null, alignment: null });
+  });
+
   it("adapts a simple Word table map into a normalized table source", () => {
     const tableNode = table([
       row([cell("A1"), cell("A2")]),
@@ -643,6 +652,32 @@ describe("Quire table Word source adapter", () => {
       { startRow: 0, rowSpan: 1, startColumn: 1, columnSpan: 1 },
       { startRow: 1, rowSpan: 1, startColumn: 1, columnSpan: 1 }
     ]);
+  });
+
+  it("adapts legacy horizontal members as one rectangle with only the origin content range", () => {
+    const tableNode = table([row([
+      cell("起点", { hMerge: "restart" }),
+      cell("", { hMerge: "continue" })
+    ])], { grid: [{ width: { value: 1440, unit: "dxa" } }, { width: { value: 1440, unit: "dxa" } }] });
+    const map = createWordTableMap(tableNode);
+    const source = createSource(tableNode);
+
+    expect(source.diagnostics).toEqual([]);
+    expect(source.semanticCells).toHaveLength(1);
+    expect(source.semanticCells[0]).toMatchObject({
+      gridRect: { startRow: 0, rowSpan: 1, startColumn: 0, columnSpan: 2 },
+      explicitCellIds: map.explicitCells.map(cell => cell.id),
+      contentRange: { from: map.explicitCells[0]!.cellPos,
+        to: map.explicitCells[0]!.cellPos + tableNode.child(0).child(0).nodeSize - 2 }
+    });
+    expect(source.semanticCells[0]!.contentRange.to).toBeLessThan(map.explicitCells[1]!.cellPos);
+    const geometry = layoutQuireTableGeometry({
+      tableId: source.tableId, tableRange: source.tableRange, source,
+      constraints: { rect: { x: 0, y: 0, width: 600, height: 0 }, defaultRowHeight: 28, defaultCellPadding: 4, defaultBorderWidth: 1 },
+      measureContent: () => ({ height: 12 })
+    });
+    expect(geometry.cells).toHaveLength(1);
+    expect(geometry.cells[0]!.rect.width).toBe(192);
   });
 
   it("preserves mixed horizontal and vertical merge semantic geometry", () => {

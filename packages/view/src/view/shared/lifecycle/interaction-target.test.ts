@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { QuireInteractionSelectionTarget } from "@quirekit/view-engine";
-import { createMountedInteractionTargetSnapshot } from "./interaction-target";
+import { createEditor } from "@quirekit/core";
+import { NodeSelection, TextSelection } from "@quirekit/pm";
+import { StarterKit } from "@quirekit/starter-kit";
+import { createMountedInteractionTargetSnapshot, readLiveMountedInteractionTarget } from "./interaction-target";
 
 /**
  * Creates one complete retained content-control target for projection tests.
@@ -120,5 +123,18 @@ describe("mounted interaction target projection", () => {
       referenceRect: { x: 40, y: 60, width: 120, height: 80 }
     });
     expect(Object.isFrozen(snapshot?.owner)).toBe(true);
+  });
+
+  it("keeps an object hit only while its node selection exists", () => {
+    const { schema } = createEditor({ extensions: [StarterKit] }).state;
+    const doc = schema.nodes.doc!.create(null, schema.nodes.paragraph!.create(null, schema.text("abc")));
+    const object = createObjectTarget();
+    const control = createContentControlTarget();
+
+    expect(readLiveMountedInteractionTarget(object, NodeSelection.create(doc, 0))).toBe(object);
+    // Arrow keys moved the caret off the object: typing must edit text again.
+    expect(readLiveMountedInteractionTarget(object, TextSelection.create(doc, 3))).toBeNull();
+    expect(readLiveMountedInteractionTarget(control, TextSelection.create(doc, 3))).toBe(control);
+    expect(readLiveMountedInteractionTarget(null, TextSelection.create(doc, 3))).toBeNull();
   });
 });

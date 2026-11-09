@@ -9,7 +9,7 @@ import type { MdDialogKind } from "../dialogs/types";
 import type { MdFileMode } from "../files/types";
 import { useMdOverlayTarget } from "../overlays/context";
 import { mobileFloatingPopoverStyle } from "../mobile/controls";
-import type { MdEditorLocale } from "../types";
+import type { MdEditorLocale, MdSelectionAction } from "../types";
 import Toolbar from "./toolbar.vue";
 const props = defineProps<{
   /** Canonical source and native layout owner. */ editor: MsfeEditor;
@@ -18,6 +18,7 @@ const props = defineProps<{
   /** Whether comments can be added; a readonly source then still offers the comment action. */ commentable?: boolean;
   /** Control language. */ locale: MdEditorLocale;
   /** Host contacts, forwarded to the shared toolbar context. */ mentions?: MdMentionSource | undefined;
+  /** Host commands appended after the formatting actions. */ selectionActions?: readonly MdSelectionAction[] | undefined;
 }>();
 const emit = defineEmits<{
   /** Open a source-anchored product editor, such as the link dialog. */ edit: [kind: MdDialogKind, target?: MsfeTarget, body?: string];
@@ -90,7 +91,7 @@ watch(() => props.editor, (editor, _old, cleanup) => {
     <QuirePopoverAnchor><span class="md-floating-toolbar-anchor" :style="position ?? undefined" /></QuirePopoverAnchor>
     <QuirePopoverContent v-if="position" width="auto" padding="none" :style="mobileFloatingPopoverStyle" :show-arrow="false" :portal-target="portal ?? 'body'">
       <div ref="surface" class="md-floating-toolbar" data-md-floating-toolbar>
-        <Toolbar preset="selection" :active="!!position" :editor="editor" :state="state" :locale="locale" :mentions="mentions"
+        <Toolbar preset="selection" :active="!!position" :editor="editor" :state="state" :locale="locale" :mentions="mentions" :selection-actions="selectionActions"
           @edit="(...args) => emit('edit', ...args)" @comment="emit('comment')" @file="(...args) => emit('file', ...args)" @expanded="expanded = $event" />
       </div>
     </QuirePopoverContent>

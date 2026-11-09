@@ -43,15 +43,14 @@ export function currentLocation(): LicenseLocation | undefined {
 }
 
 /**
- * Reports whether the page runs inside a packaged desktop or mobile shell.
- * @returns Whether Electron, NW.js or Capacitor hosts the page.
+ * Reports whether the page runs inside a packaged desktop or mobile shell. The user agent is not
+ * used: editors and IDEs embed Electron browsers whose agent names Electron while showing a dev server.
+ * @returns Whether an Electron or NW.js renderer with Node integration, or Capacitor, hosts the page.
  */
 export function isPackagedShell(): boolean {
-  const scope = globalThis as { navigator?: { userAgent?: unknown }; Capacitor?: unknown; process?: { versions?: Record<string, unknown> } };
-  const agent = typeof scope.navigator?.userAgent === "string" ? scope.navigator.userAgent : "";
+  const scope = globalThis as { Capacitor?: unknown; process?: { versions?: Record<string, unknown> } };
   const versions = scope.process?.versions;
-  return /\bElectron\//u.test(agent) || scope.Capacitor !== undefined
-    || typeof versions?.electron === "string" || typeof versions?.nw === "string";
+  return scope.Capacitor !== undefined || typeof versions?.electron === "string" || typeof versions?.nw === "string";
 }
 
 /**

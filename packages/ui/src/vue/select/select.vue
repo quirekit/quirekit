@@ -13,6 +13,7 @@ import type {
   QuireKitSelectSize
 } from "../../components/select";
 import QuireIcon from "../icon/icon.vue";
+import { chordText, keyLabel } from "../kbd/labels";
 import { useModalPortal } from "../shared/surface/use-modal-portal";
 import { useQuireKitMessages } from "../locale-provider/context";
 
@@ -210,6 +211,7 @@ function updateValue(values: string[]): void {
                 <Select.ItemText class="qk-select__item-label">
                   <slot name="item" :item="item">{{ item.label }}</slot>
                 </Select.ItemText>
+                <kbd v-if="item.shortcut?.length" class="qk-select__item-shortcut" :aria-label="keyLabel(item.shortcut)">{{ chordText(item.shortcut) }}</kbd>
                 <Select.ItemIndicator class="qk-select__item-indicator">
                   <QuireIcon name="check" :size="16" />
                 </Select.ItemIndicator>

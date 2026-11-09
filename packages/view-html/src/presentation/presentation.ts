@@ -12,7 +12,8 @@ import {
   resolveMountedViewUpdateScheduleMode,
   type MountedViewUpdateRevisionClock
 } from "@quirekit/view/mounted-backend";
-import { createHtmlFlowRenderResult, measureHtmlFlowSnapshot, type HtmlFlowRenderResult } from "../geometry";
+import { createHtmlFlowRenderResult, type HtmlFlowRenderResult } from "../geometry";
+import { HtmlFlowGeometryRuntime } from "../geometry/retained";
 import { syncHtmlMountedRootAttributes } from "../attributes";
 import {
   createHtmlDocumentCompositionRuntime,
@@ -74,6 +75,7 @@ export class HtmlContinuousFlowPresentation {
   private readonly scheduler: HtmlRenderScheduler;
   private readonly selectionRuntime: HtmlSelectionRuntime;
   private readonly focusRuntime: HtmlFocusRuntime;
+  private readonly flowGeometry = new HtmlFlowGeometryRuntime();
   private readonly updateRevisionClock: MountedViewUpdateRevisionClock =
     createMountedViewUpdateRevisionClock();
   private currentRenderResult: HtmlFlowRenderResult | undefined;
@@ -142,7 +144,8 @@ export class HtmlContinuousFlowPresentation {
       ownerDocument: options.elements.root.ownerDocument,
       surface: options.elements.contentSurface,
       rootId: `${options.id}:document-root`,
-      regionId: `${options.id}:document-body`
+      regionId: `${options.id}:document-body`,
+      projectDomPoint: (point) => this.compositionRuntime.projectDomPoint(point)
     });
     this.compositionRuntime = createHtmlDocumentCompositionRuntime({
       documentView: this.documentView,
@@ -188,7 +191,9 @@ export class HtmlContinuousFlowPresentation {
       }
       this.currentImePreedit = renderOptions.imePreedit;
     }
-    const mode = resolveMountedViewUpdateScheduleMode({
+    // A ResizeObserver delivery must not synchronously resize its own surface.
+    // Coalesce passive notifications through the same frame queue as input.
+    const mode = renderOptions.reason === "resize" && renderOptions.passiveResize ? "frame" : resolveMountedViewUpdateScheduleMode({
       reason: renderOptions.reason,
       focused: this.options.hasFocus()
     });
@@ -261,6 +266,7 @@ export class HtmlContinuousFlowPresentation {
     }
     this.destroyed = true;
     this.scheduler.destroy();
+    this.flowGeometry.destroy();
     this.compositionRuntime.destroy();
     this.mutationBoundary.destroy();
     this.focusRuntime.destroy();
@@ -281,7 +287,8 @@ export class HtmlContinuousFlowPresentation {
   ): boolean {
     if (!this.currentRenderResult || !surfaceState) return false;
     if (renderOptions.reason === "composition") return true;
-    if (renderOptions.reason !== "selection" && renderOptions.reason !== "transaction") return false;
+    if (renderOptions.reason !== "selection" && renderOptions.reason !== "transaction"
+      && !(renderOptions.reason === "resize" && renderOptions.passiveResize)) return false;
     if (this.currentRenderResult.layoutSnapshot.state.doc !== this.options.editor.state.doc) return false;
     // Unknown decoration dependencies still enter retained reconciliation. This
     // decision concerns DOM writes only; it never consults a layout provider.
@@ -303,6 +310,7 @@ export class HtmlContinuousFlowPresentation {
   ): HtmlPresentationContentWriteProducts {
     const payload = requirePresentationPayload(update);
     const invalidation = this.createContentInvalidation(update);
+    this.mutationBoundary.beginOwnedWrites();
     syncHtmlMountedRootAttributes({
       view: this.options.mountedView,
       root: this.options.elements.root
@@ -341,7 +349,7 @@ export class HtmlContinuousFlowPresentation {
       for (let index = 0; index < writes + composition.writes; index += 1) {
         context.recordContentWrite();
       }
-      this.mutationBoundary.drainOwnedWrites();
+      this.mutationBoundary.drainOwnedWrites({ ownershipChanged: result.ownershipChanged });
       return invalidation;
     }
 
@@ -359,7 +367,7 @@ export class HtmlContinuousFlowPresentation {
     for (let index = 0; index < composition.writes; index += 1) {
       context.recordContentWrite();
     }
-    this.mutationBoundary.drainOwnedWrites();
+    this.mutationBoundary.drainOwnedWrites({ ownershipChanged: false });
     return invalidation;
   }
 
@@ -426,24 +434,25 @@ export class HtmlContinuousFlowPresentation {
       (trace.textWrites.length + trace.attributeWrites.length + trace.structureWrites.length > 0);
     const reuseContentRender = !contentChanged && !!this.currentRenderResult &&
       this.currentRenderResult.layoutSnapshot.state.doc === this.options.editor.state.doc &&
-      (update.reason === "selection" || update.reason === "transaction") &&
+      (update.reason === "selection" || update.reason === "transaction"
+        || update.reason === "resize" && payload.options.passiveResize) &&
       this.currentSurfaceState?.displaySize.width === surfaceState.displaySize.width &&
       this.currentSurfaceState?.displaySize.height === surfaceState.displaySize.height;
     // Publish current structure facts before selection projection, including
     // when document replacement and select-all share this presentation frame.
-    const snapshot = reuseContentRender
-      ? { ...this.currentRenderResult!.layoutSnapshot, state: this.options.editor.state }
-      : context.readGeometry(() => measureHtmlFlowSnapshot({
-          editor: this.options.editor, documentView: this.documentView,
-          surface: this.options.elements.contentSurface, surfaceState
-        }));
-    this.measurementProvider.updateBlockGeometry(snapshot.root, snapshot.state.doc);
+    const geometry = context.readGeometry(() => this.flowGeometry.measure({
+      editor: this.options.editor, documentView: this.documentView,
+      surface: this.options.elements.contentSurface, surfaceState
+    }, { reason: update.reason, trace, compositionWrites: this.latestCompositionWrites },
+    this.currentRenderResult?.layoutSnapshot, reuseContentRender));
+    const snapshot = geometry.snapshot;
+    this.measurementProvider.updateBlockGeometry(snapshot.root, snapshot.state.doc, geometry.changedBlocks);
     const domGeometry = context.readGeometry(() => this.measureDomGeometry(snapshot));
     const renderResult = createHtmlFlowRenderResult({ snapshot, surfaceState, domGeometry, updatePatch });
     return {
       surfaceState,
       renderResult,
-      strategy: reuseContentRender ? "selection-update" : "full",
+      strategy: this.flowGeometry.diagnostics.mode === "reuse" ? "selection-update" : "full",
       reason: payload.options.reason,
       domGeometry
     };
@@ -482,12 +491,15 @@ export class HtmlContinuousFlowPresentation {
    * @param products - Geometry and render products built by the read phase.
    */
   private applyOverlayWrite(products: HtmlPresentationRenderProducts): void {
+    this.mutationBoundary.beginOwnedWrites();
     syncHtmlMountedSurfaceGeometry({
       contentSurface: this.options.elements.contentSurface,
       documentRoot: this.documentRoot,
       overlaySurface: this.options.elements.overlaySurface,
       runtime: this.options.runtime
     }, products.surfaceState);
+    this.mutationBoundary.drainOwnedWrites({ ownershipChanged: false });
+    this.flowGeometry.acceptSurfaceSize(this.options.elements.contentSurface);
     this.currentSurfaceState = products.surfaceState;
     this.currentRenderResult = products.renderResult;
     this.currentDomGeometry = products.domGeometry;
@@ -532,6 +544,7 @@ export class HtmlContinuousFlowPresentation {
       phases: diagnostics.phases,
       diagnostics: {
         flowGeometryRebuilt: products.strategy === "full",
+        geometry: this.flowGeometry.diagnostics,
         schedulerEvidence: "available",
         scheduler: diagnostics.scheduler,
         stateVersions: diagnostics.stateVersions,

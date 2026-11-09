@@ -150,9 +150,9 @@ export abstract class BaseMountedEditorView<
     return this.rootValue;
   }
 
-  /** Focuses the mounted view input target when editing is allowed. */
+  /** Focuses the mounted input for selection and copy unless the view is locked. */
   focus(): void {
-    if (!this.editable || this.destroyed) {
+    if (this.status === "lock" || this.destroyed) {
       return;
     }
 

@@ -6,7 +6,7 @@ import { GFM } from "@quirekit/lezer-markdown";
 import { sourceRevealSetting } from "@quirekit/msfe-core";
 import { compositionEffect, compositionField, modeFacet } from "@quirekit/msfe-core/state";
 import { CustomContainer, Frontmatter } from "@quirekit/msfe-markdown-extras";
-import { exitDocumentBlock, insertDocumentLineBreak, insertDocumentParagraph } from "./paragraph";
+import { exitDocumentBlock, insertDocumentLineBreak, insertDocumentParagraph, openBlankRow } from "./paragraph";
 
 const containerSyntax = CustomContainer.resolve(() => { throw new Error("Grammar fixtures do not mount an editor"); }).syntax!;
 const frontmatterSyntax = Frontmatter.resolve(() => { throw new Error("Grammar fixtures do not mount an editor"); }).syntax!;
@@ -38,6 +38,7 @@ describe("document paragraph input", () => {
     ["***¦", "***\n\n¦"],
     ["---\ntitle: Test\n---¦", "---\ntitle: Test\n---\n\n¦"],
     ["ab¦cd", "ab\n\n¦cd"],
+    ["Text\n\n¦***\n\nNext", "Text\n\n***\n\n¦\n\nNext"],
     ["first¦\nsecond", "first\n\n¦\nsecond"],
     ["::: note Title\nab¦cd\n:::", "::: note Title\nab\n\n¦cd\n:::"],
   ])("inserts a paragraph without rewriting surrounding source: %s", (source, result) => {
@@ -158,4 +159,18 @@ describe("document paragraph input", () => {
       extensions: [EditorState.allowMultipleSelections.of(true), markdown(), modeFacet.of("live")] }));
     expect(insertDocumentParagraph(state)).toBeNull();
   });
+});
+
+describe("Enter on a visible empty row after a block", () => {
+  it.each([
+    ["```js\na\n```\n¦", "```js\na\n```\n\n\n¦"],
+    ["| a |\n| - |\n| 1 |\n¦", "| a |\n| - |\n| 1 |\n\n\n¦"],
+  ])("inserts two breaks so the caret visibly moves: %s", (source, expected) => {
+    const before = fixture(source), spec = openBlankRow(before);
+    expect(spec).not.toBeNull();
+    const after = before.update(spec!).state, doc = after.doc.toString(), head = after.selection.main.head;
+    expect(doc.slice(0, head) + "¦" + doc.slice(head)).toBe(expected);
+  });
+
+  it.each(["Text\n\n¦", "¦", "Text¦"])("leaves other rows to native Enter: %s", source => expect(openBlankRow(fixture(source))).toBeNull());
 });

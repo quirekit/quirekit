@@ -20,7 +20,7 @@ import type {
   ClassicEditorToolbarControlContribution
 } from "./controls";
 import type { ClassicEditorPopmenuContribution } from "./popmenu";
-import type { ClassicEditorBlockTypeContribution } from "./block-types/types";
+import type { ClassicEditorBlockPresentationContribution, ClassicEditorBlockTypeContribution } from "./block-types/types";
 import type {
   ClassicEditorDialogContribution,
   ClassicEditorGlobalSettingsSectionContribution,
@@ -41,6 +41,7 @@ export type ClassicEditorRibbonItemContribution =
 export type ClassicEditorContribution =
   | ClassicEditorInsertItemContribution
   | ClassicEditorBlockTypeContribution
+  | ClassicEditorBlockPresentationContribution
   | ClassicEditorMenuItemContribution
   | ClassicEditorDocumentServiceMenuContribution
   | ClassicEditorRibbonTabContribution

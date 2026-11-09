@@ -39,7 +39,7 @@ describe("asynchronous source preview presentation", () => {
     const cache = { get: vi.fn(() => "<svg><text>saved diagram</text></svg>"), set: vi.fn() };
     const f = mount(previewRenderer(load, undefined, { loadingSource: false, cache }), input);
     expect(f.output.querySelector("svg")).not.toBeNull(); expect(f.output.dataset.status).toBe("ready");
-    expect(cache.get).toHaveBeenCalledWith(input, document);
+    expect(cache.get.mock.calls[0]?.slice(0, 2)).toEqual([input, document]);
     await Promise.resolve(); await Promise.resolve(); expect(load).not.toHaveBeenCalled();
   });
 
@@ -52,7 +52,7 @@ describe("asynchronous source preview presentation", () => {
     finishes[0]!("<svg><text>old</text></svg>"); await Promise.resolve(); await Promise.resolve();
     expect(cache.set).not.toHaveBeenCalled(); expect(f.output.textContent).toBe("");
     finishes[1]!("<svg><text>new</text></svg>"); await vi.waitFor(() => expect(f.output.dataset.status).toBe("ready"));
-    expect(cache.set).toHaveBeenCalledExactlyOnceWith(next, document, "<svg><text>new</text></svg>");
+    expect(cache.set).toHaveBeenCalledExactlyOnceWith(next, document, "<svg><text>new</text></svg>", expect.objectContaining({ fontSize: expect.any(Number) }));
     expect(f.output.textContent).toBe("new");
   });
 

@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/layout",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/layout"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/layout"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/layout#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Internal API, no compatibility guarantee: consumer-neutral layout, pagination, table, text, and shaping foundation.",

@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/proofing-hunspell",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/proofing-hunspell"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/proofing-hunspell"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/proofing-hunspell#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Hunspell spelling provider for the QuireKit proofing extension, running in a Web Worker.",

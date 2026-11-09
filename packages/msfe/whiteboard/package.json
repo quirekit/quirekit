@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/msfe-whiteboard",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Editable whiteboard blocks stored as Markdown fences in the MSFE source editor.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/msfe/whiteboard"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/msfe/whiteboard"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/msfe/whiteboard#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

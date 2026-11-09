@@ -1,5 +1,23 @@
 import { Decoration } from "@quirekit/cm-view";
+import type { EditorState } from "@quirekit/cm-state";
+import type { SyntaxNode } from "@lezer/common";
 import type { MsfeProjection, ProjectionContext } from "@quirekit/msfe-core";
+
+/**
+ * A list item or heading that is only its marker, with no space after it, is
+ * still being typed: it stays literal text until the space gives it structure.
+ * @param state - Canonical source. @param item - ListItem node.
+ * @returns Whether the item is a bare marker.
+ */
+export function bareListItem(state: EditorState, item: SyntaxNode): boolean {
+  return bareMarker(state, item, "ListMark");
+}
+
+/** @param state - Canonical source. @param node - Block. @param marker - Its opening marker node name. @returns Whether the block is only that marker, with no space after it. */
+export function bareMarker(state: EditorState, node: SyntaxNode, marker: string): boolean {
+  const mark = node.getChild(marker);
+  return !!mark && node.to === mark.to && mark.to === state.doc.lineAt(mark.from).to;
+}
 
 /** @param projection - Existing feature semantics. @param roles - Document roles for native marks. @returns The same source projection with shared Prose tags. */
 export function semanticProjection(projection: MsfeProjection, roles: Readonly<Record<string, string>>): MsfeProjection {
@@ -17,6 +35,7 @@ export function semanticProjection(projection: MsfeProjection, roles: Readonly<R
 
 /** @param input - Marker within an accepted native block. @returns Hidden prefix or selectable active source. */
 export function prefixProjection({ state, node, active }: ProjectionContext) {
+  if (node.name === "ListMark" && node.parent && bareListItem(state, node.parent)) return [];
   const line = state.doc.lineAt(node.from), preceding = state.sliceDoc(line.from, node.from);
   const from = /^\s*$/u.test(preceding) ? line.from : node.from;
   const to = node.to + Number(state.sliceDoc(node.to, node.to + 1) === " ");

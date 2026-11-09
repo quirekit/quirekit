@@ -11,6 +11,7 @@
   "licenseSha256": "05c6130cda97e7600ca91427a41e8a065efcf82365fc0293e7de80faec494c07",
   "localChanges": [
     "Package names, imports and build/test configuration use QuireKit workspace identities.",
+    "src/input.ts: advance mouse selection edge scrolling on the owning window's animation frames with elapsed-time velocity and fractional pixel carry; settle actual release coordinates and retire text-selection work on cancellation, blur or destruction while preserving a native content drag's source.",
     "src/docview.ts: measure sibling gaps, assign trailing wrapper padding to its last block, and avoid accumulating skipped viewports' spacing.",
     "src/docview.ts: lock content height before tile construction and component retirement so transient DOM shrinkage cannot clamp the outer scroll position.",
     "src/buildtile.ts and src/docview.ts: retire previous parent links when DOM is reused; undo full reuse for merged input tiles.",
@@ -21,8 +22,10 @@
     "src/editorview.ts, src/extension.ts and src/docview.ts: retain measured source anchors for outer scroll snapshots without synchronous geometry reads during capture.",
     "src/dom.ts: resolve physical scroll owners by axis from both overflow dimensions and computed CSS, ignoring visible or clipped decoration overflow while retaining programmatic hidden scrolling.",
     "src/cursor.ts, src/input.ts and src/domchange.ts: require mounted keyboard and pointer endpoints to own a positive-height line, excluding phantom font rectangles on collapsed rows and preserving corrected undirectional atomic ranges.",
-    "src/input.ts: end a composition whose compositionend the browser never sent when a new composition, a non-composing key or a pointer press with no composed DOM arrives.",
-    "src/buildtile.ts: keep DOM beside a composition in place: skip the empty tail after it so a widget starting at its end is preserved, walk zero-length tiles at an inserted composition, and reuse the widget buffer walked last."
+    "src/input.ts: end a composition whose compositionend the browser never sent when a new composition, focus loss, a non-composing key or a pointer press arrives with no composed DOM or after its composition events have stopped for 300ms.",
+    "src/input.ts: leave paste during composition to the browser outside Android.",
+    "src/docview.ts: mark the Firefox caret moved into an adjacent text node as imprecise so reading the selection back keeps the state caret.",
+    "src/buildtile.ts: keep DOM beside a composition in place: skip the empty tail after it so a widget starting at its end is preserved, walk zero-length tiles at an inserted composition unless the composed text sits before a widget buffer (Chromium), reuse the widget buffer walked last at the composition, and other buffers first-in, first-out."
   ],
   "sourceEntry": "src/index.ts"
 }

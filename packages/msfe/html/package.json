@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/msfe-html",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Inline and block HTML rendering for the MSFE Markdown source editor.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/msfe/html"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/msfe/html"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/msfe/html#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

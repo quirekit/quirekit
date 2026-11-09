@@ -7,6 +7,7 @@ import {
   parseWordTableTsv,
   serializeWordTableSelection
 } from "./serialize";
+import { createWordTableSelectionHtmlSlice } from "./slice";
 
 const schema = new Schema({
   nodes: {
@@ -90,6 +91,25 @@ function selectionBetweenCells(
 }
 
 describe("Word table clipboard adapters", () => {
+  it("retains horizontal physical members internally and projects one full-width HTML origin", () => {
+    const doc = docWithTable([
+      row([cell("A", { hMerge: "restart" }), cell("", { hMerge: "continue" })]),
+      row([cell("B"), cell("C")])
+    ]);
+    const selection = selectionBetweenCells(doc, 0, 0);
+    expect(selection.rect.columnSpan).toBe(2);
+    const original = doc.toJSON();
+    const serialized = serializeWordTableSelection(selection);
+    const internal = serialized.slice.content.firstChild!;
+    expect(internal.child(0).childCount).toBe(2);
+    expect(internal.child(0).children.map(node => node.attrs.hMerge)).toEqual(["restart", "continue"]);
+    expect(createWordTableMap(internal).semanticCells[0]!.rect.columnSpan).toBe(2);
+    const html = createWordTableSelectionHtmlSlice(selection).content.firstChild!;
+    expect(html.child(0).childCount).toBe(1);
+    expect(html.child(0).child(0).attrs).toMatchObject({ gridSpan: 2, colspan: 2, hMerge: null });
+    expect(serialized.tsv).toBe("A\t");
+    expect(doc.toJSON()).toEqual(original);
+  });
   it("word-table-clipboard-serializes-selection-to-slice-html-and-tsv", () => {
     const doc = docWithTable([
       row([cell("A"), cell("B")]),

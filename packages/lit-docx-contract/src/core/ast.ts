@@ -6,6 +6,7 @@
 
 import type { HeaderFooterType } from './ooxml-enums.js'
 import type { LitAstMark, LitAstNode } from './contracts.js'
+import type { XmlElement } from '../ooxml/element.js'
 
 /** 文本标记（加粗、斜体、链接等行内样式），挂在 text 节点的 marks 上 */
 export interface LitMark extends LitAstMark {
@@ -118,6 +119,10 @@ export interface LitSectionColumnDefinition {
 
 /** LitAST 分节属性，对应已建模的 `w:sectPr` 子集。 */
 export interface LitSectionAttrs extends LitSectionPageSizeAttrs {
+  /** Empty paragraph-like source carrier for this paragraph-owned boundary; preserved outside normal body flow. */
+  boundaryParagraph?: LitNode
+  /** JSON-safe self-contained w:pgBorders envelope; preserved through editing, without native rendering or image/corner relationships. */
+  _pgBordersRaw?: XmlElement
   /** 可选的稳定分节标识，由消费方维护。 */
   id?: string
   /** 页面边距与页眉页脚距离。 */
@@ -140,6 +145,8 @@ export interface LitSectionAttrs extends LitSectionPageSizeAttrs {
   footnotePr?: Record<string, unknown>
   /** Uninterpreted section endnote properties retained through host codecs. */
   endnotePr?: Record<string, unknown>
+  /** Explicit suppression of endnotes at this section boundary, retained for host preservation. */
+  noEndnote?: boolean
   /** 分节符类型，对应 `ST_SectionMark`。 */
   sectionBreakType?: 'nextPage' | 'nextColumn' | 'continuous' | 'evenPage' | 'oddPage'
   /** 是否启用首页不同的页眉页脚。 */

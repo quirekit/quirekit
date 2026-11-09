@@ -3,7 +3,7 @@ import {Rect, isScrolledToBottom, getScale, scrollableParents} from "./dom"
 import {HeightMap, HeightOracle, BlockInfo, MeasuredHeights, QueryType, heightRelevantDecoChanges,
         clearHeightChangeFlag, heightChangeFlag} from "./heightmap"
 import {decorations, outerDecorations, ViewUpdate, UpdateFlag, ChangedRange, ScrollTarget, nativeSelectionHidden,
-        contentAttributes} from "./extension"
+        contentAttributes, scrollViewportMargin} from "./extension"
 import {WidgetType, Decoration, DecorationSet, BlockType} from "./decoration"
 import {EditorView} from "./editorview"
 import {Direction} from "./bidi"
@@ -51,9 +51,10 @@ function fullPixelRange(dom: HTMLElement, paddingTop: number): Rect {
 
 const enum VP {
   Margin = 1000,
+  // Extra pixels rendered per pixel scrolled since the last update
+  ScrollMarginFactor = 4,
   // coveredBy requires at least this many extra pixels to be covered
   MinCoverMargin = 10,
-  MaxCoverMargin = VP.Margin / 4,
   // Beyond this size, DOM layout starts to break down in browsers
   // because they use fixed-precision numbers to store dimensions.
   MaxDOMHeight = 7e6,
@@ -392,15 +393,22 @@ export class ViewState {
   get visibleTop() { return this.scaler.fromDOM(this.pixelViewport.top) }
   get visibleBottom() { return this.scaler.fromDOM(this.pixelViewport.bottom) }
 
+  // Fast scrolling renders further ahead; an idle or typing update
+  // keeps the base margin, so its work does not grow with the allowance.
+  private marginFor(bias: number) {
+    return VP.Margin + Math.min(Math.abs(bias) * VP.ScrollMarginFactor, this.state.facet(scrollViewportMargin))
+  }
+
   getViewport(bias: number, scrollTarget: ScrollTarget | null): Viewport {
-    // This will divide VP.Margin between the top and the
+    let margin = this.marginFor(bias)
+    // This will divide the margin between the top and the
     // bottom, depending on the bias (the change in viewport position
     // since the last update). It'll hold a number between 0 and 1
-    let marginTop = 0.5 - Math.max(-0.5, Math.min(0.5, bias / VP.Margin / 2))
+    let marginTop = 0.5 - Math.max(-0.5, Math.min(0.5, bias / margin / 2))
     let map = this.heightMap, oracle = this.heightOracle
     let {visibleTop, visibleBottom} = this
-    let viewport = new Viewport(map.lineAt(visibleTop - marginTop * VP.Margin, QueryType.ByHeight, oracle, 0, 0).from,
-                                map.lineAt(visibleBottom + (1 - marginTop) * VP.Margin, QueryType.ByHeight, oracle, 0, 0).to)
+    let viewport = new Viewport(map.lineAt(visibleTop - marginTop * margin, QueryType.ByHeight, oracle, 0, 0).from,
+                                map.lineAt(visibleBottom + (1 - marginTop) * margin, QueryType.ByHeight, oracle, 0, 0).to)
     // If scrollTarget is given, make sure the viewport includes that position
     if (scrollTarget) {
       let {head} = scrollTarget.range
@@ -413,8 +421,8 @@ export class ViewState {
           topPos = block.top
         else
           topPos = block.bottom - viewHeight
-        viewport = new Viewport(map.lineAt(topPos - VP.Margin / 2, QueryType.ByHeight, oracle, 0, 0).from,
-                                map.lineAt(topPos + viewHeight + VP.Margin / 2, QueryType.ByHeight, oracle, 0, 0).to)
+        viewport = new Viewport(map.lineAt(topPos - margin / 2, QueryType.ByHeight, oracle, 0, 0).from,
+                                map.lineAt(topPos + viewHeight + margin / 2, QueryType.ByHeight, oracle, 0, 0).to)
       }
     }
     return viewport
@@ -433,10 +441,11 @@ export class ViewState {
     let {top} = this.heightMap.lineAt(from, QueryType.ByPos, this.heightOracle, 0, 0)
     let {bottom} = this.heightMap.lineAt(to, QueryType.ByPos, this.heightOracle, 0, 0)
     let {visibleTop, visibleBottom} = this
-    return (from == 0 || top <= visibleTop - Math.max(VP.MinCoverMargin, Math.min(-bias, VP.MaxCoverMargin))) &&
+    let margin = this.marginFor(bias), maxCover = margin / 4
+    return (from == 0 || top <= visibleTop - Math.max(VP.MinCoverMargin, Math.min(-bias, maxCover))) &&
       (to == this.state.doc.length ||
-       bottom >= visibleBottom + Math.max(VP.MinCoverMargin, Math.min(bias, VP.MaxCoverMargin))) &&
-      (top > visibleTop - 2 * VP.Margin && bottom < visibleBottom + 2 * VP.Margin)
+       bottom >= visibleBottom + Math.max(VP.MinCoverMargin, Math.min(bias, maxCover))) &&
+      (top > visibleTop - 2 * margin && bottom < visibleBottom + 2 * margin)
   }
 
   mapLineGaps(gaps: readonly LineGap[], changes: ChangeSet) {

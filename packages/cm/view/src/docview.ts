@@ -213,7 +213,9 @@ export class DocView {
             let nextTo = nextToUneditable(anchor.node, anchor.offset)
             if (nextTo && nextTo != (NextTo.Before | NextTo.After)) {
               let text = (nextTo == NextTo.Before ? textNodeBefore : textNodeAfter)(anchor.node, anchor.offset)
-              if (text) anchor = new DOMPos(text.node, text.offset)
+              // The moved point reads back as a different position; mark it imprecise
+              // so reading the selection keeps the state's caret.
+              if (text) anchor = head = new DOMPos(text.node, text.offset, false)
             }
           }
           rawSel.collapse(anchor.node, anchor.offset)

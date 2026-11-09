@@ -1,4 +1,5 @@
 import { createTypographyElementCss } from "./elements";
+import { scopedElementSelector, selectorAlternatives } from "./selectors";
 
 /** Opt-in native styling; explicit islands stop descendant matching, not CSS inheritance. */
 export const typographySemanticCss = `
@@ -13,5 +14,5 @@ ${createTypographyElementCss(elementSelector)}
  * @returns Zero-specificity defaults that allow explicit visual-role overrides.
  */
 function elementSelector(elements: string): string {
-  return `:where(:scope:is(${elements}), ${elements})`;
+  return scopedElementSelector(selectorAlternatives(elements));
 }

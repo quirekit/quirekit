@@ -12,6 +12,8 @@ interface Props {
   readonly toggleOnClick?: boolean;
   /** Tooltip explanation; defaults to the accessible label. */
   readonly tooltip?: string | false;
+  /** Keys shown beside the tooltip text in reading order; display only. */
+  readonly shortcut?: readonly string[];
   /** Reason displayed while this control is unavailable. */
   readonly disabledReason?: string;
   /** Show a compact indicator beside the icon or visible label. */
@@ -56,6 +58,7 @@ const {
   disabled = false,
   describedBy,
   tooltip = undefined,
+  shortcut,
   disabledReason,
   indicator = false
 } = defineProps<Props>();
@@ -93,7 +96,7 @@ function guardDisabledActivation(event: MouseEvent): void {
 </script>
 
 <template>
-  <ToolbarTooltip :trigger-id="typeof $attrs.id === 'string' ? $attrs.id : item.id" :label="label" :tooltip="tooltip" :disabled-reason="disabledReason" :subject-disabled="disabled" :suppressed="expanded && popup !== false">
+  <ToolbarTooltip :trigger-id="typeof $attrs.id === 'string' ? $attrs.id : item.id" :label="label" :tooltip="tooltip" :shortcut="shortcut" :disabled-reason="disabledReason" :subject-disabled="disabled" :suppressed="expanded && popup !== false">
   <button
     :id="item.id"
     v-bind="$attrs"

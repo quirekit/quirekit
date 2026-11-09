@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/ofd",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/ofd"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/ofd"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/ofd#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Standalone write-first OFD authoring library for browsers and Node.",

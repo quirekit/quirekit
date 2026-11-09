@@ -1,6 +1,34 @@
-import { type ChangeSpec } from "@quirekit/cm-state";
+import { type ChangeSpec, type EditorState } from "@quirekit/cm-state";
 import { syntaxTree } from "@quirekit/cm-language";
 import type { MsfeCommand } from "@quirekit/msfe-core";
+import { changeListIndent } from "@quirekit/msfe-prose";
+
+/**
+ * A caret in an item of another list kind converts its whole list level, as rich
+ * editors change a list's type; a selection converts the lines it covers.
+ * @param state - Source. @param kind - Requested list kind. @param first - First selected line. @param last - Last selected line.
+ * @returns Line numbers to convert, in order.
+ */
+function targetLines(state: EditorState, kind: "bullet" | "ordered" | "task", first: number, last: number): number[] {
+  const range = Array.from({ length: last - first + 1 }, (_, index) => first + index);
+  if (!state.selection.main.empty) return range;
+  let item = syntaxTree(state).resolveInner(state.selection.main.head, -1);
+  while (item.parent && item.name !== "ListItem") item = item.parent;
+  const list = item.name === "ListItem" ? item.parent : null;
+  if (!list || !/^(?:Bullet|Ordered)List$/u.test(list.name)) return range;
+  const task = !!item.getChild("Task"), family = task ? "task" : list.name === "OrderedList" ? "ordered" : "bullet";
+  if (family === kind) return range;
+  return list.getChildren("ListItem").map(sibling => state.doc.lineAt(sibling.from).number);
+}
+
+const outdent = changeListIndent(-1);
+
+/** @param state - Source. @param head - Caret. @returns Whether the caret is in an item of a list that is not nested in another item. */
+function rootItem(state: EditorState, head: number): boolean {
+  let item = syntaxTree(state).resolveInner(head, -1);
+  while (item.parent && item.name !== "ListItem") item = item.parent;
+  return item.name === "ListItem" && !!item.parent?.parent && item.parent.parent.name !== "ListItem";
+}
 
 /** @param kind - Persisted list marker family. @returns Selected-line conversion retaining nesting, quote prefixes and task state. */
 export function toggleMdList(kind: "bullet" | "ordered" | "task"): MsfeCommand {
@@ -10,7 +38,7 @@ export function toggleMdList(kind: "bullet" | "ordered" | "task"): MsfeCommand {
     const last = state.doc.lineAt(selection.to > selection.from && state.doc.lineAt(selection.to).from === selection.to ? selection.to - 1 : selection.to);
     const lines = [];
     // Only the explicitly selected lines are visited; table/code/container delimiters cannot become list prefixes.
-    for (let number = first.number; number <= last.number; number++) {
+    for (const number of targetLines(state, kind, first.number, last.number)) {
       const line = state.doc.line(number);
       if (!line.text.trim() && !selection.empty) continue;
       let node = syntaxTree(state).resolveInner(line.from + line.text.search(/\S|$/u), 1);
@@ -28,6 +56,8 @@ export function toggleMdList(kind: "bullet" | "ordered" | "task"): MsfeCommand {
         task, markerWidth: (marker?.length ?? 0) + (match.groups!.gap?.length ?? 0), continuationEnd });
     }
     const remove = lines.every(line => line.family === kind), changes: ChangeSpec[] = [];
+    // Removing the list from one root item at the caret leaves a paragraph apart from both list halves.
+    if (remove && selection.empty && lines.length === 1 && rootItem(state, selection.head)) return outdent(state);
     const ordinals = new Map<string, number>(), replacements = new Map<number, { size: number; insert: string }>();
     const indentation = new Map<number, { quotes: number; delta: number }[]>();
     for (const line of lines) {

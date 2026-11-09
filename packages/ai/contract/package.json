@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/ai-contract",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/ai/contract"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/ai/contract"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/ai/contract#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Type contract that QuireKit extensions use to describe themselves to AI agents.",

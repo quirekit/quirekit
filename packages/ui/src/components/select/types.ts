@@ -23,4 +23,6 @@ export interface QuireKitSelectItem {
   readonly label: string;
   /** 是否禁止选择当前选项。 */
   readonly disabled?: boolean;
+  /** 选项后显示的快捷键，按阅读顺序列出；仅展示，不注册按键。 */
+  readonly shortcut?: readonly string[];
 }

@@ -1,4 +1,5 @@
 import type { Node as ProseMirrorNode } from "@quirekit/pm";
+import { resolveWordDefaultTabInterval } from "@quirekit/classic-paragraph-model";
 import { resolveWordParagraphStyleRegistry } from "@quirekit/classic-styles-model";
 import type {
   ResolvedWordNumberingMarker,
@@ -10,6 +11,7 @@ import { resolveWordEffectiveParagraphNumbering } from "./effective";
 import { resolveEffectiveWordListIndentation } from "./indentation";
 import { resolveWordNumberingTabs } from "./tabs";
 import { formatWordNumberingMarker } from "./template";
+import { advanceWordNumberingCounters } from "./counters";
 
 /**
  * Resolves all generated Word list markers in document order.
@@ -82,7 +84,7 @@ function resolveDocumentMarkers(
       justification: level.justification,
       levelIndentation: level.paragraphIndentation,
       tabs: resolveWordNumberingTabs(level, node, styleRegistry),
-      defaultTabStopTwips: readDefaultTabStop(document.attrs.wordSettings),
+      defaultTabStopTwips: resolveWordDefaultTabInterval(document.attrs.wordSettings),
       indentation: resolveEffectiveWordListIndentation(
         level.paragraphIndentation,
         node,
@@ -147,42 +149,7 @@ function resolveOrderedMarkerText(
 ): string {
   const values = counters.get(numId) ?? [];
   counters.set(numId, values);
-  values[levelIndex] = startOverride
-    ?? (values[levelIndex] === undefined
-      ? level.start
-      : (values[levelIndex] ?? level.start) + 1);
-  for (let deeper = levelIndex + 1; deeper < values.length; deeper += 1) {
-    const deeperLevel = resolveWordNumberingLevel(registry, numId, deeper)?.level;
-    if (
-      deeperLevel !== undefined
-      && shouldRestartDeeperLevel(deeperLevel, levelIndex)
-    ) {
-      values[deeper] = undefined;
-    }
-  }
   const definition = resolveWordNumberingLevel(registry, numId, levelIndex)!.definition;
+  advanceWordNumberingCounters(values, level, startOverride, definition.levels);
   return formatWordNumberingMarker(level, definition.levels, values);
-}
-
-/**
- * Reports whether one encountered ancestor restarts a deeper counter.
- *
- * @param level - Deeper level definition carrying the restart policy.
- * @param encounteredLevel - Level just advanced in document order.
- * @returns Whether the deeper counter must be cleared.
- */
-function shouldRestartDeeperLevel(
-  level: WordNumberingLevel,
-  encounteredLevel: number
-): boolean {
-  if (level.restartAfterLevel === null) return false;
-  const trigger = level.restartAfterLevel ?? level.level - 1;
-  return encounteredLevel <= trigger;
-}
-
-/** @param settings - Canonical document settings. @returns Positive document tab interval. */
-function readDefaultTabStop(settings: unknown): number {
-  const value = settings && typeof settings === "object"
-    ? (settings as Record<string, unknown>).defaultTabStop : undefined;
-  return typeof value === "number" && Number.isFinite(value) && value > 0 ? value : 720;
 }

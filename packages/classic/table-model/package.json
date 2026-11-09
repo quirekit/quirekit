@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/classic-table-model",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -39,10 +39,19 @@
   },
   "devDependencies": {
     "@quirekit/ai-contract": "workspace:*",
+    "@quirekit/collab-contract": "workspace:*",
     "@quirekit/extensions": "workspace:*",
     "tsdown": "catalog:",
     "typebox": "1.1.38",
     "typescript": "catalog:",
     "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@quirekit/collab-contract": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "@quirekit/collab-contract": {
+      "optional": true
+    }
   }
 }

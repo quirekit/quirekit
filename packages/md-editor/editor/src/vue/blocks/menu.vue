@@ -55,7 +55,7 @@ function execute(command: MsfeCommand): void {
 /** @param side - Explicit adjacent boundary. @param id - Complete Markdown template. */
 function insert(side: SourceBlockSide, id: string): void {
   const source = blockInsertionSource(props.controls.editor, props.locale, id);
-  if (source) execute(withSourceOperation(insertSourceBlock(props.controls.block, side, source), { kind: "block.insert", facts: { type: id.replace(/^insert-/u, "") } }));
+  if (source !== null) execute(withSourceOperation(insertSourceBlock(props.controls.block, side, source), { kind: "block.insert", facts: { type: id.replace(/^insert-/u, "") } }));
   else { handoff.value = true; emit("insert", side, id); emit("close"); }
 }
 /** @param cut - Delete only after successful clipboard publication at the captured revision. */
@@ -77,12 +77,12 @@ async function copy(cut = false): Promise<void> {
     <QuireActionDirectory :actions="actions" :layout="page ? 'grid' : 'list'" @activate="mobileAction" />
     <p v-if="error" role="status">{{ error }}</p>
   </QuireTaskPanel>
-  <QuireMenu v-else :portal-target="portal ?? 'body'" :open="true" :anchor-point="{ x: Math.max(8, controls.rect.left - 36), y: controls.rect.top + 28 }" placement="left-start" width="208px"
+  <QuireMenu v-else :portal-target="portal ?? 'body'" :open="true" :anchor-point="{ x: Math.max(8, controls.rect.left - 36), y: controls.rect.top + 28 }" placement="left-start" width="232px"
     :aria-label="text.menu" initial-focus="menu" :close-on-select="false" :lang="locale" data-md-block-menu @update:open="!$event && emit('close')">
     <Format :controls="controls" :locale="locale" @close="emit('close')" />
     <HighlightColors :controls="controls" :locale="locale" @close="emit('close')" />
     <QuireMenuSubmenu v-for="side in (['before', 'after'] as const)" :key="side" width="224px">
-      <template #leading><QuireIcon :name="side === 'before' ? 'moveUp' : 'moveDown'" /></template>
+      <template #leading><QuireIcon :name="side === 'before' ? 'tableInsertRowAbove' : 'tableInsertRowBelow'" /></template>
       <template #trigger>{{ text[side] }}</template>
       <InsertList :target="{ controls, side }" :locale="locale" :mentions="mentions" @select="insert(side, $event)" />
     </QuireMenuSubmenu>
@@ -92,7 +92,7 @@ async function copy(cut = false): Promise<void> {
     <QuireMenuSeparator />
     <QuireMenuItem value="copy" @select="copy()"><template #leading><QuireIcon name="copy" /></template>{{ text.copy }}</QuireMenuItem>
     <QuireMenuItem value="cut" @select="copy(true)"><template #leading><QuireIcon name="scissors" /></template>{{ text.cut }}</QuireMenuItem>
-    <QuireMenuItem value="duplicate" @select="execute(withSourceOperation(insertSourceBlock(controls.block, 'after', controls.editor.state.sliceDoc(controls.block.from, controls.block.to)), { kind: 'block.duplicate' }))"><template #leading><QuireIcon name="copy" /></template>{{ text.duplicate }}</QuireMenuItem>
+    <QuireMenuItem value="duplicate" @select="execute(withSourceOperation(insertSourceBlock(controls.block, 'after', controls.editor.state.sliceDoc(controls.block.from, controls.block.to)), { kind: 'block.duplicate' }))"><template #leading><QuireIcon name="files" /></template>{{ text.duplicate }}</QuireMenuItem>
     <QuireMenuItem value="delete" tone="danger" @select="execute(withSourceOperation(removeSourceBlock(controls.block), { kind: 'block.remove' }))"><template #leading><QuireIcon name="trash" /></template>{{ text.remove }}</QuireMenuItem>
     <p v-if="error" role="status" class="m-0 p-qk-inline qk-type-helper text-qk-text-secondary">{{ error }}</p>
   </QuireMenu>

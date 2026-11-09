@@ -1,5 +1,5 @@
 import type { QuireKitMenuEntry } from "@quirekit/ui";
-import { canInsertSourceBlock, type MsfeEditor } from "@quirekit/msfe-core";
+import { canInsertSourceBlock, SOURCE_CARET, type MsfeEditor } from "@quirekit/msfe-core";
 import { queryFootnotes } from "@quirekit/msfe-markdown-extras";
 import type { MdEditorLocale } from "../../types";
 import { mdEditorMessages } from "../../messages";
@@ -20,15 +20,15 @@ export function blockInsertionItems(editor: MsfeEditor, locale: MdEditorLocale, 
   ] }].filter(group => group.children?.length) as readonly QuireKitMenuEntry[];
 }
 
-/** @param editor - Current footnote namespace. @param locale - New content language. @param value - Shared insertion identity. @returns Immediate source payload, null when a parameter editor is needed. */
+/** @param editor - Current footnote namespace. @param locale - New content language. @param value - Shared insertion identity. @returns Immediate source payload (empty opens a paragraph), null when a parameter editor is needed. */
 export function blockInsertionSource(editor: MsfeEditor, locale: MdEditorLocale, value: string): string | null {
-  if (value === "insert-paragraph") return locale === "en" ? "New paragraph" : "新的段落";
-  if (/^insert-h[1-6]$/u.test(value)) return `${"#".repeat(Number(value.slice(-1)))} ${locale === "en" ? "New heading" : "新的标题"}`;
+  if (value === "insert-paragraph") return "";
+  if (/^insert-h[1-6]$/u.test(value)) return `${"#".repeat(Number(value.slice(-1)))} `;
   if (value === "footnote") {
     const index = queryFootnotes(editor.state);
     if (index.status !== "ready") return null;
     let number = 1; while (index.entries.has(`note-${number}`)) number++;
-    return `[^note-${number}]\n\n[^note-${number}]: ${mdEditorMessages[locale].footnoteBody}`;
+    return `[^note-${number}]\n\n[^note-${number}]: ${SOURCE_CARET}`;
   }
   return insertionBlocks(locale).find(item => value === `insert-${item.id}`)?.source ?? null;
 }

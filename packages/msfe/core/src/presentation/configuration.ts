@@ -1,3 +1,4 @@
+import { highlightSelectionMatches } from "@quirekit/cm-search";
 import type { MsfeEditorOptions } from "../editor/types";
 import { defaultEditorIcon } from "./icons";
 import { EditorState, type Extension } from "@quirekit/cm-state";
@@ -29,7 +30,7 @@ export function modeConfiguration(mode: MsfeMode, readOnly: boolean, options: Ms
     EditorView.contentAttributes.of({ "aria-readonly": String(locked), tabindex: "0" }),
     locked ? readonlyPresentation : [],
     EditorView.editorAttributes.of({ "data-msfe-mode": mode }),
-    mode === "source" ? [lineNumbers(), foldGutter({ markerDOM: open => (options.icons ?? defaultEditorIcon)(open ? "chevronDown" : "chevronRight", options.parent.ownerDocument) }), highlightActiveLine(), highlightActiveLineGutter()] : [],
+    mode === "source" ? [lineNumbers(), foldGutter({ markerDOM: open => (options.icons ?? defaultEditorIcon)(open ? "chevronDown" : "chevronRight", options.parent.ownerDocument) }), highlightActiveLine(), highlightActiveLineGutter(), highlightSelectionMatches()] : [],
   ];
 }
 

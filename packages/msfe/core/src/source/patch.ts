@@ -1,4 +1,4 @@
-import { encodeMarkdownField } from "../markdown/strings";
+import { encodeMarkdownDestination, encodeMarkdownField } from "../markdown/strings";
 import { readSourceDestination } from "./destination";
 import type { SourceDocument, SourceEdit, SourceNode } from "./authoring/types";
 import type { DestinationPatch } from "./types";
@@ -21,12 +21,16 @@ export function patchSourceDestination(document: SourceDocument, node: SourceNod
     // A reference/automatic form cannot own an independent target. Materialize only
     // this explicitly edited usage, preserving its existing formatted label.
     const title = patch.title ?? destination.title, url = patch.url ?? destination.url;
-    return [{ from: node.from, to: node.to, insert: `${node.kind === "Image" ? "!" : ""}[${label}](<${encodeMarkdownField(url, "<>")}>${title ? ` "${encodeMarkdownField(title, '"')}"` : ""})` }];
+    return [{ from: node.from, to: node.to, insert: `${node.kind === "Image" ? "!" : ""}[${label}](${encodeMarkdownDestination(url)}${title ? ` "${encodeMarkdownField(title, '"')}"` : ""})` }];
   }
   const changes: SourceEdit[] = [];
   if (patch.label !== undefined) changes.push({ from: destination.labelFrom, to: destination.labelTo, insert: label });
-  if (patch.url !== undefined) changes.push({ from: destination.urlFrom, to: destination.urlTo,
-    insert: encodeMarkdownField(patch.url, destination.angled ? "<>" : "<>()") });
+  if (patch.url !== undefined) {
+    // Keep the author's delimiters; a bare address that gains a space or angle bracket switches to the angled form.
+    const keep = destination.angled || patch.url !== "" && !/[\s<>\u0000-\u001f\u007f]/u.test(patch.url);
+    changes.push({ from: destination.urlFrom, to: destination.urlTo,
+      insert: keep ? encodeMarkdownField(patch.url, destination.angled ? "<>" : "<>()") : encodeMarkdownDestination(patch.url) });
+  }
   if (patch.title !== undefined) {
     const { titleFrom, titleTo } = destination;
     const closing = titleTo === null ? '"' : document.slice(titleTo, titleTo + 1);

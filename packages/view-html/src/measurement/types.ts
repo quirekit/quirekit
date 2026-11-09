@@ -4,7 +4,7 @@ import type { QuireLayoutNode } from "@quirekit/view-engine";
 import type {
   QuireLayoutSourceRef
 } from "@quirekit/layout/identity";
-import type { HtmlRetainedDocumentView } from "../document";
+import type { HtmlDomPoint, HtmlRetainedDocumentView } from "../document";
 
 /** Provenance carried by every retained HTML measurement answer. */
 export interface HtmlMeasurementProvenance {
@@ -60,6 +60,13 @@ export interface CreateHtmlDomMeasurementProviderOptions {
   readonly rootId: string;
   /** Stable continuous-flow document region identity. */
   readonly regionId: string;
+  /**
+   * Carries canonical DOM points past transient DOM such as an IME preedit.
+   *
+   * @param point - DOM point from retained ownership.
+   * @returns Point valid in the current DOM.
+   */
+  readonly projectDomPoint?: <T extends HtmlDomPoint>(point: T) => T;
 }
 
 /** Identity-preserving DOM geometry authority for one retained HTML root. */
@@ -68,8 +75,9 @@ export interface HtmlDomMeasurementProvider {
    * Publishes measured block geometry for spatial gap ownership.
    * @param root - Current continuous-flow geometry; identical roots reuse their index.
    * @param document - Canonical document represented by this geometry.
+   * @param changed - Verified stable-topology range and rectangle changes, when available.
    */
-  updateBlockGeometry(root: QuireLayoutNode, document: ProseMirrorNode): void;
+  updateBlockGeometry(root: QuireLayoutNode, document: ProseMirrorNode, changed?: ReadonlyMap<string, QuireLayoutNode>): void;
   /**
    * Maps a canonical position to an owned DOM point.
    *

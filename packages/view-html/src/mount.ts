@@ -1,5 +1,6 @@
-import { TextSelection } from "@quirekit/pm";
-import type { QuireBlockPointerLease, QuireMountedBlockFragment } from "@quirekit/core";
+import { TextSelection, type Node as ProseMirrorNode } from "@quirekit/pm";
+import type { QuireBlockPointerLease, QuireMountedBlockFragment, QuireMountedTextRangeRect } from "@quirekit/core";
+import type { QuireDocumentRange } from "@quirekit/renderer";
 import { beginMountedBlockPointerLease, validateMountedBlockPointerLease } from "@quirekit/view/mounted-backend";
 import { queryHtmlBlockFragments, queryHtmlBlockFragmentsInRect } from "./geometry/blocks";
 import { createHtmlVisualNavigation } from "./measurement/navigation";
@@ -14,7 +15,6 @@ import type {
 } from "@quirekit/view-engine";
 import {
   BaseMountedEditorView,
-  bindMountedResizeEvents,
   createMountedViewInteractionLifecycle,
   type MountedViewInteractionLifecycle,
   type MountedViewScrollRect,
@@ -33,6 +33,7 @@ import {
   type HtmlContinuousFlowPresentation
 } from "./presentation";
 import { bindHtmlMountedPointerEvents } from "./pointer-events";
+import { bindHtmlResizeEvents } from "./presentation/resize";
 import type {
   HtmlMountedView,
   HtmlMountedViewElements,
@@ -185,13 +186,8 @@ export class HtmlMountedEditorView
         this.focus();
       }
     }));
-    this.interactionLifecycle.addCleanup(bindMountedResizeEvents({
-      root: this.elements.root,
-      observedElement: this.elements.contentSurface,
-      onResize: () => {
-        this.presentation.render({ editor: this.editor, reason: "resize" });
-      }
-    }));
+    this.interactionLifecycle.addCleanup(bindHtmlResizeEvents(this.elements.root, this.elements.contentSurface,
+      passiveResize => this.presentation.render({ editor: this.editor, reason: "resize", passiveResize })));
     this.presentation.render({
       editor: options.editor,
       reason: "initial"
@@ -228,6 +224,19 @@ export class HtmlMountedEditorView
   coordsAtPos(pos: number, side = 1): QuireViewCoordsAtPosResult {
     const rect = this.presentation.measurementProvider.coordsAtPos(pos, side);
     return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
+  }
+
+  /**
+   * Measures passive line bands of a range, such as a collaborator's selection.
+   *
+   * @param range - Half-open range in the current document.
+   * @param sourceDocument - Exact document the range was resolved against.
+   * @returns Client-space line bands, or null when the document is stale.
+   */
+  getTextRangeRects(range: QuireDocumentRange, sourceDocument: ProseMirrorNode): readonly QuireMountedTextRangeRect[] | null {
+    if (sourceDocument !== this.state.doc) return null;
+    return this.presentation.measurementProvider.selectionRects(range)
+      .map(({ left, top, right, bottom }) => ({ x: left, y: top, width: right - left, height: bottom - top }));
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Mark, sourceCommand, sourceDocument, sourceNode, readSourceDestination, encodeMarkdownField } from "@quirekit/msfe-core";
+import { Mark, sourceCommand, sourceDocument, sourceNode, readSourceDestination, encodeMarkdownDestination, encodeMarkdownField } from "@quirekit/msfe-core";
 import { Decoration, EditorView } from "@quirekit/cm-view";
 import { EditorSelection } from "@quirekit/cm-state";
 import { isSafeDestination, type MsfeCommand, type MsfeExtension } from "@quirekit/msfe-core";
@@ -58,7 +58,7 @@ export function insertLink(url: string): MsfeCommand {
     const label = state.sliceDoc(range.from, range.to);
     if (/[\r\n]/u.test(label)) return null;
     const text = encodeMarkdownField(label || url, "[]*_`<>");
-    return { changes: { from: range.from, to: range.to, insert: `[${text}](<${encodeMarkdownField(url, "<>")}>)` },
+    return { changes: { from: range.from, to: range.to, insert: `[${text}](${encodeMarkdownDestination(url)})` },
       selection: EditorSelection.range(range.from + 1, range.from + 1 + text.length) };
   };
 }

@@ -51,7 +51,10 @@ function resolve(state: EditorState, node: SyntaxNode, position: number): Editin
 export function boundariesAt(state: EditorState, position: number): readonly EditingBoundary[] {
   if (!boundariesActive(state)) return [];
   const tree = syntaxTree(state), seen = new Set<string>(), values: EditingBoundary[] = [...objects(state, position, position)];
-  for (const side of [1, -1] as const) for (let node: SyntaxNode | null = tree.resolve(position, side); node; node = node.parent) {
+  // Leading indentation has no content of its own: it belongs to the block that starts after it.
+  const line = state.doc.lineAt(position), indent = line.from + /^[ \t]*/u.exec(line.text)![0].length;
+  const anchors = position < indent ? [position, indent] : [position];
+  for (const anchor of anchors) for (const side of [1, -1] as const) for (let node: SyntaxNode | null = tree.resolve(anchor, side); node; node = node.parent) {
     const key = `${node.name}/${node.from}/${node.to}`;
     if (seen.has(key)) continue;
     seen.add(key);

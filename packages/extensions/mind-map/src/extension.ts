@@ -7,6 +7,7 @@ import { mindMapLayout } from "./layout";
 import { mindMapNodeView } from "./view";
 import { openMindMap } from "./session";
 import { forkMindMapSlice } from "./clipboard";
+import { createMindMapRevisionPlugin } from "./revision";
 import type { MindMapOptions, MindMapStorage } from "./types";
 import { describeMindMapCommands } from "./ai/commands";
 import { mindMapAiCapabilities } from "./ai/facts";
@@ -52,8 +53,8 @@ export const MindMap = Node.create<MindMapOptions, MindMapStorage>({
   /** @returns Canvas-compatible object activation through public PM handlers. */
   addProseMirrorPlugins() {
     const editor = this.editor, open = this.options.open;
-    if (!editor) return [];
-    return [new Plugin({ props: {
+    if (!editor) return [createMindMapRevisionPlugin()];
+    return [createMindMapRevisionPlugin(), new Plugin({ props: {
       transformPasted: forkMindMapSlice,
       /** @param _view - Mounted view. @param _pos - Pointer position. @param node - Hit node. @param pos - Atom start. @param _event - Native activation. @param direct - Direct object hit. @returns Whether the task opened. */
       handleDoubleClickOn(_view: EditorView, _pos: number, node: PMNode, pos: number, _event: MouseEvent, direct: boolean) { return direct && node.type.name === "mindMap" && openMindMap(editor, open, pos); },

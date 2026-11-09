@@ -265,6 +265,14 @@ export interface QuireAiFormatCapability {
    * @returns Whether the owning command accepted the change.
    */
   readonly apply?: ((context: QuireAiFormatApplyContext, value: unknown) => boolean) | undefined;
+  /**
+   * Optional whole-range satisfaction rule paired with the applying owner.
+   * Defaults to comparing `read` on every paragraph or character run.
+   * @param context - Immutable current document and mapped selected range.
+   * @param value - Schema-valid requested value, or null to clear.
+   * @returns Whether the complete range already satisfies all requested fields.
+   */
+  readonly satisfied?: ((context: QuireAiFormatSatisfactionContext, value: unknown) => boolean) | undefined;
   /** Chooses among several declarations able to apply one format; the highest wins. */
   readonly applyPriority?: number | undefined;
   /**
@@ -297,6 +305,16 @@ export interface QuireAiFormatApplyContext {
   /** Range start in the transaction's current document: a text range, or a block's content start. */
   readonly from: number;
   /** Range end in the transaction's current document. */
+  readonly to: number;
+}
+
+/** Read-only current range inspected before deciding whether a format needs execution. */
+export interface QuireAiFormatSatisfactionContext {
+  /** Immutable document at the current transaction stage. */
+  readonly doc: Node;
+  /** Mapped content start of the selected range. */
+  readonly from: number;
+  /** Mapped content end of the selected range. */
   readonly to: number;
 }
 

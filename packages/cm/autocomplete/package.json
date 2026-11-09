@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/cm-autocomplete",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Autocompletion for the CodeMirror code editor",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/cm/autocomplete"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/cm/autocomplete"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/cm/autocomplete#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

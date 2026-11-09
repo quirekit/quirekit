@@ -2,6 +2,8 @@ import { EditorState, Prec, Transaction, type Extension, type TransactionSpec } 
 import { EditorView, ViewPlugin, type ViewUpdate } from "@quirekit/cm-view";
 import { boundaryInputCorrection } from "./changes";
 import { boundaryNavigation } from "./navigation";
+import { composedTextPlacement } from "./composition";
+import { pendingMarkCleanup } from "../../commands/formatting/pending";
 import { editingBoundaryRules } from "./registry";
 import { editingSelection } from "./selection";
 import type { EditingBoundaryRule } from "./types";
@@ -56,7 +58,7 @@ const restore = ViewPlugin.fromClass(class {
 });
 
 /** Shared instance identity prevents one input pipeline per feature/provider. */
-export const editingBoundaryRuntime = [Prec.highest(EditorState.transactionFilter.of(filter)), Prec.high(nativeReplacement), boundaryNavigation, restore];
+export const editingBoundaryRuntime = [Prec.highest(EditorState.transactionFilter.of(filter)), Prec.high(nativeReplacement), boundaryNavigation, restore, composedTextPlacement, pendingMarkCleanup];
 
 /** @param rules - Feature-owned syntax contracts, highest precedence first. @returns Shared navigation, input protection and endpoint recovery; duplicate installations reuse one runtime. */
 export function editingBoundaries(rules: readonly EditingBoundaryRule[]): Extension {

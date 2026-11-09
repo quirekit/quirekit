@@ -83,7 +83,9 @@ class HtmlRetainedDocumentViewRuntime implements HtmlRetainedDocumentView {
     });
 
     this.decorationSource = decorationSource;
-    this.positionIndex.rebuild(this.root);
+    if (result.ownershipChanged || this.positionIndex.requiresMountValidation()) {
+      this.positionIndex.rebuild(this.root);
+    }
     return result;
   }
 

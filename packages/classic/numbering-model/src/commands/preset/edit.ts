@@ -37,7 +37,7 @@ export function createUpdateWordNumberingDefinitionCommand(): CommandSpec {
       levels[String(override.level)] = cloneWordNumberingPresetLevel(next);
     }
     if (input.startOverride !== undefined && input.startOverride !== null
-      && (!Number.isInteger(input.startOverride) || input.startOverride < 1)) return false;
+      && (!Number.isInteger(input.startOverride) || input.startOverride < 0)) return false;
     const referenceChanged = input.startOverride !== undefined
       && input.startOverride !== reference!.startOverride;
     if (!changed && !referenceChanged) return false;

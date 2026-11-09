@@ -15,7 +15,8 @@ import type {
 } from "./derive/internal";
 import { createWordTableMapFromData } from "./query";
 import { reportRowWidthDiagnostics } from "./derive/row-diagnostics";
-import { resolveSemanticCell } from "./derive/semantic";
+import { resolveHorizontalMergeGroups } from "./derive/horizontal-merge";
+import type { ExplicitRowCell } from "./derive/types";
 import { closeNonAdjacentChains } from "./derive/vertical-merge";
 import { freezeSemanticCell } from "./derive/semantic-cell";
 import {
@@ -63,6 +64,7 @@ export function createWordTableMap(tableNode: PMNode): WordTableMap {
 
     fillRowOffsetSlots(rowSlots, rowIndex, 0, gridBeforeCount, "before");
 
+    const rowCells: ExplicitRowCell[] = [];
     rowNode.forEach((cellNode, cellOffset, cellIndex) => {
       const explicitCell = createExplicitCellRef({
         rowId,
@@ -73,19 +75,19 @@ export function createWordTableMap(tableNode: PMNode): WordTableMap {
         cellNode,
         diagnostics
       });
-      const semanticCell = resolveSemanticCell({
-        explicitCell,
-        rowIsHeader: rowNode.attrs.isHeader === true,
-        semanticCells,
-        semanticById,
-        openChains,
-        diagnostics
-      });
-
-      fillCellSlots(rowSlots, explicitCell, semanticCell.id, diagnostics);
-      explicitCells.push(explicitCell);
+      rowCells.push({ node: cellNode, explicit: explicitCell });
       cursor += explicitCell.range.columnSpan;
     });
+    // Physical placement precedes ownership, so a horizontal group's complete
+    // interval is available before it participates in a vertical merge chain.
+    resolveHorizontalMergeGroups(rowCells, {
+      rowIsHeader: rowNode.attrs.isHeader === true,
+      semanticCells, semanticById, openChains, diagnostics
+    });
+    for (const { explicit } of rowCells) {
+      fillCellSlots(rowSlots, explicit, semanticById.get(explicit.semanticCellId!)!, diagnostics);
+      explicitCells.push(explicit);
+    }
 
     const gridAfterCount = readGridOffset(
       rowNode.attrs,

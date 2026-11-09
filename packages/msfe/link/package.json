@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/msfe-link",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Markdown links, autolinks and link cards for the MSFE source editor.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/msfe/link"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/msfe/link"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/msfe/link#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",

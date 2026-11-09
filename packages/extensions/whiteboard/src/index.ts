@@ -5,3 +5,5 @@ export { applyWhiteboardDiagram } from "./diagram/apply";
 export { readWhiteboardNode } from "./source";
 export { whiteboardBoardLabel } from "./ai/facts";
 export { whiteboardBoardItems } from "./ai/items";
+export { createWhiteboardRevisionPlugin, whiteboardRevisionKey } from "./revision";
+export { forkWhiteboardSlice } from "./clipboard";

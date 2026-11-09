@@ -436,7 +436,7 @@ describe("BaseMountedEditorView", () => {
     expect(view.widgetAtPoint({ x: 12, y: 12 })).toBeNull();
   });
 
-  it("uses PM-style editable props when reporting and focusing editability", () => {
+  it("uses PM-style editable props without disabling selection focus", () => {
     const { editor } = createTestEditor();
     const view = new TestMountedEditorView({
       editor,
@@ -452,7 +452,7 @@ describe("BaseMountedEditorView", () => {
     view.focus();
 
     expect(view.editable).toBe(false);
-    expect(view.focusCallCount).toBe(0);
+    expect(view.focusCallCount).toBe(1);
   });
 
   it("caches and refreshes the mounted DOM root", () => {
@@ -769,6 +769,18 @@ describe("BaseMountedEditorView", () => {
     expect(dispatchTransaction).not.toHaveBeenCalled();
     expect((view.elements.inputProxy as HTMLTextAreaElement).readOnly).toBe(true);
     expect(view.elements.inputProxy?.getAttribute("aria-readonly")).toBe("true");
+  });
+
+  it("allows read-only selection focus but rejects focus after destruction", () => {
+    const { editor } = createTestEditor();
+    (editor as unknown as { isEditable: boolean }).isEditable = false;
+    const view = new TestMountedEditorView({ editor, status: "primary", elements: createTestElements() });
+    expect(view.editable).toBe(false);
+    view.focus();
+    expect(view.focusCallCount).toBe(1);
+    view.destroy();
+    view.focus();
+    expect(view.focusCallCount).toBe(1);
   });
 
   it("mirrors live editor and plugin editability onto the native input proxy", () => {

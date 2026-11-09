@@ -120,6 +120,8 @@ export interface ReconcileHtmlDescriptorTreeOptions {
 export interface HtmlReconcileResult {
   /** Same immortal document descriptor supplied to reconciliation. */
   readonly root: HtmlDocumentDesc;
+  /** Whether descriptor identity, order or custom-view DOM ownership may have changed. */
+  readonly ownershipChanged: boolean;
   /** Smallest parent-bounded containers reconciled by this pass. */
   readonly dirtyContainers: readonly string[];
   /** Schema-to-DOM gaps found while creating required descendants. */

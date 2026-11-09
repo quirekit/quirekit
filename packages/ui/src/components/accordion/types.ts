@@ -4,6 +4,9 @@ export type QuireKitAccordionOrientation = "horizontal" | "vertical";
 /** Accordion 触发器的公开尺寸。 */
 export type QuireKitAccordionSize = "sm" | "md";
 
+/** Accordion 的外框与条目边界外观。 */
+export type QuireKitAccordionVariant = "outline" | "plain";
+
 /** Accordion 中一个稳定条目的框架无关合同。 */
 export interface QuireKitAccordionItem {
   /** 条目的稳定值，同时参与打开状态与 DOM 标识。 */

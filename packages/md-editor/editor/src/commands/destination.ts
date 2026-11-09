@@ -1,5 +1,5 @@
 import { EditorSelection } from "@quirekit/cm-state";
-import { sourceDocument, sourceNode, readSourceDestination, patchSourceDestination, encodeMarkdownField, isSafeDestination, type MsfeCommand, type DestinationPatch } from "@quirekit/msfe-core";
+import { sourceDocument, sourceNode, readSourceDestination, patchSourceDestination, encodeMarkdownDestination, encodeMarkdownField, isSafeDestination, type MsfeCommand, type DestinationPatch } from "@quirekit/msfe-core";
 import { syntaxTree, syntaxTreeAvailable } from "@quirekit/cm-language";
 import type { EditorState } from "@quirekit/cm-state";
 import { selectedNode } from "./context";
@@ -11,7 +11,7 @@ function selectedLink(state: EditorState) { return selectedNode(state, ["Link", 
 export function mdDestinationSource(image: boolean, patch: DestinationPatch): string | null {
   if (!patch.url?.trim() || !isSafeDestination(patch.url, image) || Object.values(patch).some(value => typeof value !== "string" || /[\r\n]/u.test(value))) return null;
   const label = encodeMarkdownField(patch.label?.trim() || (image ? "" : patch.url), "[]*_`<>");
-  return `${image ? "!" : ""}[${label}](<${encodeMarkdownField(patch.url, "<>")}>${patch.title ? ` "${encodeMarkdownField(patch.title, '"')}"` : ""})`;
+  return `${image ? "!" : ""}[${label}](${encodeMarkdownDestination(patch.url)}${patch.title ? ` "${encodeMarkdownField(patch.title, '"')}"` : ""})`;
 }
 
 /** @param state - Current single source selection. @returns Whether one link can own this inline range without swallowing block syntax or another link. */
@@ -54,7 +54,7 @@ export function editMdDestination(image: boolean, patch: DestinationPatch): Msfe
     const selected = state.sliceDoc(range.from, range.to), plain = patch.label ?? selected;
     const label = !image && !plain.trim() ? encodeMarkdownField(patch.url, "[]*_`<>")
       : patch.label === undefined ? selected : encodeMarkdownField(patch.label, "[]*_`<>");
-    const insert = `${image ? "!" : ""}[${label}](<${encodeMarkdownField(patch.url, "<>")}>${patch.title ? ` "${encodeMarkdownField(patch.title, '"')}"` : ""})`;
+    const insert = `${image ? "!" : ""}[${label}](${encodeMarkdownDestination(patch.url)}${patch.title ? ` "${encodeMarkdownField(patch.title, '"')}"` : ""})`;
     return { changes: { from: range.from, to: range.to, insert }, selection: EditorSelection.cursor(range.from + insert.length), scrollIntoView: true };
   };
 }

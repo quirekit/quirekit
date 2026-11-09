@@ -21,6 +21,7 @@ import type { QuireAiCapability } from "@quirekit/ai-contract";
 ## Notes
 
 - The package contains types only; reading documents, running edits and validation are done by `@quirekit/ai-runtime`.
+- A format may declare `satisfied` for a whole-range idempotence rule owned by the same declaration as `apply`. Without it, the runtime compares `read` on every paragraph or character run. The callback only reads the current document and mapped range; it does not run commands.
 
 ## Related
 

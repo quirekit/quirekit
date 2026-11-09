@@ -14,6 +14,9 @@ import type { HeadingOptions } from "./types";
  * @returns Inline and line decorations owned by this heading.
  */
 function decorateHeading({ state, node, active, from, to }: ProjectionContext): Range<Decoration>[] {
+  // `#` without its space is still being typed and stays literal text.
+  const opening = node.name.startsWith("ATX") ? node.getChild("HeaderMark") : null;
+  if (opening && node.to === opening.to && opening.to === state.doc.lineAt(opening.from).to) return [];
   const level = Number(node.name.slice(-1));
   const ranges = [Decoration.line({ class: `msfe-heading msfe-h${level}` }).range(state.doc.lineAt(node.from).from)];
   if (node.name.startsWith("Setext")) {

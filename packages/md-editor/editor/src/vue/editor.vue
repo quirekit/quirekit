@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import "katex/dist/katex.min.css";
 import "@quirekit/whiteboard-editor/styles.css";
-import { computed, provide, shallowRef, useSlots, watch } from "vue";
+import { computed, nextTick, provide, shallowRef, useSlots, watch } from "vue";
 import type { ExportTemplateReference } from '@quirekit/export-template';
 import { useExportTemplateSelection } from './templates/selection';
 import { useMsfeEditor, VueComponentViewRenderer, VueNodeViewHost } from "@quirekit/msfe-vue";
@@ -32,14 +32,15 @@ import LinkContext from "./links/card.vue";
 import DocumentPreview from "./document-links/preview.vue";
 import { withDocumentReferences } from "./document-links/features";
 import ObjectSurface from "./objects/surface.vue";
-import { keymap, placeholder } from "@quirekit/cm-view";
+import { placeholder } from "@quirekit/cm-view";
+import { linePlaceholders } from "../presentation/placeholder";
 import { withMdImageStorage } from "../images/docx";
 import type { MdMentionSession } from "./mentions/types";
 import { createMdSlashTrigger } from "./slash/trigger";
 import SlashSurface from "./slash/surface.vue";
 import type { MdSlashSession } from "./slash/types";
 import type { MdEditorProps } from "./types";
-import type { MdEditableView } from "../types";
+import type { MdEditableView, MdEditorView } from "../types";
 import MdProse from "./prose.vue";
 import { mdReadingComponents } from "./reading/components";
 import Toolbar from "./toolbar/toolbar.vue";
@@ -55,6 +56,9 @@ import { railStyle } from "./outline/rails";
 import { useMdOutline } from "./outline/use-outline";
 import { setMdView } from "../presentation/mode";
 import DialogEditor from "./dialogs/editor.vue";
+import ShortcutsDialog from "./shortcuts/dialog.vue";
+import { mdShortcutKeymap } from "./shortcuts/keymap";
+import { dispatchChromeIntent } from "./toolbar/intent";
 import { createDialogIntent } from "./dialogs/intent";
 import type { MdDialogIntent, MdDialogKind } from "./dialogs/types";
 import FileDialog from "./files/dialog.vue";
@@ -76,8 +80,9 @@ const emit = defineEmits<{
   /** Incremental source change; persist by reading only when needed. */ change: [event: MsfeChangeEvent];
   /** Original creation or runtime error for host diagnostics. */ error: [error: unknown];
   /** Persist the template reference alongside the host document, outside Markdown and history. */ "update:exportStyle": [reference: ExportTemplateReference];
+  /** The view shortcut asks for the next view; bind with `v-model:view` to let it switch. */ "update:view": [view: MdEditorView];
 }>();
-const slots = useSlots(), libraryOpen = shallowRef(false);
+const slots = useSlots(), libraryOpen = shallowRef(false), shortcutsOpen = shallowRef(false);
 const exportTemplate = useExportTemplateSelection(props, reference => emit('update:exportStyle', reference));
 const hasTemplatePicker = computed(() => !!props.templates && !!slots['export-templates']);
 /** Conversion policy without the converter, shared by Word files and format exporters. */
@@ -132,9 +137,9 @@ const { editor, host } = useMsfeEditor(parent, () => ({
     ...(props.containers === undefined ? {} : { containers: props.containers }),
     ...(props.extras === undefined ? {} : { extras: props.extras }),
     extensions: [documentViewport(() => toolbarElement.value, () => mobileDock.value?.getElement() ?? null, () => mobileSelection.value?.getTaskElement() ?? mobileDock.value?.getTaskElement() ?? null),
-      { id: "md-link-settings", extensions: keymap.of([{ key: "Mod-k", run: () => edit("link") }]) },
+      { id: "md-shortcuts", extensions: mdShortcutKeymap(runShortcut) },
       { id: "md-search", extensions: mdSearchKeymap },
-      slash.extension, ...(props.readOnly || props.placeholder === "" ? [] : [{ id: "md-placeholder", extensions: placeholder(props.placeholder ?? text.value.placeholder) }]), ...(props.extensions ?? []), ...(props.blockControls ? [createSourceBlockControls({
+      slash.extension, ...(props.readOnly || props.placeholder === "" ? [] : [{ id: "md-placeholder", extensions: [placeholder(props.placeholder ?? text.value.placeholder), linePlaceholders(text.value.linePlaceholder)] }]), ...(props.extensions ?? []), ...(props.blockControls ? [createSourceBlockControls({
       change: value => { blockControls.value = value; if (!value || value.dragging) blockMenu.value = false; },
       openMenu: value => { blockControls.value = value; blockMenu.value = true; },
       insertionChange: value => { emptyControls.value = value; if (!value) emptyMenu.value = false; },
@@ -150,6 +155,15 @@ const { editor, host } = useMsfeEditor(parent, () => ({
   codeLanguages: props.codeLanguages ?? mdCodeLanguages, onChange: event => emit("change", event),
   onError: error => { failed.value = true; emit("error", error); },
 }));
+/** @param id - Documented toolbar intent. @returns Whether the key ran it through the same entry as the toolbar button. */
+function runShortcut(id: string): boolean {
+  const owner = editor.value;
+  if (!owner) return false;
+  if (id === "shortcuts") { shortcutsOpen.value = true; return true; }
+  if (owner.state.readOnly) return false;
+  dispatchChromeIntent(owner, id, props.locale, owner.captureTarget(), { edit, file: openFile, template: () => { libraryOpen.value = true; } });
+  return true;
+}
 /** @param request - Validated formula or text-diagram source. @returns Whether the source dialog opened. */
 function openPreviewEditor(request: PreviewEditRequest): boolean {
   if (intent.value || file.value || blockInsert.value) return false;
@@ -168,7 +182,7 @@ const commentMentions = computed(() => {
   return source ? (query: string) => resolveMdMentions(source, { query, signal: new AbortController().signal }) : undefined;
 });
 const comments = commentPlugin?.setup({ editor: () => editor.value ?? undefined, state: () => state.value, root,
-  wide: () => props.layout === "document" && !narrow.value, narrow: () => narrow.value, locale: () => props.locale, mentions: () => commentMentions.value }) ?? null;
+  wide: () => props.layout === "document" && !narrow.value, narrow: () => narrow.value, reading: () => reading.value, locale: () => props.locale, mentions: () => commentMentions.value }) ?? null;
 const linkContextEnabled = computed(() => !intent.value && !file.value && !mention.value && !blockInsert.value && !libraryOpen.value
   && !blockMenu.value && !emptyMenu.value && !slashSession.value && !comments?.drafting.value && !mobileDock.value?.active);
 /** @returns Whether a comment draft opened for the selection; also bound to Mod-Alt-M. */
@@ -215,6 +229,23 @@ watch(editor, (value, _previous, cleanup) => {
   value.setSelection(EditorSelection.single(value.state.doc.length));
 }, { immediate: true });
 watch([editableView, () => props.readOnly] as const, ([view, readOnly]) => { if (editor.value) setMdView(editor.value, view, readOnly); });
+const reader = shallowRef<HTMLElement | null>(null);
+// A view switch, from the shortcut or the host's own control, leaves the keyboard in the document.
+// A host control can still take focus after the switch (WebKit applies it late), so the next frame retries once.
+watch(() => props.view, value => {
+  const focus = () => value === "reading" ? reader.value?.focus({ preventScroll: true }) : editor.value?.focus();
+  const focused = () => !!root.value?.contains(document.activeElement);
+  void nextTick(() => { focus(); requestAnimationFrame(() => { if (!focused()) focus(); }); });
+});
+const views: readonly MdEditorView[] = ["document", "preview", "source", "reading"];
+/** @param event - Key press anywhere in the editor; Mod-Alt-V steps to the next view, the reading view included. */
+function switchView(event: KeyboardEvent): void {
+  const mac = /Mac|iPhone|iPad/u.test(navigator.platform);
+  if (event.code !== "KeyV" || !event.altKey || event.shiftKey || (mac ? !event.metaKey || event.ctrlKey : !event.ctrlKey || event.metaKey) || event.isComposing) return;
+  event.preventDefault();
+  event.stopPropagation();
+  emit("update:view", views[(views.indexOf(props.view) + 1) % views.length]!);
+}
 watch(() => props.mentions, source => { if (!source) mention.value = undefined; });
 watch(() => [props.slashMenu && !narrow.value, intent.value, file.value, mention.value, blockInsert.value, libraryOpen.value, blockMenu.value, emptyMenu.value] as const,
   ([enabled, ...busy]) => { if (!enabled || busy.some(Boolean)) slash.dismiss(); });
@@ -239,11 +270,11 @@ function chooseExportTemplate(reference: ExportTemplateReference): void {
   exportTemplate.choose(reference); libraryOpen.value = false;
   if ((file.value?.mode === 'wordExport' || file.value?.mode === 'formatExport') && props.templates) file.value = { ...file.value, templateReference: { ...reference }, templateProvider: props.templates };
 }
-defineExpose({ editor, openFile });
+defineExpose({ editor, openFile, showComments: () => comments?.showList(), setCommentRailVisible: (visible: boolean) => comments?.setRailVisible(visible) });
 </script>
 <template>
   <QuireLocaleProvider :locale="locale">
-  <div ref="root" :lang="locale" class="md-editor min-w-0 bg-qk-surface-page" :data-layout="layout" :data-block-controls="props.blockControls"
+  <div ref="root" :lang="locale" class="md-editor min-w-0 bg-qk-surface-page" @keydown.capture="switchView" :data-layout="layout" :data-block-controls="props.blockControls"
     :data-outline="outlineLayout.mode.value === 'none' ? undefined : outlineLayout.mode.value" :data-comments="comments?.layout.value === 'side' ? 'side' : undefined" :data-rails="rails ? '' : undefined"
     :data-outline-position="outlineLayout.mode.value === 'none' ? undefined : props.outlinePosition" :data-panel-open="openPanel ?? undefined" :style="rails">
     <div v-if="toolbarMode === 'fixed' && editor && state && !reading" v-show="!narrow" ref="toolbarElement" class="md-editor__toolbar">
@@ -253,7 +284,7 @@ defineExpose({ editor, openFile });
       </div>
       <Toolbar class="md-editor__toolbar-main" :active="!narrow" :editor="editor" :state="state" :locale="locale" :mentions="mentions" :docx="!!docx" :exporters="props.exporters ?? []"
         :template-name="hasTemplatePicker ? exportTemplate.name.value : undefined" @template="libraryOpen = true" @edit="edit" @file="openFile" @insert="blockInsert = $event"
-        @comment="openCommentDraft" @comments="comments?.showList()" @comment-step="comments?.step($event)" @document-comment="comments?.openDocumentDraft()" />
+        @comment="openCommentDraft" @comments="comments?.showList()" @comment-step="comments?.step($event)" @document-comment="comments?.openDocumentDraft()" @shortcuts="shortcutsOpen = true" />
       <div v-if="props.panels?.length || outlineInToolbar && props.outlinePosition === 'end'" class="md-editor__panel-toggles">
         <OutlineToggle v-if="outlineInToolbar && props.outlinePosition === 'end'" v-model:open="outlineOpen" :pinnable="outlineLayout.pinnable.value" placement="bottom-end"
           :tree="outline.tree.value" :active="outline.active.value" :labels="outlineLabels" @expand="expandOutline" @navigate="navigateOutline" />
@@ -269,7 +300,7 @@ defineExpose({ editor, openFile });
     </div>
     <div v-if="slots.header" class="md-editor__document md-editor__header"><slot name="header" /></div>
     <div v-show="!reading" ref="parent" class="md-editor__document" :data-has-header="!!slots.header || undefined" :data-has-footer="!!slots.footer || undefined" />
-    <div v-if="reading && state" class="md-editor__document md-editor__reading" data-md-reading><MdProse :state="state" :locale="locale" :components="mdReadingComponents" /></div>
+    <div v-if="reading && state" ref="reader" tabindex="-1" class="md-editor__document md-editor__reading outline-none" data-md-reading><MdProse :state="state" :locale="locale" :components="mdReadingComponents" /></div>
     <div v-if="slots.footer" class="md-editor__document md-editor__footer"><slot name="footer" /></div>
     <component :is="comments.documentSection" v-if="comments?.documentSection && !reading" class="md-editor__document" />
     <aside v-if="editor && outlineLayout.mode.value !== 'none' && !outlineInToolbar" class="md-editor__outline" :aria-label="text.outline">
@@ -301,7 +332,7 @@ defineExpose({ editor, openFile });
     <MobileSelection v-if="editor && state && !reading" ref="mobileSelection" :editor="editor" :state="state" :locale="locale" :root="root" :fixed="layout === 'document'" :enabled="narrow && !intent && !file && !mention && !blockInsert && !libraryOpen && !blockMenu && !emptyMenu && !mobileDock?.active"
       :commentable="!!comments?.writable.value" @comment="openCommentDraft" />
     <FloatingToolbar v-if="(toolbarMode === 'floating' || toolbarMode === 'fixed' && props.selectionToolbar) && editor && state && !reading" :editor="editor" :state="state" :locale="locale" :mentions="mentions"
-      :commentable="!!comments?.writable.value" :enabled="!narrow && !intent && !file && !mention && !blockInsert && !libraryOpen && !blockMenu && !emptyMenu && !slashSession && !comments?.drafting.value" @edit="edit" @file="openFile" @comment="openCommentDraft" />
+      :commentable="!!comments?.writable.value || !!props.selectionActions?.length" :selection-actions="props.selectionActions" :enabled="!narrow && !intent && !file && !mention && !blockInsert && !libraryOpen && !blockMenu && !emptyMenu && !slashSession && !comments?.drafting.value" @edit="edit" @file="openFile" @comment="openCommentDraft" />
     <MobileDock v-if="toolbarMode !== 'none' && editor && state && !reading" ref="mobileDock" :editor="editor" :state="state" :locale="locale" :visible="narrow" :fixed="layout === 'document'" :root="root"
       :mentions="mentions" :docx="!!docx" :exporters="props.exporters ?? []" :template-name="hasTemplatePicker ? exportTemplate.name.value : undefined"
       @edit="edit" @file="openFile" @template="libraryOpen = true" @comments="comments?.showList()" @insert="blockInsert = $event" />
@@ -322,6 +353,7 @@ defineExpose({ editor, openFile });
     <DialogEditor v-if="intent && editor && state" :intent="intent" :editor="editor" :state="state" :locale="locale" :images="images" :documents="documentLinks?.search" @close="intent = undefined" />
     <FileDialog v-if="file && editor && state" :intent="file" :editor="editor" :state="state" :options="filePolicy" :converter="docx ? docx.converter : undefined" :features="{ containers, extras }" :locale="locale"
       :template-picker="hasTemplatePicker" @template="libraryOpen = true" @close="file = undefined" />
+    <ShortcutsDialog v-model:open="shortcutsOpen" :locale="locale" :comments="!!comments" :block-menu="!!props.blockControls" />
     <slot v-if="libraryOpen && templates" name="export-templates" :provider="templates" :selected="exportTemplate.selected.value"
       :choose="chooseExportTemplate" :close="() => libraryOpen = false" />
   </div>
@@ -333,7 +365,17 @@ defineExpose({ editor, openFile });
 .md-editor[data-layout="embedded"] { border: var(--qk-border-width-default) solid var(--qk-color-border-subtle); border-radius: var(--qk-radius-group); }
 .md-editor__toolbar { min-width: 0; padding: var(--qk-space-inline); background: var(--qk-color-surface-page); }
 .md-editor[data-layout="document"] > .md-editor__toolbar { position: sticky; top: var(--md-editor-toolbar-top, 0px); z-index: var(--qk-layer-chrome); }
-.md-editor[data-layout="document"] > .md-editor__document { max-width: var(--md-editor-document-width, 960px); margin-inline: auto; padding-block: var(--qk-space-group) var(--qk-space-section); }
+/* The document ends with room to scroll its last line up from the window's bottom edge. */
+.md-editor[data-layout="document"] > .md-editor__document { max-width: var(--md-editor-document-width, 960px); margin-inline: auto; padding-block: var(--qk-space-group) max(var(--qk-space-section), 25vh); }
+/* A full-page document reads at article rhythm: a slightly larger body, room between blocks, and more air above higher headings. */
+.md-editor[data-layout="document"] > .md-editor__document :deep(.qk-prose) {
+  --qk-type-body-font-size: 15px; --qk-type-body-line-height: 1.6;
+  --qk-prose-block-space: var(--qk-space-surface-compact); --qk-prose-heading-space: var(--qk-space-surface);
+}
+.md-editor[data-layout="document"] > .md-editor__document :deep(.qk-prose :is([data-qk-prose^="h"], h1, h2, h3, h4, h5, h6)) { margin-block-end: var(--qk-space-surface-compact); }
+.md-editor[data-layout="document"] > .md-editor__document :deep(.qk-prose :is([data-qk-prose="h1"], h1):not(:first-child)) { margin-block-start: var(--qk-space-page); }
+.md-editor[data-layout="document"] > .md-editor__document :deep(.qk-prose :is([data-qk-prose="h2"], h2):not(:first-child)) { margin-block-start: var(--qk-space-section); }
+.md-editor[data-layout="document"] > .md-editor__document :deep(.qk-prose :is([data-qk-prose="h3"], h3):not(:first-child)) { margin-block-start: var(--qk-space-group); }
 /* Block handles sit up to 62px before the text; narrow editors keep the same margin on both sides so the column stays centered. */
 .md-editor[data-block-controls="true"][data-layout="document"] > .md-editor__document { max-width: min(var(--md-editor-document-width, 960px), calc(100% - 144px)); margin-inline: max(72px, calc((100% - var(--md-editor-document-width, 960px)) / 2)); }
 .md-editor[data-block-controls="true"][data-layout="embedded"] > .md-editor__document { margin-inline-start: 88px; }

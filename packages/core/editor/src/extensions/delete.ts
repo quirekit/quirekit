@@ -38,7 +38,8 @@ export const Delete = Extension.create<DeleteOptions>({
   onUpdate({ transaction, appendedTransactions }) {
     const editor = this.editor;
 
-    if (!editor || !transaction) {
+    // Typing removes nothing; skipping it avoids replaying every step on the previous document.
+    if (!editor || !transaction || !removesContent([transaction, ...appendedTransactions])) {
       return;
     }
 
@@ -135,3 +136,19 @@ export const Delete = Extension.create<DeleteOptions>({
     callback();
   }
 });
+
+/**
+ * Tells whether transactions removed content or a mark, the only changes
+ * delete events describe.
+ *
+ * @param transactions - Root and appended transactions.
+ * @returns Whether a step replaced a non-empty range or removed a mark.
+ */
+function removesContent(transactions: readonly Transaction[]): boolean {
+  return transactions.some((transaction) => transaction.steps.some((step) => {
+    if (step instanceof RemoveMarkStep) return true;
+    let removed = false;
+    step.getMap().forEach((from, to) => { if (to > from) removed = true; });
+    return removed;
+  }));
+}

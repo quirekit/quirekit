@@ -9,6 +9,10 @@ import QuireCard from "../card/card.vue";
 import QuireIcon from "../icon/icon.vue";
 import QuireMenu from "../menu/menu.vue";
 import { useQuireKitLocale, useQuireKitMessages } from "../locale-provider/context";
+import QuireTooltipContent from "../tooltip/content.vue";
+import QuireTooltipRoot from "../tooltip/root.vue";
+import QuireTooltipTrigger from "../tooltip/trigger.vue";
+import QuireCommentAction from "./action.vue";
 import CommentField from "./field.vue";
 import CommentMessage from "./message.vue";
 import { formatCommentTime } from "./presentation";
@@ -32,6 +36,8 @@ defineSlots<{
   body?: (props: { readonly message: QuireKitCommentMessage }) => unknown;
   /** Replaces the built-in plain-text editor, e.g. with a rich editor; the host saves and cancels through `editingId`. */
   editor?: (props: { readonly message: QuireKitCommentMessage }) => unknown;
+  /** Host controls placed before resolve in the card header, usually small icon buttons. */
+  actions?: () => unknown;
 }>();
 /** Message being edited; bind it to own editing, otherwise the card keeps it locally. */
 const editing = defineModel<string | null>("editingId", { default: null });
@@ -102,18 +108,26 @@ function cancelReply(): void { reply.value = ""; replying.value = false; }
         </button>
         <div class="qk-comment-thread__actions">
           <div v-if="stepping" class="qk-comment-thread__stepper">
-            <QuireIconButton size="xs" :label="text.previous" :title="text.previous" @click="emit('previous')"><QuireIcon name="chevronUp" /></QuireIconButton>
+            <QuireCommentAction :label="text.previous" icon="chevronUp" @click="emit('previous')" />
             <span class="qk-comment-thread__position" :aria-label="text.position(position!.index, position!.total)">{{ position!.index }} / {{ position!.total }}</span>
-            <QuireIconButton size="xs" :label="text.next" :title="text.next" @click="emit('next')"><QuireIcon name="chevronDown" /></QuireIconButton>
+            <QuireCommentAction :label="text.next" icon="chevronDown" @click="emit('next')" />
           </div>
-          <QuireIconButton v-if="resolvable" size="xs" :color="resolved ? 'success' : 'neutral'" :variant="resolved ? 'soft' : 'ghost'"
-            :disabled="busy" :label="resolved ? text.reopen : text.resolve" :title="resolved ? text.reopen : text.resolve" :aria-pressed="resolved"
-            @click="resolved ? emit('reopen') : emit('resolve')"><QuireIcon name="circleCheck" /></QuireIconButton>
-          <QuireMenu v-if="rootActions.length" :aria-label="text.moreActions" :items="rootActions" placement="bottom-end" @select="selectRoot">
-            <template #trigger>
-              <QuireIconButton size="xs" :label="text.moreActions" :title="text.moreActions"><QuireIcon name="moreHorizontal" /></QuireIconButton>
-            </template>
-          </QuireMenu>
+          <slot name="actions" />
+          <QuireCommentAction v-if="resolvable" :color="resolved ? 'success' : 'neutral'" :variant="resolved ? 'soft' : 'ghost'"
+            :disabled="busy" :label="resolved ? text.reopen : text.resolve" icon="circleCheck" :aria-pressed="resolved"
+            @click="resolved ? emit('reopen') : emit('resolve')" />
+          <QuireTooltipRoot v-if="rootActions.length" placement="top">
+            <QuireTooltipTrigger as-child>
+              <span class="qk-comment-thread__menu">
+                <QuireMenu :aria-label="text.moreActions" :items="rootActions" placement="bottom-end" @select="selectRoot">
+                <template #trigger>
+                  <QuireIconButton size="xs" :label="text.moreActions"><QuireIcon name="moreHorizontal" /></QuireIconButton>
+                </template>
+              </QuireMenu>
+              </span>
+            </QuireTooltipTrigger>
+            <QuireTooltipContent :content="text.moreActions" />
+          </QuireTooltipRoot>
         </div>
       </div>
     </template>

@@ -1,10 +1,14 @@
 {
   "name": "@quirekit/incremark-react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React Markdown reading and incremental streaming over QuireKit Lezer.",
   "type": "module",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/incremark-react"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/incremark-react"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/incremark-react#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "sideEffects": [

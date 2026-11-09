@@ -45,6 +45,8 @@ export * from "./core/ooxml-enums.js";
 export * from "./core/preservation.js";
 export * from "./core/ruby/types.js";
 export * from "./core/types.js";
+export * from "./core/textbox/link.js";
+export * from "./core/textbox/types.js";
 export * from "./core/watermark/types.js";
 export * from "./ooxml/element.js";
 export * from "./ooxml/schema.js";

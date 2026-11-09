@@ -7,6 +7,9 @@ export type QuireKitSegmentedSize = QuireKitControlSize;
 /** Segmented Control 的排列方向。 */
 export type QuireKitSegmentedOrientation = "horizontal" | "vertical";
 
+/** Segmented Control 轨道、选中片和选项共用的外形。 */
+export type QuireKitSegmentedShape = "rounded" | "pill" | "square";
+
 /** 一个可被 Segmented Control 选择的稳定选项。 */
 export interface QuireKitSegmentedItem {
   /** 提交给表单和 v-model 的稳定语义值。 */
@@ -47,7 +50,7 @@ export interface QuireKitSegmentedTokens {
   >;
   /** 轨道与选中片之间的内缩距离。 */
   readonly trackInset: string;
-  /** 轨道圆角。 */
+  /** 轨道圆角，默认由选中片圆角与轨道内缩距离配对。 */
   readonly trackRadius: string;
   /** 选中片圆角。 */
   readonly indicatorRadius: string;

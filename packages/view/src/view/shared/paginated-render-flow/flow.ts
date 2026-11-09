@@ -11,6 +11,7 @@ import type {
   MountedPaginatedRenderFlow,
   MountedPaginatedRenderUpdate
 } from "./types";
+import { mapQuireImePreedit } from "./ime-preedit";
 
 /** Default implementation of the mounted paginated render-flow contract. */
 class DefaultMountedPaginatedRenderFlow<Reason extends string>
@@ -39,9 +40,12 @@ class DefaultMountedPaginatedRenderFlow<Reason extends string>
     }
 
     // Composition owns speculative text lifetime. Other update reasons retain
-    // that state so scroll and background fill cannot make preedit disappear.
+    // that state so scroll and background fill cannot make preedit disappear,
+    // and carry it over document changes that arrive mid-composition.
     if (update.reason === this.options.compositionReason) {
       this.currentImePreedit = update.imePreedit;
+    } else {
+      this.currentImePreedit = mapQuireImePreedit(this.currentImePreedit, update.transactions);
     }
 
     const layoutDirtyRange = deriveQuireLayoutDirtyRangeFromTransactions(

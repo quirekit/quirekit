@@ -1,8 +1,12 @@
 {
   "name": "@quirekit/web-fonts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/web-fonts"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/web-fonts"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/web-fonts#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "description": "Internal API, no compatibility guarantee: host-authorized external web-font catalogs, caching, and browser registration for QuireKit.",

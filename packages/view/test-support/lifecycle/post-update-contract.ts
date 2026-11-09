@@ -283,7 +283,8 @@ export function describePresentedCaretContract(backend: PostUpdateContractBacken
     f.flush();
     expect(f.editor.state.pm).toBe(before);
     expect(presented).toHaveLength(1);
-    const preview = view.coordsAtPos(before.selection.head + 2);
+    // Canonical positions skip the preedit; the composition point on its far side is where the preview caret stands.
+    const preview = view.coordsAtPos(before.selection.head, 1);
     expect(presented[0]).toMatchObject({ left: preview.left, top: preview.top, bottom: preview.bottom });
     expect(presented[0]!.left).toBeGreaterThan(initial!.left);
   });

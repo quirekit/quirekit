@@ -2,7 +2,7 @@ import { EditorSelection } from "@quirekit/cm-state";
 import type { MsfeCommand } from "@quirekit/msfe-core";
 import { queryFootnotes } from "@quirekit/msfe-markdown-extras";
 
-/** @param placeholder - Localized initial definition. @returns Atomic reference + unique definition insertion with the definition selected. */
+/** @param placeholder - Initial definition text, usually empty. @returns Atomic reference + unique definition insertion with the definition selected. */
 export function insertMdFootnote(placeholder: string): MsfeCommand {
   return state => {
     if (state.selection.ranges.length !== 1 || /[\r\n]/u.test(placeholder)) return null;

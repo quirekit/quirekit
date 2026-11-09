@@ -3,7 +3,7 @@ export { applyViewStateUpdate } from "./editor/view-state";
 export { createMsfeReadState } from "./reading/state";
 export type { MsfeReadStateOptions } from "./reading/types";
 export type { MsfeHistory, MsfeHistoryState } from "./history/types";
-export { sourceBlockAt, sourceBlockScopes, sourceBlockSibling, sameSourceBlockScope, moveSourceBlock, removeSourceBlock, insertSourceBlock, replaceSourceBlock } from "./blocks";
+export { sourceBlockAt, sourceBlockScopes, sourceBlockSibling, sameSourceBlockScope, moveSourceBlock, removeSourceBlock, insertSourceBlock, replaceSourceBlock, SOURCE_CARET } from "./blocks";
 export { sourceBlankLineAt, insertAtSourceBlankLine, canInsertSourceBlock, insertSourceBlockAtSelection, querySourceBlockInsertion } from "./blocks";
 export type { SourceBlock, SourceBlockSide, SourceBlockScopeResolver, SourceBlankLine, SourceBlockInsertionReason, SourceBlockInsertionQuery } from "./blocks";
 export { createSourceBlockControls } from "./blocks";
@@ -38,7 +38,7 @@ export { inlineBoundaryNavigation } from "./presentation/inline/navigation";
 export type { InlineBoundaryRule, InlineBoundaryBehavior } from "./presentation/inline/types";
 export { readInlineDestination, readSourceDestination, isSafeDestination } from "./source/destination";
 export { patchSourceDestination } from "./source/patch";
-export { decodeMarkdownString, decodeMarkdownDestination, encodeMarkdownField } from "./markdown/strings";
+export { decodeMarkdownString, decodeMarkdownDestination, encodeMarkdownDestination, encodeMarkdownField } from "./markdown/strings";
 export { resolveMarkdownReference, getMarkdownReferenceWork } from "./markdown/references/query";
 export { requestMarkdownParse } from "./source/parsing/demand";
 export { changedSyntaxRanges, mergeSourceRanges, touchesSourceRanges } from "./source/parsing/changes";
@@ -76,4 +76,5 @@ export type { SourceClientPoint, SourceViewportBounds, SourceScrollStep } from "
 export type { BlockInputIntent, BlockInputResult, BlockInputTarget, BlockInputContext, BlockInputHandler, BlockInputBehavior, BlockInputRule } from "./input";
 
 export { editingBoundaries } from "./input/boundaries/runtime";
+export { STYLE_EXIT } from "./input/boundaries/selection";
 export type { EditingBoundary, EditingBoundaryKind, EditingBoundaryRule, EditingBoundaryContext } from "./input/boundaries/types";

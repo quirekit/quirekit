@@ -58,6 +58,7 @@ export * from "./candidate-list";
 export * from "./table";
 
 export * from "./badge";
+export * from "./block-handle";
 export * from "./tag";
 
 export * from "./skeleton";

@@ -38,6 +38,27 @@ describe("configurable inline boundary selection", () => {
     expect(state.update({ selection }).state.selection.eq(selection)).toBe(true);
   });
 
+  it("stops after a style that closes its line when the caret moves or is placed there", () => {
+    const state = stateFor("L **word**\nnext"), select = (from: number, to: number) =>
+      state.update({ selection: { anchor: from } }).state.update({ selection: { anchor: to }, userEvent: "select" }).state.selection.main.head;
+    expect(select(2, 10)).toBe(10);
+    expect(select(7, 8)).toBe(10);
+    expect(state.update({ selection: { anchor: 10 } }).state.update({ selection: { anchor: 9 }, userEvent: "select" }).state.selection.main.head).toBe(8);
+    // Typing at the content end stays inside; mid-line styles keep a single inside stop.
+    const typed = state.update({ selection: { anchor: 8 } }).state.update({ changes: { from: 8, insert: "s" }, selection: { anchor: 9 }, userEvent: "input.type" }).state;
+    expect([typed.doc.toString(), typed.selection.main.head]).toEqual(["L **words**\nnext", 9]);
+    // Nested styles share the stop at the line end, after every closer.
+    const nested = stateFor("L ***word***\nnext"), nestedSelect = (from: number, to: number) =>
+      nested.update({ selection: { anchor: from } }).state.update({ selection: { anchor: to }, userEvent: "select" }).state.selection.main.head;
+    expect([nestedSelect(6, 9), nestedSelect(6, 10), nestedSelect(2, 12), nestedSelect(12, 11)]).toEqual([12, 12, 12, 9]);
+    // A click reports the label end while the pointer is down and settles at the line end on release.
+    const pressed = nested.update({ selection: { anchor: 9 }, effects: revealSelectionEffect.of(EditorSelection.single(9)), userEvent: "select.pointer" }).state;
+    expect(pressed.selection.main.head).toBe(9);
+    expect(pressed.update({ effects: revealSelectionEffect.of(null) }).state.selection.main.head).toBe(12);
+    const middle = stateFor("L **word** R");
+    expect(middle.update({ selection: { anchor: 2 } }).state.update({ selection: { anchor: 10 }, userEvent: "select" }).state.selection.main.head).toBe(8);
+  });
+
   it("accepts custom policies and explicit native opt-out by precedence", () => {
     const state = stateFor("L `code` R", Prec.high(inlineBoundaryNavigation([{ nodes: ["InlineCode"], marker: "CodeMark", behavior: "content" }])));
     expect(state.update({ selection: { anchor: 2 } }).state.selection.main.head).toBe(3);

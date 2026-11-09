@@ -1,5 +1,6 @@
+import type {} from "@quirekit/collab-contract";
 import { Extension, type QuireAnyExtension } from "@quirekit/core";
-import { WordNumbering } from "@quirekit/classic-numbering-model";
+import { WordNumbering, createWordNumberingCollabRules } from "@quirekit/classic-numbering-model";
 import type { BlockListFeature } from "@quirekit/block-editor";
 import { createListCommands } from "./commands";
 import { blockListFacts } from "./facts";
@@ -15,6 +16,10 @@ const BlockLists = Extension.create<Record<string, never>, BlockListFeature>({
   addCommands() { return createListCommands(); },
   /** @returns Derived HTML presentation and legacy-container admission. */
   addProseMirrorPlugins() { return [createListMigrationPlugin(), createListDecorations(this.editor!)]; },
+  /** @returns Shared numbering rules; legacy-list migration acts on the local peer's input. */
+  addCollabRules() {
+    return [...createWordNumberingCollabRules(), { kind: "server-plugin", key: "blockListMigration", role: "client" }];
+  },
   /** @param context - Newly created session with legacy content. */
   onCreate({ editor }) {
     editor.commands.command(({ tr, dispatch }) => {

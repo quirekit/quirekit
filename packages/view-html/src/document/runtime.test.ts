@@ -2,6 +2,7 @@ import { getChangedRanges } from "@quirekit/core";
 import { EditorState, Schema } from "@quirekit/pm";
 import { describe, expect, it, vi } from "vitest";
 import { FakeSvgMountDocument } from "@quirekit/view/test-support/svg-mount";
+import { HtmlDescriptorPositionIndex } from "../reconcile/ownership/position-index";
 import {
   createHtmlRetainedDocumentView,
   HtmlDomMappingGapError
@@ -11,6 +12,32 @@ describe("retained HTML document view", registerDocumentViewTests);
 
 /** Registers retained document facade behavior. */
 function registerDocumentViewTests(): void {
+  it("reuses ownership indexes through text changes and rebuilds on a split", () => {
+    const fixture = createRuntimeFixture();
+    const sibling = fixture.view.root.children[1]!.mount!.dom;
+    const rebuild = vi.spyOn(HtmlDescriptorPositionIndex.prototype, "rebuild");
+    try {
+      const transaction = fixture.state.tr.insertText("!", 1);
+      const result = fixture.view.update({ documentNode: transaction.doc,
+        mapping: transaction.mapping, changedRanges: getChangedRanges(transaction) });
+      expect(rebuild).not.toHaveBeenCalled();
+      expect(result.ownershipChanged).toBe(false);
+      expect(fixture.view.nodeDOM(transaction.doc.child(0).nodeSize)).toBe(sibling);
+      const point = fixture.view.domAtPos(10);
+      expect(fixture.view.posAtDOM(point.node, point.offset)).toBe(10);
+
+      const split = fixture.state.apply(transaction).tr.split(3);
+      const changed = fixture.view.update({ documentNode: split.doc,
+        mapping: split.mapping, changedRanges: getChangedRanges(split) });
+      expect(rebuild).toHaveBeenCalledOnce();
+      expect(changed.ownershipChanged).toBe(true);
+      const splitPoint = fixture.view.domAtPos(5);
+      expect(fixture.view.posAtDOM(splitPoint.node, splitPoint.offset)).toBe(5);
+    } finally {
+      rebuild.mockRestore();
+      fixture.view.destroy();
+    }
+  });
   it("keeps the document facade and sibling DOM across text input", testPersistentUpdate);
   it("maps document and DOM points only through retained ownership", testOwnedMappings);
   it("updates stale DOM positions through transaction mappings", testMappedDOMPosition);

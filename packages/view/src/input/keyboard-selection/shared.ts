@@ -1,4 +1,4 @@
-import { Selection, TextSelection, type Transaction } from "@quirekit/pm";
+import { Selection, TextSelection, type ResolvedPos, type Transaction } from "@quirekit/pm";
 import type { QuireKeyboardSelectionTransactionOptions } from "./types";
 
 /**
@@ -13,14 +13,8 @@ export function collapseSelectionToHorizontalEdge(
   direction: -1 | 1
 ): Transaction | null {
   const { selection, doc } = options.state;
-  const requestedPosition = direction < 0 ? selection.from : selection.to;
-  const position = clampKeyboardSelectionPosition(options, requestedPosition);
-
-  if (selection.empty) {
-    return null;
-  }
-
-  return options.state.tr.setSelection(Selection.near(doc.resolve(position), direction));
+  const position = clampKeyboardSelectionPosition(options, direction < 0 ? selection.from : selection.to);
+  return selection.empty ? null : options.state.tr.setSelection(Selection.near(doc.resolve(position), direction));
 }
 
 /**
@@ -36,18 +30,7 @@ export function setCollapsedSelection(
   position: number,
   bias: number
 ): Transaction | null {
-  const { selection, doc } = options.state;
-  const constrainedPosition = clampKeyboardSelectionPosition(options, position);
-  const nextSelection = Selection.near(
-    doc.resolve(Math.min(Math.max(constrainedPosition, 0), doc.content.size)),
-    bias
-  );
-
-  if (nextSelection.eq(selection)) {
-    return null;
-  }
-
-  return options.state.tr.setSelection(nextSelection);
+  return applyChangedSelection(options, Selection.near(resolveKeyboardTarget(options, position, bias), bias));
 }
 
 /**
@@ -63,19 +46,8 @@ export function setExtendedSelection(
   head: number,
   bias: number
 ): Transaction | null {
-  const { selection, doc } = options.state;
-  const constrainedHead = clampKeyboardSelectionPosition(options, head);
-  const nextSelection = TextSelection.between(
-    doc.resolve(selection.anchor),
-    doc.resolve(Math.min(Math.max(constrainedHead, 0), doc.content.size)),
-    bias
-  );
-
-  if (nextSelection.eq(selection)) {
-    return null;
-  }
-
-  return options.state.tr.setSelection(nextSelection);
+  const { state } = options;
+  return applyChangedSelection(options, TextSelection.between(state.doc.resolve(state.selection.anchor), resolveKeyboardTarget(options, head, bias), bias));
 }
 
 /**
@@ -89,12 +61,36 @@ export function clampKeyboardSelectionPosition(
   options: QuireKeyboardSelectionTransactionOptions,
   position: number
 ): number {
-  const boundary = options.selectionScopeBoundary
-    ?? options.storyCommandBoundary;
+  const boundary = options.selectionScopeBoundary ?? options.storyCommandBoundary;
+  return boundary === undefined ? position : Math.min(boundary.selectionTo, Math.max(boundary.selectionFrom, position));
+}
 
-  if (boundary === undefined) {
-    return position;
+/**
+ * Builds a transaction only when keyboard movement changes the selection.
+ * @param options - Keyboard state.
+ * @param next - Candidate selection.
+ * @returns Selection transaction, or null when the selection is unchanged.
+ */
+function applyChangedSelection(options: QuireKeyboardSelectionTransactionOptions, next: Selection): Transaction | null {
+  return next.eq(options.state.selection) ? null : options.state.tr.setSelection(next);
+}
+
+/**
+ * Resolves a scoped keyboard target outside any atomic inline node, such as a phonetic
+ * guide: its text belongs to one object, so a caret inside would add typed text to it.
+ *
+ * @param options - Keyboard state and scope boundaries.
+ * @param position - Requested document position.
+ * @param bias - Negative leaves before the node, otherwise after it.
+ * @returns Resolved in-range position outside every atomic inline ancestor.
+ */
+function resolveKeyboardTarget(options: QuireKeyboardSelectionTransactionOptions, position: number, bias: number): ResolvedPos {
+  const { doc } = options.state;
+  const $position = doc.resolve(Math.min(Math.max(clampKeyboardSelectionPosition(options, position), 0), doc.content.size));
+  for (let depth = 1; depth <= $position.depth; depth += 1) {
+    if ($position.node(depth).isInline && $position.node(depth).isAtom) {
+      return doc.resolve(bias < 0 ? $position.before(depth) : $position.after(depth));
+    }
   }
-
-  return Math.min(boundary.selectionTo, Math.max(boundary.selectionFrom, position));
+  return $position;
 }

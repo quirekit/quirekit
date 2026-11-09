@@ -283,7 +283,7 @@ function readToggleOptions(
     const start = (value as ToggleWordOrderedListOptions).start;
     return start === undefined
       ? { start: null, checked: false }
-      : Number.isInteger(start) && start > 0
+      : Number.isInteger(start) && start >= 0
         ? { start, checked: false }
         : undefined;
   }

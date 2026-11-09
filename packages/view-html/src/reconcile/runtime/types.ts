@@ -7,6 +7,8 @@ import type { HtmlNodeViewEnvironment } from "../../node-view/types";
 
 /** Mutable state shared by bounded dirty-container passes. */
 export interface HtmlReconcileContext {
+  /** Whether a child topology or custom-view owner requires fresh DOM indexes. */
+  ownershipChanged: boolean;
   /** Browser document used for new schema shells. */
   readonly ownerDocument: Document;
   /** Monotonic document-owned descriptor allocator. */

@@ -30,6 +30,7 @@ import '@quirekit/unocss-preset/quirekit.css'
 ## Things to know
 
 - Component guides and examples are in the repository’s `apps/design` documentation site.
+- Wrap the app in `QuireIconProvider` with `quireIconRegistry`, or named icons render blank. Use `QuireThemeProvider` for dark themes and theme overrides.
 - Configure colors, typography and spacing through a shared theme so components remain consistent.
 
 ## Related documentation

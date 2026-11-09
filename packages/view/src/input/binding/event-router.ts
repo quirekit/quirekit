@@ -92,6 +92,8 @@ export class QuireMountedInputEventRouter {
     const keyboardEvent = event as KeyboardEvent;
 
     if (this.blockReadOnlyEditingInput()) {
+      // Read-only textareas can turn Backspace into browser history navigation.
+      if (keyboardEvent.key === "Backspace") event.preventDefault();
       return;
     }
 
@@ -364,15 +366,11 @@ export class QuireMountedInputEventRouter {
   private applyImeResult(result: QuireImeEventResult, event?: Event): boolean {
     const handled = this.resultApplier.applyImeResult(result, event);
 
-    if (!handled) {
-      return false;
-    }
-
-    if (!result.isComposing && result.commitText === undefined) {
+    if (handled && !result.isComposing && result.commitText === undefined) {
       this.controller.cancelComposition();
     }
 
-    return true;
+    return handled;
   }
 
   /**

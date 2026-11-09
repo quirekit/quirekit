@@ -1,9 +1,13 @@
 {
   "name": "@quirekit/msfe-prose",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Core Markdown prose syntax for MSFE: emphasis, inline code, strikethrough, rules, quotes, lists and tables.",
   "license": "MIT",
-  "repository": {"type":"git","url":"git+https://github.com/quirekit/quirekit.git","directory":"packages/msfe/prose"},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quirekit/quirekit.git",
+    "directory": "packages/msfe/prose"
+  },
   "homepage": "https://github.com/quirekit/quirekit/tree/main/packages/msfe/prose#readme",
   "bugs": "https://github.com/quirekit/quirekit/issues",
   "type": "module",
