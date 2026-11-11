@@ -30,3 +30,5 @@ export { createTextDiagramRenderer } from "./text-diagram/renderer";
 export { textFigureRenderPort } from "./ai/check";
 export type { TextFigureAgentInput } from "./ai/commands";
 export type { TextFigureRenderer } from "./ai/check";
+// Keeps the AI capability typings in the published declarations.
+export type {} from "./ai/types";

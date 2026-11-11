@@ -36,6 +36,7 @@ export { createMountedPointerSelectionOptions } from "./selection-options";
 export { bindMountedPointerSession, handleMountedPointerDown } from "./session";
 export type {
   BindMountedPointerSessionOptions,
+  MountedPointerSessionCallbacks,
   HandleMountedPointerDownOptions,
   MountedPointerSelectionRenderMode,
   MountedPointerSessionRenderState

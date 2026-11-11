@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/lezer-markdown",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Incremental Markdown parser that consumes and emits Lezer trees",
   "license": "MIT",
   "repository": {

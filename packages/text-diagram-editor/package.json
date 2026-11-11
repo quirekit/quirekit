@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/text-diagram-editor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Vue workspace for editing Mermaid, PlantUML and Graphviz diagrams with live preview and export.",
   "license": "MIT",
   "repository": {

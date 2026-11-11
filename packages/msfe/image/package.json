@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-image",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Markdown images with insertion, previews and host-provided uploads for the MSFE source editor.",
   "license": "MIT",
   "repository": {

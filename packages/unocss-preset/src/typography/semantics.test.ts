@@ -6,9 +6,9 @@ import { generateQuireKitCss } from "../output/css";
 describe("opt-in HTML typography", () => {
   it("publishes complete semantic roles with explicit scope boundaries", async () => {
     const css = await generateQuireKitCss();
-    expect(css).toContain('@scope (.qk-typography) to ([data-qk-not-typography], [data-qk-not-prose])');
+    expect(css).toContain('@layer qk-elements {\n@scope (.qk-typography) to ([data-qk-not-typography], [data-qk-not-prose])');
     for (const [element, role] of [["h1", "page-title"], ["h2", "section-title"], ["h3", "heading"], ["h6", "heading"], ["p", "body"], ["small", "helper"], ["code", "code"]]) {
-      const selector = `:where(${element}:scope), :where(${element})`;
+      const selector = `${element}:scope, ${element}`;
       const declarations = css.split(`${selector}{`)[1]?.split("}")[0];
       for (const field of ["font-family", "font-size", "line-height", "font-weight", "letter-spacing"]) {
         expect(declarations, `${element}: ${field}`).toContain(`${field}:var(--qk-type-${role}-${field})`);

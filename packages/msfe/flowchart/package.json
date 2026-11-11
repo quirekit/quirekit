@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-flowchart",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Editable flowchart blocks stored as Markdown fences in the MSFE source editor.",
   "license": "MIT",
   "repository": {

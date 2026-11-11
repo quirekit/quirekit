@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/cm-theme-one-dark",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "One Dark theme for the CodeMirror code editor",
   "license": "MIT",
   "repository": {

@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "declarationMap": false,
-    "sourceMap": false
+    "sourceMap": false,
+    "types": ["node"]
   },
   "include": ["src/**/*.ts", "src/**/*.vue"]
 }

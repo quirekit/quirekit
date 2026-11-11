@@ -94,7 +94,7 @@ function findButton(nodes: readonly VNode[]): VNode | undefined {
 
 // As-child normally lets child attributes win. This component has no DOM of its
 // own; cloning keeps the original button while making task identity authoritative.
-const SlotButton = defineComponent({
+const SlotButton = /* @__PURE__ */ defineComponent({
   name: "TaskTriggerSlot",
   inheritAttrs: false,
   setup(_props, { attrs }) {

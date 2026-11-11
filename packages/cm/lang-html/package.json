@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/cm-lang-html",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "HTML language support for the CodeMirror code editor",
   "license": "MIT",
   "repository": {

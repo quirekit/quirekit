@@ -344,8 +344,8 @@ function readPointerEvent(event: {
  * @returns qkView target descriptor.
  */
 function createTarget(
-  target: Partial<QuireViewTarget<TestContext>> = {}
-): QuireViewTarget<TestContext> {
+  target: Partial<QuireViewTarget> = {}
+): QuireViewTarget {
   return {
     id: "button",
     nodePath: "0",

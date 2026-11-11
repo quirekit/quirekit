@@ -34,3 +34,10 @@ export { BlockDefinitions } from "./definitions/extension";
 export { BlockInlineContent } from "./inline-content/extension";
 export { openInlineContent, registerInlineContentHost } from "./inline-content/tasks";
 export type { InlineContentRequest, InlineContentTarget } from "./inline-content/types";
+// Keeps the command typings in the published declarations.
+export type {} from "./definitions/commands";
+export type {} from "./attachments/commands";
+export type {} from "./web-card/commands";
+export type {} from "./notes/commands";
+export type {} from "./math/commands";
+export type {} from "./code/extension";

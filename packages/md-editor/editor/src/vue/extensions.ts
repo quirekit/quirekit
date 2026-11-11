@@ -10,7 +10,7 @@ import { TaskItem } from "@quirekit/msfe-prose";
 import { Image as ImageFeature } from "@quirekit/msfe-image";
 import { createMdEditorExtensions } from "../editor";
 import { ProseCodeBlock, ProseHeading } from "../presentation/features";
-import { mdContainerTypes } from "../presentation/container";
+import { mdContainerTypes } from "../presentation/projection/container";
 import { mdEditorMessages } from "./messages";
 import type { MdEditorLocale } from "./types";
 import type { AnyExtension } from "@quirekit/msfe-core";

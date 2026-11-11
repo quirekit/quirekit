@@ -93,7 +93,7 @@ interface Emits {
 const props = withDefaults(defineProps<Props>(), {
   size: "sm",
   defaultValue: () => [],
-  max: Number.POSITIVE_INFINITY,
+  max: Infinity,
   delimiter: ",",
   addOnPaste: true,
   allowDuplicates: false,

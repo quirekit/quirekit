@@ -9,7 +9,8 @@ import {
 } from "./context";
 import QuireThemeSurface from "./surface.vue";
 
-export default defineComponent({
+// The SFC compiler drops an annotation on `export default`, so the pure call is on its own declaration.
+const ThemePortal = /* @__PURE__ */ defineComponent({
   name: "QuireThemePortal",
   inheritAttrs: false,
   /**
@@ -33,4 +34,6 @@ export default defineComponent({
       : h(QuireThemeSurface, { layout: "bridge" }, context.slots);
   },
 });
+
+export default ThemePortal;
 </script>

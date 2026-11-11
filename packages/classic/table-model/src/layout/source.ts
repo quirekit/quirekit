@@ -124,8 +124,8 @@ export function createQuireTableSourceFromWordMap(
       borderColor: borderStyle?.color ?? "#000000",
       borderWidth: borderStyle?.width ?? 1
     },
-    // Word sizes automatic rows by content alone; tables authored here keep the default row height.
-    contentSizedRows: isImportedWordTable(options.tableNode)
+    // Word and WPS size automatic rows by content alone, with no authoring floor.
+    contentSizedRows: true
   };
   return options.legacyFloatingOrigin ? applyWordTableLegacyOrigin(source) : source;
 }
@@ -359,14 +359,5 @@ function readExplicitCellNode(
   }
 
   return cellNode;
-}
-
-/**
- * @param tableNode - Source Word table node.
- * @returns Whether the table came from a Word document, which the DOCX importer records as its preservation source.
- */
-function isImportedWordTable(tableNode: QuireTableWordMapSourceOptions["tableNode"]): boolean {
-  const preservation = tableNode.attrs.preservation as { readonly source?: unknown } | null | undefined;
-  return preservation?.source === "lit-docx";
 }
 

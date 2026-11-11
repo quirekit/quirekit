@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/whiteboard",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Renderer-neutral whiteboard documents, validation, previews and save preparation.",
   "license": "MIT",
   "repository": {

@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/pm-state",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "QuireKit vendored ProseMirror state boundary.",
   "license": "MIT",
   "repository": {

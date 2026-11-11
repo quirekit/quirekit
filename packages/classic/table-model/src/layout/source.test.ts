@@ -92,9 +92,9 @@ describe("Quire table Word source adapter", () => {
     });
     expect(buildQuireTablePaintModel(geometry).borders).toEqual([]);
   });
-  it("sizes automatic rows by content only for tables imported from Word", () => {
+  it("sizes automatic rows by content for authored and imported tables alike", () => {
     const rows = [row([cell("甲"), cell("乙")])];
-    expect(createSource(table(rows)).contentSizedRows).toBe(false);
+    expect(createSource(table(rows)).contentSizedRows).toBe(true);
     expect(createSource(table(rows, { preservation: { source: "lit-docx" } })).contentSizedRows).toBe(true);
   });
   it("normalizes floating table anchors, positioning, clearance, and overlap", () => {

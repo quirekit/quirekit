@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/pm-decoration",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "DOM-free ProseMirror decoration data structures under the QuireKit scope.",
   "license": "MIT",
   "repository": {

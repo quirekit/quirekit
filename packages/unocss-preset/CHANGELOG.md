@@ -1,5 +1,13 @@
 # @quirekit/unocss-preset
 
+## 0.0.3
+
+### Patch Changes
+
+- Make Prose and Typography element defaults cheap to match in Safari and other system WebKit hosts. Their scoped selectors now start with a plain tag or `data-qk-prose` role, and the rules live in a `qk-elements` layer nested inside `qk-recipes`, so every recipe and utility still overrides them. A full-page style recalculation on a 2,000-element page drops from about 600 ms to 60 ms; scope roots, limits and computed styles are unchanged.
+
+  降低 Prose 与 Typography 元素默认样式在 Safari 等系统 WebKit 环境中的匹配开销。作用域内的选择器改为直接以标签或 `data-qk-prose` 角色开头，规则放入 `qk-recipes` 内的 `qk-elements` 子层，组件配方和工具类仍可覆盖。约 2000 个元素的页面整页样式重算由约 600ms 降到 60ms；作用域的起止范围与计算样式不变。
+
 ## 0.0.2
 
 ### Patch Changes

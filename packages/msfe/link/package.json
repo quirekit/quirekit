@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-link",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Markdown links, autolinks and link cards for the MSFE source editor.",
   "license": "MIT",
   "repository": {

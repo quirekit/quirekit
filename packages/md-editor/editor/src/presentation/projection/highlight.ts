@@ -1,7 +1,7 @@
 import { componentView, withSourceOperation, type ComponentViewRenderer, type MsfeEditor, type ProjectionInput, type ProjectionLayer, type SourceQuery } from "@quirekit/msfe-core";
-import { highlightContainerName, parseHighlightAttributes } from "../highlight/attributes";
-import { updateMdHighlight } from "../highlight/commands";
-import type { MdHighlightIconProps } from "../highlight/types";
+import { highlightContainerName, parseHighlightAttributes } from "../../highlight/attributes";
+import { updateMdHighlight } from "../../highlight/commands";
+import type { MdHighlightIconProps } from "../../highlight/types";
 
 /** @param mount - Generic component boundary. @returns A static icon for hosts without a framework renderer. */
 export const nativeHighlightIcon: ComponentViewRenderer<MdHighlightIconProps> = mount => {

@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/md-editor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "QuireKit Markdown document editor with shared Prose presentation.",
   "type": "module",
   "license": "MIT",

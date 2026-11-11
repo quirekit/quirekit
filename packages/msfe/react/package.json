@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-react",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "React bindings for the MSFE Markdown source editor: hooks, editor content and React node views.",
   "license": "MIT",
   "repository": {

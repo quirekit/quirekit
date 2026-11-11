@@ -7,9 +7,9 @@ import { CustomContainer, type ContainerStorage } from "@quirekit/msfe-markdown-
 import { Decoration, keymap } from "@quirekit/cm-view";
 import { Prec } from "@quirekit/cm-state";
 import { commandKeyBinding } from "@quirekit/msfe-core";
-import { semanticProjection, prefixProjection, emphasisProjection, tableProjection } from "./marks";
-import { containerProjection, mdContainerTypes } from "./container";
-import { withHighlightIcons, nativeHighlightIcon } from "./highlight";
+import { semanticProjection, prefixProjection, emphasisProjection, tableProjection } from "./projection/marks";
+import { containerProjection, mdContainerTypes } from "./projection/container";
+import { withHighlightIcons, nativeHighlightIcon } from "./projection/highlight";
 import type { MdContainerOptions } from "../types";
 import { paragraphInput, markupInput, fenceInput, tableInput, lineBreakInput, exitInput } from "../input/behavior";
 import { deleteListMarkupBackward } from "../input/list";

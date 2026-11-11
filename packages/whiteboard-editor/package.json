@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/whiteboard-editor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Vue whiteboard workspace and dialog built on the QuireKit whiteboard model and Excalidraw.",
   "license": "MIT",
   "repository": {

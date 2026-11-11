@@ -1,3 +1,4 @@
+export type { TextStyleAttributeExtensionOptions } from "./attribute-extension";
 export * from "./background-color";
 export * from "./color";
 export * from "./docx";

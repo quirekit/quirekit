@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-bold",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Bold syntax and toggle command for the MSFE Markdown source editor.",
   "license": "MIT",
   "repository": {

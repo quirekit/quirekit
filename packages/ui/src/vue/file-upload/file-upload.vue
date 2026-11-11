@@ -13,7 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
   accept: undefined,
   multiple: false,
   maxFiles: 5,
-  maxFileSize: Number.POSITIVE_INFINITY,
+  maxFileSize: Infinity,
   minFileSize: 0,
   defaultFiles: () => [],
   allowDrop: true,

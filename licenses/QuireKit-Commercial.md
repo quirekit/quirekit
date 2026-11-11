@@ -1,13 +1,12 @@
 # QuireKit Commercial License / QuireKit 商业许可证
 
-Version 0.9. 中文版见下文。The Chinese version follows the English version.
+Version 0.10. 中文版见下文。The Chinese version follows the English version.
 
-Copyright (c) 2026 Wang Yishuai (王一帅). All rights reserved.
+Copyright (c) 2026 上海轻书远行信息科技有限公司. All rights reserved.
 
 ## 1. Definitions
 
-- "Licensor" means Wang Yishuai (王一帅), the copyright holder of QuireKit, or the
-  legal entity to which that holder assigns the rights.
+- "Licensor" means 上海轻书远行信息科技有限公司, and its successors and assigns.
 - "Commercial Component" means any software package the Licensor publishes under
   this license, including its source code, build output and documentation.
 - "Agreement" means a written order, subscription or license agreement, including an
@@ -175,11 +174,11 @@ In case of any inconsistency between them, the Chinese version prevails.
 
 ## 中文版
 
-0.9 版。版权所有 (c) 2026 王一帅（Wang Yishuai）。保留所有权利。
+0.10 版。版权所有 (c) 2026 上海轻书远行信息科技有限公司。保留所有权利。
 
 ### 1. 定义
 
-- “许可方”指 QuireKit 的著作权人王一帅（Wang Yishuai），或该著作权人将权利转让给的法律主体。
+- “许可方”指上海轻书远行信息科技有限公司及其承继者与受让人。
 - “商业组件”指许可方按本许可证发布的任何软件包，包括其源代码、构建产物和文档。
 - “授权协议”指许可方签署或接受的、写明该商业组件的书面订单、订阅或许可协议，包括在线订单。
   所有付费授权码均随授权协议签发。

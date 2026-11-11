@@ -1,5 +1,13 @@
 # @quirekit/ui
 
+## 0.0.3
+
+### Patch Changes
+
+- Bundlers can now drop components an app does not use: importing only the theme and icon providers from `@quirekit/ui/vue` no longer pulls in the form controls, prose elements, file upload and tags input.
+
+  打包工具现在可以剔除应用没用到的组件：只从 `@quirekit/ui/vue` 引入主题和图标提供器时，不再连带打包表单控件、排版元素、文件上传和标签输入。
+
 ## 0.0.2
 
 ### Patch Changes

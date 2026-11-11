@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/pm-collab",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "QuireKit vendored ProseMirror collaboration boundary.",
   "license": "MIT",
   "repository": {

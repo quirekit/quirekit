@@ -3,7 +3,7 @@ import { themeVariableReferences } from "@quirekit/ui";
 import { inlineCodeDeclarations, typographyDeclarations } from "../../typography/declarations";
 import { proseCompositionShortcuts } from "./compositions";
 import { createTypographyElementCss } from "../../typography/elements";
-import { scopedElementSelector, selectorAlternatives } from "../../typography/selectors";
+import { elementLayer, scopedElementSelector, selectorAlternatives } from "../../typography/selectors";
 import { proseElementAlternatives, proseElements, proseSubjectAlternatives } from "./selectors";
 import { proseContainerCss } from "./container";
 import { proseHighlightCss } from "./highlight";
@@ -27,20 +27,23 @@ function nodeSelector(elements: string, suffix?: string): string {
   return scopedElementSelector(proseElementAlternatives(elements), suffix);
 }
 
-/** @param elements - Native tags only, excluding editor blocks that borrow a role through data-qk-prose. @returns Scope-root and descendant selectors. */
+/**
+ * @param elements - Native tags only, excluding editor blocks that borrow a role through data-qk-prose.
+ * @returns Scope-root and descendant selectors that also outrank the role selector on a native tag carrying a role.
+ */
 function nativeSelector(elements: string): string {
-  return scopedElementSelector(selectorAlternatives(elements));
+  return scopedElementSelector(selectorAlternatives(elements).flatMap(tag => [tag, `${tag}[data-qk-prose]`]));
 }
 
 /**
- * Native relationships outrank a nested node's defaults while remaining below utility classes.
- * The zero-specificity subject only lets browsers skip elements that cannot match.
+ * Native relationships outrank a nested node's defaults while remaining below recipes and utility classes.
+ * The leading subject lets browsers skip elements that cannot match.
  * @param elements - Contextual native selectors, such as pre code or ol ol.
  * @returns Selectors preserving document context across nested component scopes.
  */
 function contextSelector(elements: string): string {
   const roles = proseElements(elements);
-  return proseSubjectAlternatives(elements).flatMap(subject => [`:where(${subject}:scope):is(${roles})`, `:where(${subject}):is(${roles})`]).join(", ");
+  return proseSubjectAlternatives(elements).flatMap(subject => [`${subject}:scope:is(${roles})`, `${subject}:is(${roles})`]).join(", ");
 }
 
 /**
@@ -82,6 +85,7 @@ ${proseHighlightCss}
 .qk-prose-table:focus-visible { outline:var(--qk-border-width-focus) solid var(--qk-color-border-focus); outline-offset:var(--qk-border-width-focus); }
 .qk-prose-table > table { margin-block:0; }
 .qk-prose-table :is(th, td) { min-inline-size:calc(5em + 2 * var(--qk-space-surface-compact)); }
+@layer ${elementLayer} {
 @scope (.qk-prose, .qk-prose-node) to ([data-qk-not-prose], [data-qk-not-typography]) {
 ${createTypographyElementCss(nodeSelector, contextSelector)}
   ${nodeSelector("ul, ol, li, dl, dt, dd, blockquote, table, thead, tbody, tfoot, tr, th, td, figure")} { font-family:var(--qk-type-body-font-family); font-size:var(--qk-type-body-font-size); line-height:var(--qk-type-body-line-height); font-weight:var(--qk-type-body-font-weight); letter-spacing:var(--qk-type-body-letter-spacing); }
@@ -120,5 +124,6 @@ ${createTypographyElementCss(nodeSelector, contextSelector)}
   ${nodeSelector("hr")} { border:0; border-block-start:var(--qk-border-width-default) solid var(--qk-color-border-subtle); margin-block:var(--qk-space-group); }
   ${nodeSelector("p, h1, h2, h3, h4, h5, h6, ul, ol, dl, blockquote, pre, table, figure, hr", ":first-child")} { margin-block-start:0; }
   ${nodeSelector("p, h1, h2, h3, h4, h5, h6, ul, ol, dl, blockquote, pre, table, figure, hr", ":last-child")} { margin-block-end:0; }
+}
 }
 `;

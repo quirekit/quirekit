@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/font-pack",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Optional application-mounted open font assets for QuireKit.",
   "type": "module",
   "license": "MIT",

@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-collaboration-hocuspocus",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Optional Hocuspocus transport for MSFE collaboration sessions.",
   "license": "MIT",
   "repository": {

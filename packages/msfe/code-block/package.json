@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-code-block",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Fenced code blocks with language selection and highlighting for the MSFE Markdown source editor.",
   "license": "MIT",
   "repository": {

@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-heading",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "ATX headings, heading commands, navigation and folding for the MSFE Markdown source editor.",
   "license": "MIT",
   "repository": {

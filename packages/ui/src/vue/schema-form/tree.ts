@@ -9,7 +9,7 @@ import type { QuireKitFormFieldSlotProps } from "../form-field/types";
 import type { QuireKitSchemaCondition, QuireKitSchemaNode, QuireKitSchemaRegistry } from "./types";
 
 /** Internal recursive renderer: identity, conditions and semantic grouping only. */
-export default defineComponent({
+export default /* @__PURE__ */ defineComponent({
   name: "QuireSchemaFields",
   props: {
     nodes: { type: Array as PropType<readonly QuireKitSchemaNode[]>, required: true },

@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/lit-doc",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "license": "MIT",
   "description": "Bounded legacy Word inspection and typed OOXML conversion for browsers and Node.",

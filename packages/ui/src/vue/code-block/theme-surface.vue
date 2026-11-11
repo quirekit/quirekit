@@ -14,7 +14,8 @@ function sameValue(previous: unknown, next: unknown): boolean {
   return previous.every((value, index) => Object.is(value, next[index]));
 }
 
-export default defineComponent({
+// The SFC compiler drops an annotation on `export default`, so the pure call is on its own declaration.
+const CodeBlockThemeSurface = /* @__PURE__ */ defineComponent({
   name: "QuireCodeBlockThemeSurface",
   inheritAttrs: false,
   props: {
@@ -53,4 +54,6 @@ export default defineComponent({
     };
   }
 });
+
+export default CodeBlockThemeSurface;
 </script>

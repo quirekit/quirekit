@@ -177,6 +177,12 @@ export interface BindMountedPointerSessionOptions {
   readonly cancelPointerDragFrame?: ((handle: number) => void) | undefined;
 }
 
+/** Selection, focus and diagnostics callbacks every backend supplies to its pointer binding. */
+export type MountedPointerSessionCallbacks = Pick<BindMountedPointerSessionOptions,
+  | "widgetEvents" | "getInputBinding" | "getInteractionTarget" | "focus" | "renderSelection"
+  | "setInteractionTarget" | "setSelectionGeometryContext" | "prepareHeaderFooterPointerSelection"
+  | "handleDrawingCreationPointer" | "isDrawingCreationActive" | "onPointerHitTest">;
+
 /** Inputs used to process one pointerdown inside a mounted pointer session. */
 export interface HandleMountedPointerDownOptions {
   /** Shared mounted pointer session capabilities. */

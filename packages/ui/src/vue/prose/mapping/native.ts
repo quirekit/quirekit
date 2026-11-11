@@ -7,7 +7,7 @@ import { QuireProseImg, QuireProseFigure, QuireProseFigcaption } from "../media"
 import type { QuireKitProseComponentMap } from "../types";
 
 /** Immutable native tag defaults. Spread into the host renderer map before applying local overrides. */
-export const quireProseComponents = Object.freeze({
+export const quireProseComponents = /* @__PURE__ */ Object.freeze({
   h1: QuireProseH1,
   h2: QuireProseH2,
   h3: QuireProseH3,

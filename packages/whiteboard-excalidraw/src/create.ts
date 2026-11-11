@@ -5,12 +5,14 @@ import type { WhiteboardEditor, WhiteboardEditorOptions } from "./types";
 import { captureScene, snapshotScene } from "./snapshot";
 import { trackDraftInput } from "./input";
 import { whiteboardLanguage } from "./locale";
+import { commonJsExports } from "./interop";
 
 /** @param options - One host and independent source. @returns Ready, disposable runtime loaded on demand. */
 export async function createExcalidrawWhiteboard(options: WhiteboardEditorOptions): Promise<WhiteboardEditor> {
   const document = readWhiteboardDocument(options.document);
   options.signal?.throwIfAborted();
-  const [React, { createRoot }, upstream] = await Promise.all([import("react"), import("react-dom/client"), import("@excalidraw/excalidraw"), import("@excalidraw/excalidraw/index.css")]);
+  const [reactModule, clientModule, upstream] = await Promise.all([import("react"), import("react-dom/client"), import("@excalidraw/excalidraw"), import("@excalidraw/excalidraw/index.css")]);
+  const React = commonJsExports(reactModule, "createElement"), { createRoot } = commonJsExports(clientModule, "createRoot");
   options.signal?.throwIfAborted();
   const container = options.container, owner = container.ownerDocument;
   const draftInput = trackDraftInput(container);

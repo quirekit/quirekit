@@ -1,5 +1,13 @@
 # @quirekit/md-editor
 
+## 0.0.3
+
+### Patch Changes
+
+- The selection toolbar now sits in the layer that scrolls with the document, so it stays attached to the selected text while scrolling instead of trailing a frame behind. It re-measures only when the selection, the content size or the window changes, and moves below the selection when the sticky toolbar would cover it.
+
+  选区工具条改为放在随文档滚动的那一层里：滚动时它贴着选中的文字一起走，不再慢一帧。只有选区、正文尺寸或窗口变化时才重新测量；上方会被吸顶工具栏挡住时改到选区下方。
+
 ## 0.0.2
 
 ### Patch Changes

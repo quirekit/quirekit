@@ -12,7 +12,7 @@ import type { QuireKitSchemaRegistry } from "../types";
 function textValue(value: unknown): string { return value == null ? "" : String(value); }
 
 /** Built-in controls reuse existing QuireKit recipes and headless adapters. */
-export const schemaControls: QuireKitSchemaRegistry = Object.freeze({
+export const schemaControls: QuireKitSchemaRegistry = /* @__PURE__ */ Object.freeze({
   input: { component: Input, toControl: textValue },
   textarea: { component: Textarea, toControl: textValue },
   // NumberInput owns localized strings; numerical payload conversion belongs to the consumer.

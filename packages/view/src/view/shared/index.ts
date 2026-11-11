@@ -259,6 +259,7 @@ export type {
 } from "./pointer";
 export type {
   BindMountedPointerSessionOptions,
+  MountedPointerSessionCallbacks,
   HandleMountedPointerDownOptions,
   MountedPointerSelectionRenderMode,
   MountedPointerSessionRenderState,

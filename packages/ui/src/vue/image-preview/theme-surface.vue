@@ -7,7 +7,8 @@ const styles = Object.freeze({
   dark: Object.freeze({ ...previewColors.dark, display: "contents" })
 });
 
-export default defineComponent({
+// The SFC compiler drops an annotation on `export default`, so the pure call is on its own declaration.
+const ImagePreviewThemeSurface = /* @__PURE__ */ defineComponent({
   name: "QuireImagePreviewThemeSurface",
   inheritAttrs: false,
   props: {
@@ -24,4 +25,6 @@ export default defineComponent({
     return () => h("div", { style: styles[props.scheme] }, context.slots.default?.());
   }
 });
+
+export default ImagePreviewThemeSurface;
 </script>

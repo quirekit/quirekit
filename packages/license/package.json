@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/license",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "description": "Offline license keys and evaluation notices for QuireKit commercial components.",
   "type": "module",

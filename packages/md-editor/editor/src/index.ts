@@ -18,7 +18,7 @@ export type { MdEditorOptions, MdEditorExtensionOptions, MdEditableView, MdEdito
 export type { MdDocxOptions, MdDocxPolicy, MdDocxConverter, MdDocxRequest, MdDocxReport, MdDocxImportResult, MdDocxExportResult, MdDocxDiagnostic, MdDocxImage, MdDocxContainerHeader, MdDocxContainerAppearance } from './docx/types';
 export type { MdExporter, MdExportContext, MdExportResult } from './export/types';
 export { highlightDocxAppearance } from './highlight/docx';
-export { mdContainerTypes } from './presentation/container';
+export { mdContainerTypes } from './presentation/projection/container';
 export type { MdImageStorage, MdImageUploadContext, MdImageUploadSource } from './images/types';
 export { mdCodeLanguages } from "./code/languages";
 export type { MdCodeLanguage } from "./code/types";

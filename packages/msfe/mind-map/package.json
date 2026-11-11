@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-mind-map",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Editable mind map blocks stored as Markdown fences in the MSFE source editor.",
   "license": "MIT",
   "repository": {

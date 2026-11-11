@@ -1,3 +1,5 @@
 # @quirekit/extension-hard-break
 
+## 0.0.3
+
 ## 0.0.2

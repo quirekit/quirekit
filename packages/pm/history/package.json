@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/pm-history",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "QuireKit vendored ProseMirror history boundary.",
   "license": "MIT",
   "repository": {

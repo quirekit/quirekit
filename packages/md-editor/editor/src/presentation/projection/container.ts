@@ -1,6 +1,6 @@
 import { Decoration } from "@quirekit/cm-view";
 import type { ProjectionContext } from "@quirekit/msfe-core";
-import { highlightContainerName, parseHighlightAttributes } from "../highlight/attributes";
+import { highlightContainerName, parseHighlightAttributes } from "../../highlight/attributes";
 
 /** Product container names shared by editing, reading and document export. */
 export const mdContainerTypes: readonly string[] = ["info", "note", "tip", "important", "warning", "danger", "caution", "details", "decision", "highlight"];

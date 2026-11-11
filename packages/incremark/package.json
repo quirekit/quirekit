@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/incremark",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Streaming Markdown sessions and extensible Vue reading with QuireKit Lezer.",
   "type": "module",
   "license": "MIT",

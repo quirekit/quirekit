@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/msfe-whiteboard",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Editable whiteboard blocks stored as Markdown fences in the MSFE source editor.",
   "license": "MIT",
   "repository": {

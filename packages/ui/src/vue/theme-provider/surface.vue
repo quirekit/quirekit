@@ -4,7 +4,8 @@ import { trackQuireKitInputModality } from "../../components/control/modality";
 import { quireKitThemeKey } from "./context";
 import { resolveThemeSurfaceStyle } from "./styles";
 
-export default defineComponent({
+// The SFC compiler drops an annotation on `export default`, so the pure call is on its own declaration.
+const ThemeSurface = /* @__PURE__ */ defineComponent({
   name: "QuireThemeSurface",
   inheritAttrs: false,
   props: {
@@ -33,4 +34,6 @@ export default defineComponent({
     }, context.slots.default?.()) : context.slots.default?.();
   },
 });
+
+export default ThemeSurface;
 </script>

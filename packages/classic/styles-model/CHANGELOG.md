@@ -1,5 +1,7 @@
 # @quirekit/classic-styles-model
 
+## 0.0.3
+
 ## 0.0.2
 
 ### Patch Changes

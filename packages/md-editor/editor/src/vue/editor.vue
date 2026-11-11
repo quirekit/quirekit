@@ -331,8 +331,6 @@ defineExpose({ editor, openFile, showComments: () => comments?.showList(), setCo
     <VueNodeViewHost :host="host" />
     <MobileSelection v-if="editor && state && !reading" ref="mobileSelection" :editor="editor" :state="state" :locale="locale" :root="root" :fixed="layout === 'document'" :enabled="narrow && !intent && !file && !mention && !blockInsert && !libraryOpen && !blockMenu && !emptyMenu && !mobileDock?.active"
       :commentable="!!comments?.writable.value" @comment="openCommentDraft" />
-    <FloatingToolbar v-if="(toolbarMode === 'floating' || toolbarMode === 'fixed' && props.selectionToolbar) && editor && state && !reading" :editor="editor" :state="state" :locale="locale" :mentions="mentions"
-      :commentable="!!comments?.writable.value || !!props.selectionActions?.length" :selection-actions="props.selectionActions" :enabled="!narrow && !intent && !file && !mention && !blockInsert && !libraryOpen && !blockMenu && !emptyMenu && !slashSession && !comments?.drafting.value" @edit="edit" @file="openFile" @comment="openCommentDraft" />
     <MobileDock v-if="toolbarMode !== 'none' && editor && state && !reading" ref="mobileDock" :editor="editor" :state="state" :locale="locale" :visible="narrow" :fixed="layout === 'document'" :root="root"
       :mentions="mentions" :docx="!!docx" :exporters="props.exporters ?? []" :template-name="hasTemplatePicker ? exportTemplate.name.value : undefined"
       @edit="edit" @file="openFile" @template="libraryOpen = true" @comments="comments?.showList()" @insert="blockInsert = $event" />
@@ -340,6 +338,8 @@ defineExpose({ editor, openFile, showComments: () => comments?.showList(), setCo
       <BlockSurface v-if="blockControls && !intent && !file && !mention && !blockInsert" :controls="blockControls" :locale="locale" :mentions="!!mentions" v-model:open="blockMenu" @insert="blockInsert = $event" />
       <EmptyInsert v-if="emptyControls && !intent && !file && !mention && !blockInsert" :controls="emptyControls" :locale="locale" :mentions="!!mentions" :mention-source="mentions" v-model:open="emptyMenu" @insert="blockInsert = $event" />
       <ObjectSurface v-if="editor && state" :editor="editor" :state="state" :locale="locale" :enabled="!intent && !file && !mention && !blockInsert && !libraryOpen" :sticky-top="stickyTop" />
+      <FloatingToolbar v-if="(toolbarMode === 'floating' || toolbarMode === 'fixed' && props.selectionToolbar) && editor && state && !reading" :editor="editor" :state="state" :locale="locale" :mentions="mentions"
+        :commentable="!!comments?.writable.value || !!props.selectionActions?.length" :selection-actions="props.selectionActions" :enabled="!narrow && !intent && !file && !mention && !blockInsert && !libraryOpen && !blockMenu && !emptyMenu && !slashSession && !comments?.drafting.value" @edit="edit" @file="openFile" :sticky-top="stickyTop" @comment="openCommentDraft" />
     </DocumentLayer>
     <OverlayHost @target="overlayTarget = $event">
       <SlashSurface v-if="slashSession" ref="slashSurface" :session="slashSession" :locale="locale" :mentions="!!mentions" @close="slash.dismiss" @insert="blockInsert = $event" />

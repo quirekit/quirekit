@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/cm-language",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Language support infrastructure for the CodeMirror code editor",
   "license": "MIT",
   "repository": {

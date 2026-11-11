@@ -1,5 +1,13 @@
 # @quirekit/classic-table-model
 
+## 0.0.3
+
+### Patch Changes
+
+- Rows of a newly inserted table without a set height now take their content height, as in Word and WPS, instead of rising to 28px. Text no longer leaves a gap below it in each row, and a table keeps the same row heights after a round trip through DOCX.
+
+  新插入表格中未设行高的行现在按内容定高，与 Word、WPS 一致，不再抬到 28px。每行文字下方不再留出空白，表格经 DOCX 往返后行高保持不变。
+
 ## 0.0.2
 
 ### Patch Changes

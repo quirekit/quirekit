@@ -1,6 +1,6 @@
 import { readSourcePresentation, type EditingBoundaryRule } from "@quirekit/msfe-core";
 import { highlightContainerName } from "../../highlight/attributes";
-import { bareMarker } from "../marks";
+import { bareMarker } from "../projection/marks";
 
 /** @param nodes - Confirmed prefix owners. @param marker - Direct syntax token, or null when the node is the token. @returns A prefix removed as one semantic unit at Backspace. */
 export function prefixBoundary(nodes: readonly string[], marker: string | null): EditingBoundaryRule {

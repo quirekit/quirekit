@@ -3,8 +3,8 @@ import { BlockWrapper } from "@quirekit/cm-view";
 import { syntaxTree } from "@quirekit/cm-language";
 import { touchesSourceRanges, type MsfeSourceRange } from "@quirekit/msfe-core";
 import { TABLE_SCROLL_ATTRIBUTE } from "@quirekit/msfe-prose";
-import { containerTone, highlightAttributes } from "../container";
-import { bareListItem, bareMarker } from "../marks";
+import { containerTone, highlightAttributes } from "../projection/container";
+import { bareListItem, bareMarker } from "../projection/marks";
 import type { ProseStructureWork } from "./types";
 
 /**

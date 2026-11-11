@@ -283,6 +283,8 @@ export type {
   ClassicEditorSelectionPopupWidgetContribution,
   ClassicEditorSelectionPopupPlacement,
   ClassicEditorSelectionPopupTrigger,
+  ClassicEditorCommandBarGroupOptions,
+  ClassicEditorCommandBarOptions,
   ClassicEditorShellOptions,
   ClassicEditorSidebarOpenOptions,
   ClassicEditorSidebarPanelContribution,

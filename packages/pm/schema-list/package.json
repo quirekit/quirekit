@@ -1,6 +1,6 @@
 {
   "name": "@quirekit/pm-schema-list",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "QuireKit vendored ProseMirror schema-list boundary.",
   "license": "MIT",
   "repository": {
